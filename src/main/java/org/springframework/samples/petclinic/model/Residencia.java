@@ -15,12 +15,16 @@
  */
 package org.springframework.samples.petclinic.model;
 
+import java.time.LocalTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.URL;
 
@@ -49,7 +53,66 @@ public class Residencia extends BaseEntity {
 	@Column(name = "mas_info")
 	private String masInfo;
 	
+	@NotNull
+	@Column(name = "telefono")
+	private String telefono;
 	
+	@NotNull
+	@Email
+	@Column(name = "correo")
+	private String correo;
+	
+	@NotNull
+	@Column(name = "hora_apertura")
+	private LocalTime horaApertura;
+	
+	@NotNull
+	@Column(name = "hora_cierre")
+	private LocalTime horaCierre;
+	
+	@Column(name = "edad_maxima")
+	private Integer edadMaxima;
+	
+	public Integer getEdadMaxima() {
+		return edadMaxima;
+	}
+
+	public void setEdadMaxima(Integer edadMaxima) {
+		this.edadMaxima = edadMaxima;
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+
+	public String getCorreo() {
+		return correo;
+	}
+
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
+
+	public LocalTime getHoraApertura() {
+		return horaApertura;
+	}
+
+	public void setHoraApertura(LocalTime horaApertura) {
+		this.horaApertura = horaApertura;
+	}
+
+	public LocalTime getHoraCierre() {
+		return horaCierre;
+	}
+
+	public void setHoraCierre(LocalTime horaCierre) {
+		this.horaCierre = horaCierre;
+	}
+
 	@ManyToOne
 	@JoinColumn(name = "manager_id")
 	private Manager manager;

@@ -16,11 +16,12 @@
 package org.springframework.samples.petclinic.model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Past;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -39,8 +40,15 @@ public class ActivityEntity extends BaseEntity {
 	
 	@Column(name = "fecha")        
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	@Past
 	private LocalDate fecha;
+	
+	@NotNull
+	@Column(name = "hora_inicio")
+	private LocalTime horaInicio;
+	
+	@NotNull
+	@Column(name = "hora_fin")
+	private LocalTime horaFin;
 	
 	
 	public String getTitulo() {
@@ -49,6 +57,22 @@ public class ActivityEntity extends BaseEntity {
 
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
+	}
+
+	public LocalTime getHoraInicio() {
+		return horaInicio;
+	}
+
+	public void setHoraInicio(LocalTime horaInicio) {
+		this.horaInicio = horaInicio;
+	}
+
+	public LocalTime getHoraFin() {
+		return horaFin;
+	}
+
+	public void setHoraFin(LocalTime horaFin) {
+		this.horaFin = horaFin;
 	}
 
 	public String getDescripcion() {
@@ -71,7 +95,7 @@ public class ActivityEntity extends BaseEntity {
 	public String toString() {
 		return new ToStringCreator(this)
 				.append("id", this.getId()).append("new", this.isNew()).append("titulo", this.titulo).append("fecha", this.fecha)
-				.append("descripcion", this.descripcion).toString();
+				.append("descripcion", this.descripcion).append("hora_inicio", this.horaInicio).append("hora_fin", this.horaFin).toString();
 	}
 
 }

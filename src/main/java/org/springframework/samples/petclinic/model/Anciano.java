@@ -23,6 +23,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.core.style.ToStringCreator;
@@ -48,11 +49,9 @@ public class Anciano extends BaseEntity {
 	@Column(name = "tipoSancion")
 	private String tipoSancion;
 	
-	@Column(name = "tieneDependenciaSevera")
-	@NotNull
-	private Boolean tieneDependenciaSevera;
-	
 	@Column(name = "tipoDependencia")
+	@NotNull
+	@Pattern(regexp = "^NA|leve|moderada|grave")
 	private String tipoDependencia;
 	
 	//
@@ -85,15 +84,7 @@ public class Anciano extends BaseEntity {
 	public void setTieneSancion(Boolean tieneSancion) {
 		this.tieneSancion = tieneSancion;
 	}
-
-	public Boolean getTieneDependenciaSevera() {
-		return tieneDependenciaSevera;
-	}
-
-	public void setTieneDependenciaSevera(Boolean tieneDependenciaSevera) {
-		this.tieneDependenciaSevera = tieneDependenciaSevera;
-	}
-
+	
 	public User getUser() {
 		return user;
 	}
@@ -109,7 +100,7 @@ public class Anciano extends BaseEntity {
 		return new ToStringCreator(this)
 
 				.append("id", this.getId()).append("new", this.isNew()).append("edad", this.edad).append("cartaPresentacion", this.cartaPresentacion)
-				.append("tieneSancion", this.tieneSancion).append("tipoSancion", this.tipoSancion).append("tieneDependenciaSevera", this.tieneDependenciaSevera)
+				.append("tieneSancion", this.tieneSancion).append("tipoSancion", this.tipoSancion)
 				.append("tipoDependencia", this.tipoDependencia).toString();
 	}
 
