@@ -38,16 +38,18 @@ public class ActivityEntity extends BaseEntity {
 	@Column(name = "descripcion")
 	private String descripcion;
 	
+	@NotNull
 	@Column(name = "fecha")        
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate fecha;
 	
 	@NotNull
 	@Column(name = "hora_inicio")
+	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime horaInicio;
 	
-	@NotNull
 	@Column(name = "hora_fin")
+	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime horaFin;
 	
 	

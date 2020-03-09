@@ -21,6 +21,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 /**
  * Simple JavaBean domain object representing a visit.
@@ -32,10 +33,12 @@ import javax.validation.constraints.NotNull;
 public class Excursion extends ActivityEntity {
 
 	@NotNull
+	@Positive
 	@Column(name = "ratio")
 	private Double ratioAceptacion;
 	
 	@NotNull
+	@Positive
 	@Column(name = "aforo")
 	private Integer aforo;
 	
