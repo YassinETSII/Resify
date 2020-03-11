@@ -39,15 +39,16 @@ public class ActivityEntity extends BaseEntity {
 	private String descripcion;
 	
 	@NotNull
-	@Column(name = "fecha")        
+	@Column(name = "fecha_inicio")        
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private LocalDate fecha;
+	private LocalDate fechaInicio;
 	
 	@NotNull
 	@Column(name = "hora_inicio")
 	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime horaInicio;
 	
+	@NotNull
 	@Column(name = "hora_fin")
 	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime horaFin;
@@ -85,19 +86,19 @@ public class ActivityEntity extends BaseEntity {
 		this.descripcion = descripcion;
 	}
 
-	public LocalDate getFecha() {
-		return fecha;
+	public LocalDate getFechaInicio() {
+		return fechaInicio;
 	}
 
-	public void setFecha(LocalDate fecha) {
-		this.fecha = fecha;
+	public void setFechaInicio(LocalDate fechaInicio) {
+		this.fechaInicio = fechaInicio;
 	}
 
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)
-				.append("id", this.getId()).append("new", this.isNew()).append("titulo", this.titulo).append("fecha", this.fecha)
-				.append("descripcion", this.descripcion).append("hora_inicio", this.horaInicio).append("hora_fin", this.horaFin).toString();
+				.append("id", this.getId()).append("new", this.isNew()).append("titulo", this.titulo).append("descripcion", this.descripcion).append("fecha_inicio", this.fechaInicio)
+				.append("hora_inicio", this.horaInicio).append("hora_fin", this.horaFin).toString();
 	}
 
 }

@@ -19,12 +19,16 @@
             <td><c:out value="${excursion.descripcion}"/></td>
         </tr>
         <tr>
-            <th>Fecha</th>
-            <td><c:out value="${excursion.fecha}"/></td>
+            <th>Fecha Inicio</th>
+            <td><c:out value="${excursion.fechaInicio}"/></td>
         </tr>
         <tr>
             <th>Hora Inicio</th>
             <td><c:out value="${excursion.horaInicio}"/></td>
+        </tr>
+        <tr>
+            <th>Fecha Fin</th>
+            <td><c:out value="${excursion.fechaFin}"/></td>
         </tr>
         <tr>
             <th>Hora Fin</th>
@@ -39,10 +43,12 @@
             <td><c:out value="${excursion.aforo}"/></td>
         </tr>
     </table>
-
+	
+	<c:if test="${!excursion.finalMode}">
     <spring:url value="{excursionId}/edit" var="editUrl">
         <spring:param name="excursionId" value="${excursion.id}"/>
     </spring:url>
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar excursion</a>
+    </c:if>
 
 </petclinic:layout>

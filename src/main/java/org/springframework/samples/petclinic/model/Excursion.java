@@ -15,6 +15,8 @@
  */
 package org.springframework.samples.petclinic.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -22,6 +24,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Simple JavaBean domain object representing a visit.
@@ -41,7 +45,23 @@ public class Excursion extends ActivityEntity {
 	@Positive
 	@Column(name = "aforo")
 	private Integer aforo;
+
+	@NotNull
+	@Column(name = "fecha_fin")        
+	@DateTimeFormat(pattern = "yyyy/MM/dd")
+	private LocalDate fechaFin;
 	
+	@Column(name = "final_mode")
+	private boolean finalMode;
+	
+	public boolean isFinalMode() {
+		return finalMode;
+	}
+
+	public void setFinalMode(boolean finalMode) {
+		this.finalMode = finalMode;
+	}
+
 	@ManyToOne
 	@JoinColumn(name = "organizador_id")
 	private Organizador organizador;
@@ -69,5 +89,14 @@ public class Excursion extends ActivityEntity {
 	public void setOrganizador(Organizador organizador) {
 		this.organizador = organizador;
 	}
+	
+	public LocalDate getFechaFin() {
+		return fechaFin;
+	}
+
+	public void setFechaFin(LocalDate fechaFin) {
+		this.fechaFin = fechaFin;
+	}
+
 	
 }

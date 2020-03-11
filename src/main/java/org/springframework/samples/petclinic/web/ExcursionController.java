@@ -54,16 +54,15 @@ public class ExcursionController {
 
 	@Autowired
 	private OrganizadorService organizadorService;
-	
-//	@Autowired
-//	public ExcursionController(ExcursionService excursionService, UserService userService, AuthoritiesService authoritiesService) {
-//		this.excursionService = excursionService;
-//	}
 
-	@InitBinder
-	public void setAllowedFields(WebDataBinder dataBinder) {
+	@InitBinder("organizador")
+	public void initOrganizadorBinder(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
-//		dataBinder.setValidator(new ExcursionValidator());
+	}
+	
+	@InitBinder("excursion")
+	public void initExcursionBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(new ExcursionValidator());
 	}
 
 	@GetMapping()
@@ -90,6 +89,7 @@ public class ExcursionController {
 		else {
 			Organizador organizador = organizadorService.findOrganizadorByUsername(p.getName());
 			excursion.setOrganizador(organizador);
+			excursion.setFinalMode(false);
 			excursionService.saveExcursion(excursion);
 			model.put("message", "Se ha registrado la excursion correctamente");
 			return "redirect:/excursiones";

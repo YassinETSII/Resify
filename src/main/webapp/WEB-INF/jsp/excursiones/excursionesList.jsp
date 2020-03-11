@@ -12,8 +12,9 @@
         <thead>
         <tr>
             <th style="width: 150px;">Titulo</th>
-            <th style="width: 200px;">Fecha</th>
+            <th style="width: 200px;">Fecha inicio</th>
             <th style="width: 120px">Hora inicio</th>
+            <th style="width: 200px;">Fecha fin</th>
             <th style="width: 120px">Hora fin<th>
         </tr>
         </thead>
@@ -27,10 +28,13 @@
                     <a href="${fn:escapeXml(excursionUrl)}"><c:out value="${excursion.titulo}"/></a>
                 </td>
                 <td>
-                    <c:out value="${excursion.fecha}"/>
+                    <c:out value="${excursion.fechaInicio}"/>
                 </td>
                 <td>
                     <c:out value="${excursion.horaInicio}"/>
+                </td>
+                <td>
+                    <c:out value="${excursion.fechaFin}"/>
                 </td>
                 <td>
                     <c:out value="${excursion.horaFin}"/>

@@ -8,6 +8,18 @@ INSERT INTO authorities VALUES ('owner1','owner');
 INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
 INSERT INTO authorities VALUES ('vet1','veterinarian');
 
+INSERT INTO users(username,password,enabled) VALUES ('organizador1','0rg4n1z4d0r',TRUE);
+INSERT INTO authorities VALUES ('organizador1','organizador');
+
+INSERT INTO users(username,password,enabled) VALUES ('organizador2','0rg4n1z4d0r',TRUE);
+INSERT INTO authorities VALUES ('organizador2','organizador');
+
+INSERT INTO organizadores VALUES (1, 'Prueba1', 'Prueba1', 'organizador1');
+INSERT INTO organizadores VALUES (2, 'Prueba2', 'Prueba2', 'organizador2');
+
+INSERT INTO excursiones VALUES (1, 'Descripcion de prueba', '2010-09-07',  '22:30', '17:00', 
+	'Prueba', '100', '2010-09-07', FALSE, '2.0', 1);
+
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
 INSERT INTO vets VALUES (3, 'Linda', 'Douglas');
@@ -61,4 +73,3 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (1, 7, '2013-01-01',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02', 'rabies shot');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
-

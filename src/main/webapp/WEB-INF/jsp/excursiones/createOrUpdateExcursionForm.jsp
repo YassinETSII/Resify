@@ -8,7 +8,8 @@
     <jsp:attribute name="customScript">
         <script>
             $(function () {
-                $("#fecha").datepicker({dateFormat: 'yy/mm/dd'});
+                $("#fechaInicio").datepicker({dateFormat: 'yy/mm/dd'});
+                $("#fechaFin").datepicker({dateFormat: 'yy/mm/dd'});
             });
         </script>
     </jsp:attribute>
@@ -25,8 +26,9 @@
             <div class="form-group has-feedback">
                 <petclinic:inputField label="Titulo" name="titulo"/>
                 <petclinic:inputField label="Descripcion" name="descripcion"/>
-                <petclinic:inputField label="Fecha" name="fecha"/>
+                <petclinic:inputField label="Fecha Inicio" name="fechaInicio"/>
                 <petclinic:inputField label="Hora Inicio" name="horaInicio"/>
+                <petclinic:inputField label="Fecha Fin" name="fechaFin"/>
                 <petclinic:inputField label="Hora Fin" name="horaFin"/>
                 <petclinic:inputField label="Aforo" name="aforo"/>
                 <petclinic:inputField label="Ratio de aceptacion" name="ratioAceptacion"/>

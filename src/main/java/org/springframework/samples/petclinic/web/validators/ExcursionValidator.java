@@ -21,31 +21,59 @@ import org.springframework.samples.petclinic.model.Excursion;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-/**
- * <code>Validator</code> for <code>Pet</code> forms.
- * <p>
- * We're not using Bean Validation annotations here because it is easier to define such
- * validation rule in Java.
- * </p>
- *
- * @author Ken Krebs
- * @author Juergen Hoeller
- */
 public class ExcursionValidator implements Validator {
 
 	@Override
 	public void validate(Object obj, Errors errors) {
 		Excursion excursion = (Excursion) obj;
 		LocalDate currentDate = LocalDate.now();
-		
-//		if (!excursion.getFecha().isAfter(currentDate)) {
-//			errors.rejectValue("fecha", "debe ser fecha futura", "debe ser fecha futura");
-//		}	
+
+		if (excursion.getTitulo().isEmpty()) {
+			errors.rejectValue("titulo", "requerido", "requerido");
+		}
+
+		if (excursion.getDescripcion().isEmpty()) {
+			errors.rejectValue("descripcion", "requerido", "requerido");
+		}
+
+		if (excursion.getRatioAceptacion() == null) {
+			errors.rejectValue("ratioAceptacion", "requerido", "requerido");
+		}
+
+		if (excursion.getAforo() == null) {
+			errors.rejectValue("aforo", "requerido", "requerido");
+		}
+
+		if (excursion.getFechaInicio() == null || !excursion.getFechaInicio().isAfter(currentDate)) {
+			errors.rejectValue("fechaInicio", "debe ser fecha futura", "debe ser fecha futura");
+		}
+
+		if (excursion.getFechaFin() == null) {
+			errors.rejectValue("fechaFin", "requerido", "requerido");
+		}
+
+		if (excursion.getHoraInicio() == null) {
+			errors.rejectValue("horaInicio", "requerido", "requerido");
+		}
+
+		if (excursion.getHoraFin() == null) {
+			errors.rejectValue("horaFin", "requerido", "requerido");
+		}
+
+		if (excursion.getFechaFin() != null && excursion.getFechaInicio() != null && excursion.getHoraInicio() != null
+				&& excursion.getHoraFin() != null) {
+			if (excursion.getFechaInicio().isAfter(excursion.getFechaFin())) {
+				errors.rejectValue("fechaFin", "debe ser igual o posterior a la fecha inicio",
+						"debe ser igual o posterior a la fecha inicio");
+			} else if (excursion.getFechaInicio().isEqual(excursion.getFechaFin())) {
+				if (excursion.getHoraInicio().isAfter(excursion.getHoraFin())) {
+					errors.rejectValue("horaFin", "debe ser igual o posterior a la hora inicio",
+							"debe ser igual o posterior a la hora inicio");
+				}
+			}
+		}
 	}
 
-	/**
-	 * This Validator validates *just* Pet instances
-	 */
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return Excursion.class.isAssignableFrom(clazz);
