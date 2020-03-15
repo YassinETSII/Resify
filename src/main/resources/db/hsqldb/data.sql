@@ -20,6 +20,24 @@ INSERT INTO organizadores VALUES (2, 'Prueba2', 'Prueba2', 'organizador2');
 INSERT INTO excursiones VALUES (1, 'Descripcion de prueba', '2010-09-07',  '22:30', '17:00', 
 	'Prueba', '100', '2010-09-07', FALSE, '2.0', 1);
 
+-- Managers
+
+INSERT INTO users(username,password,enabled) VALUES ('manager1','manager1',TRUE);
+INSERT INTO authorities VALUES ('manager1','manager');
+
+INSERT INTO users(username,password,enabled) VALUES ('manager2','manager2',TRUE);
+INSERT INTO authorities VALUES ('manager2','manager');
+
+INSERT INTO managers VALUES (1, 'Prueba1', 'Prueba1', 'manager1');
+INSERT INTO managers VALUES (2, 'Prueba2', 'Prueba2', 'manager2');
+
+-- Residencias
+
+INSERT INTO residencias VALUES (1, 100, 'residencia1@mail.es', 'Descripcion de prueba', 'Direccion', '70', '07:00', '21:00', 
+	'http://www.resi1.com', 'Residencia 1', '987654321', 1);
+	
+
+
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
 INSERT INTO vets VALUES (3, 'Linda', 'Douglas');

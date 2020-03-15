@@ -3,9 +3,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="resify" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="excursiones">
+<resify:layout pageName="excursiones">
     <h2>Excursiones</h2>
 
     <table id="excursionesTable" class="table table-striped">
@@ -48,4 +48,4 @@
     </spring:url>
     <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Añadir nueva excursion</a>
     
-</petclinic:layout>
+</resify:layout>

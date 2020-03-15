@@ -2,9 +2,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="resify" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="excursiones">
+<resify:layout pageName="excursiones">
 
     <h2>Informacion de la excursion</h2>
 
@@ -51,4 +51,4 @@
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar excursion</a>
     </c:if>
 
-</petclinic:layout>
+</resify:layout>
