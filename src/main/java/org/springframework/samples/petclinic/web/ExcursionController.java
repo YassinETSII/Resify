@@ -44,7 +44,6 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Michael Isvy
  */
 @Controller
-@RequestMapping("/excursiones")
 public class ExcursionController {
 
 	private static final String VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM = "excursiones/createOrUpdateExcursionForm";
@@ -65,7 +64,7 @@ public class ExcursionController {
 		dataBinder.setValidator(new ExcursionValidator());
 	}
 
-	@GetMapping()
+	@GetMapping("/organizador/excursiones")
 	public String listExcursiones(Map<String, Object> model, Principal p) {
 		Organizador organizador = organizadorService.findOrganizadorByUsername(p.getName());
 		Iterable<Excursion> excursiones = excursionService.findAllMine(organizador);
@@ -73,14 +72,14 @@ public class ExcursionController {
 		return "excursiones/excursionesList";
 	}
 	
-	@GetMapping(value = "/new")
+	@GetMapping(value = "/organizador/excursiones/new")
 	public String initCreationForm(Map<String, Object> model, Principal p) {
 		Excursion excursion = new Excursion();
 		model.put("excursion", excursion);
 		return VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/new")
+	@PostMapping(value = "/organizador/excursiones/new")
 	public String processCreationForm(@Valid Excursion excursion, BindingResult result, Map<String, Object> model, Principal p) {
 		if (result.hasErrors()) {
 			model.put("excursion", excursion);
@@ -92,18 +91,18 @@ public class ExcursionController {
 			excursion.setFinalMode(false);
 			excursionService.saveExcursion(excursion);
 			model.put("message", "Se ha registrado la excursion correctamente");
-			return "redirect:/excursiones";
+			return "redirect:/organizador/excursiones";
 		}
 	}
 
-	@GetMapping(value = "/{excursionId}/edit")
+	@GetMapping(value = "/organizador/excursiones/{excursionId}/edit")
 	public String initUpdateExcursionForm(@PathVariable("excursionId") int excursionId, Model model) {
 		Excursion excursion = this.excursionService.findExcursionById(excursionId);
 		model.addAttribute(excursion);
 		return VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/{excursionId}/edit")
+	@PostMapping(value = "/organizador/excursiones/{excursionId}/edit")
 	public String processUpdateExcursionForm(@Valid Excursion excursion, BindingResult result,
 			@PathVariable("excursionId") int excursionId) {
 		if (result.hasErrors()) {
@@ -112,11 +111,11 @@ public class ExcursionController {
 		else {
 			excursion.setId(excursionId);
 			this.excursionService.saveExcursion(excursion);
-			return "redirect:/excursiones/{excursionId}";
+			return "redirect:/organizador/excursiones/{excursionId}";
 		}
 	}
 
-	@GetMapping("/{excursionId}")
+	@GetMapping("/organizador/excursiones/{excursionId}")
 	public ModelAndView showExcursion(@PathVariable("excursionId") int excursionId) {
 		ModelAndView mav = new ModelAndView("excursiones/excursionesDetails");
 		mav.addObject(this.excursionService.findExcursionById(excursionId));
