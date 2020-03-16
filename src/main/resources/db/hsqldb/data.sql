@@ -14,8 +14,13 @@ INSERT INTO authorities VALUES ('organizador1','organizador');
 INSERT INTO users(username,password,enabled) VALUES ('organizador2','0rg4n1z4d0r',TRUE);
 INSERT INTO authorities VALUES ('organizador2','organizador');
 
+INSERT INTO users(username,password,enabled) VALUES ('manager1','m4n4g3r',TRUE);
+INSERT INTO authorities VALUES ('manager1','manager');
+
 INSERT INTO organizadores VALUES (1, 'Prueba1', 'Prueba1', 'organizador1');
 INSERT INTO organizadores VALUES (2, 'Prueba2', 'Prueba2', 'organizador2');
+
+INSERT INTO managers VALUES (1, 'Prueba1', 'Prueba1', 'manager1');
 
 INSERT INTO excursiones VALUES (1, 'Descripcion de prueba', '2010-09-07',  '22:30', '17:00', 
 	'Prueba', '100', '2010-09-07', FALSE, '2.0', 1);

@@ -65,11 +65,18 @@ public class ExcursionController {
 	}
 
 	@GetMapping("/organizador/excursiones")
-	public String listExcursiones(Map<String, Object> model, Principal p) {
+	public String listMineExcursiones(Map<String, Object> model, Principal p) {
 		Organizador organizador = organizadorService.findOrganizadorByUsername(p.getName());
 		Iterable<Excursion> excursiones = excursionService.findAllMine(organizador);
 		model.put("excursiones", excursiones);
 		return "excursiones/excursionesList";
+	}
+	
+	@GetMapping("/manager/excursiones")
+	public String listExcursiones(Map<String, Object> model, Principal p) {
+		Iterable<Excursion> excursiones = excursionService.findAll();
+		model.put("excursiones", excursiones);
+		return "manager/excursionesList";
 	}
 	
 	@GetMapping(value = "/organizador/excursiones/new")
@@ -116,10 +123,16 @@ public class ExcursionController {
 	}
 
 	@GetMapping("/organizador/excursiones/{excursionId}")
-	public ModelAndView showExcursion(@PathVariable("excursionId") int excursionId) {
+	public ModelAndView showExcursionOrganizador(@PathVariable("excursionId") int excursionId) {
 		ModelAndView mav = new ModelAndView("excursiones/excursionesDetails");
 		mav.addObject(this.excursionService.findExcursionById(excursionId));
 		return mav;
 	}
-
+	
+	@GetMapping("/manager/excursiones/{excursionId}")
+	public ModelAndView showExcursionManager(@PathVariable("excursionId") int excursionId) {
+		ModelAndView mav = new ModelAndView("manager/excursionesDetails");
+		mav.addObject(this.excursionService.findExcursionById(excursionId));
+		return mav;
+	}
 }

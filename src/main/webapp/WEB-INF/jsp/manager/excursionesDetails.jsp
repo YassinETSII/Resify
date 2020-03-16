@@ -44,7 +44,7 @@
         </tr>
     </table>
 	
-    <spring:url value="/manager/excursion/{excursionId}/inscripcion/new" var="editUrl">
+    <spring:url value="/manager/excursiones/{excursionId}/peticiones-excursion/new" var="editUrl">
         <spring:param name="excursionId" value="${excursion.id}"/>
     </spring:url>
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Inscribirse</a>
