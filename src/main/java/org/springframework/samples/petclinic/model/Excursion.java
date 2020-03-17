@@ -36,15 +36,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "excursiones")
 public class Excursion extends ActivityEntity {
 
-	@NotNull
 	@Positive
 	@Column(name = "ratio")
-	private Double ratioAceptacion;
+	private double ratioAceptacion;
 	
-	@NotNull
 	@Positive
 	@Column(name = "aforo")
-	private Integer aforo;
+	private int aforo;
 
 	@NotNull
 	@Column(name = "fecha_fin")        
@@ -53,14 +51,6 @@ public class Excursion extends ActivityEntity {
 	
 	@Column(name = "final_mode")
 	private boolean finalMode;
-	
-	public boolean isFinalMode() {
-		return finalMode;
-	}
-
-	public void setFinalMode(boolean finalMode) {
-		this.finalMode = finalMode;
-	}
 
 	@ManyToOne
 	@JoinColumn(name = "organizador_id")
@@ -98,5 +88,12 @@ public class Excursion extends ActivityEntity {
 		this.fechaFin = fechaFin;
 	}
 
+	public boolean isFinalMode() {
+		return finalMode;
+	}
+
+	public void setFinalMode(boolean finalMode) {
+		this.finalMode = finalMode;
+	}
 	
 }

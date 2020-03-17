@@ -28,7 +28,7 @@ import org.springframework.core.style.ToStringCreator;
 
 @Entity
 @Table(name = "organizadores")
-public class Organizador extends BaseEntity {
+public class Organizador extends Persona{
 
 	@Column(name = "companya")
 	@NotBlank

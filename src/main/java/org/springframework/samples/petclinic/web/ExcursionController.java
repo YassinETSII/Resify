@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
@@ -50,79 +49,96 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/excursiones")
 public class ExcursionController {
 
-	private static final String	VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM	= "excursiones/createOrUpdateExcursionForm";
+	private static final String VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM = "excursiones/createOrUpdateExcursionForm";
 
 	@Autowired
-	private ExcursionService	excursionService;
+	private ExcursionService excursionService;
 
 	@Autowired
-	private OrganizadorService	organizadorService;
+	private OrganizadorService organizadorService;
 
-
-	@InitBinder("organizador")
-	public void initOrganizadorBinder(final WebDataBinder dataBinder) {
+	@InitBinder
+	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-
+	
+	@InitBinder("organizador")
+	public void initOrganizadorBinder(WebDataBinder dataBinder) {
+		dataBinder.setDisallowedFields("id");
+	}
+	
 	@InitBinder("excursion")
-	public void initExcursionBinder(final WebDataBinder dataBinder) {
+	public void initExcursionBinder(WebDataBinder dataBinder) {
 		dataBinder.setValidator(new ExcursionValidator());
 	}
 
 	@GetMapping()
-	public String listExcursiones(final Map<String, Object> model, final Principal p) {
-		Organizador organizador = this.organizadorService.findOrganizadorByUsername(p.getName());
-		Iterable<Excursion> excursiones = this.excursionService.findAllMine(organizador);
+	public String listExcursiones(Map<String, Object> model, Principal p) {
+		Organizador organizador = organizadorService.findOrganizadorByUsername(p.getName());
+		Iterable<Excursion> excursiones = excursionService.findAllMine(organizador);
 		model.put("excursiones", excursiones);
 		return "excursiones/excursionesList";
 	}
-
+	
 	@GetMapping(value = "/new")
-	public String initCreationForm(final Map<String, Object> model, final Principal p) {
+	public String initCreationForm(Map<String, Object> model, Principal p) {
 		Excursion excursion = new Excursion();
 		model.put("excursion", excursion);
-		return ExcursionController.VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
+		return VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/new")
-	public String processCreationForm(@Valid final Excursion excursion, final BindingResult result, final Map<String, Object> model, final Principal p) {
+	public String processCreationForm(@Valid Excursion excursion, BindingResult result, Map<String, Object> model, Principal p) {
 		if (result.hasErrors()) {
 			model.put("excursion", excursion);
-			return ExcursionController.VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
-		} else {
-			Organizador organizador = this.organizadorService.findOrganizadorByUsername(p.getName());
+			return VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
+		}
+		else {
+			Organizador organizador = organizadorService.findOrganizadorByUsername(p.getName());
 			excursion.setOrganizador(organizador);
 			excursion.setFinalMode(false);
-			this.excursionService.saveExcursion(excursion);
+			excursionService.saveExcursion(excursion);
 			model.put("message", "Se ha registrado la excursion correctamente");
 			return "redirect:/excursiones";
 		}
 	}
 
 	@GetMapping(value = "/{excursionId}/edit")
-	public String initUpdateExcursionForm(@PathVariable("excursionId") final int excursionId, final Model model) {
+	public String initUpdateExcursionForm(@PathVariable("excursionId") int excursionId, Model model, Principal p) {
 		Excursion excursion = this.excursionService.findExcursionById(excursionId);
+		Organizador organizador = organizadorService.findOrganizadorByUsername(p.getName());
+		if(!excursion.getOrganizador().equals(organizador)) {
+			return "exception";
+		}
 		model.addAttribute(excursion);
-		return ExcursionController.VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
+		return VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/{excursionId}/edit")
-	public String processUpdateExcursionForm(@Valid final Excursion excursion, final BindingResult result, @PathVariable("excursionId") final int excursionId, final ModelMap model) {
+	public String processUpdateExcursionForm(@Valid Excursion excursion, BindingResult result,
+			@PathVariable("excursionId") int excursionId, final ModelMap model) {
 		if (result.hasErrors()) {
 			model.put("excursion", excursion);
-			return ExcursionController.VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
-		} else {
+			return VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
+		}
+		else {
 			Excursion excursionToUpdate = this.excursionService.findExcursionById(excursionId);
 			BeanUtils.copyProperties(excursion, excursionToUpdate, "id", "organizador");
-			this.excursionService.saveExcursion(excursionToUpdate);
-			return "redirect:/excursiones";
+//			excursion.setId(excursionId);
+			this.excursionService.saveExcursion(excursion);
+			return "redirect:/excursiones/{excursionId}";
 		}
 	}
 
 	@GetMapping("/{excursionId}")
-	public ModelAndView showExcursion(@PathVariable("excursionId") final int excursionId) {
+	public ModelAndView showExcursion(@PathVariable("excursionId") int excursionId, Principal p) {
+		Excursion excursion = this.excursionService.findExcursionById(excursionId);
+		Organizador organizador = organizadorService.findOrganizadorByUsername(p.getName());
 		ModelAndView mav = new ModelAndView("excursiones/excursionesDetails");
-		mav.addObject(this.excursionService.findExcursionById(excursionId));
+		mav.addObject(excursion);
+		if(!excursion.getOrganizador().equals(organizador)) {
+			mav = new ModelAndView("exception");
+		}
 		return mav;
 	}
 
