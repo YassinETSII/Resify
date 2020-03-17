@@ -31,7 +31,7 @@ import org.springframework.core.style.ToStringCreator;
 
 @Entity
 @Table(name = "ancianos")
-public class Anciano extends BaseEntity {
+public class Anciano extends Persona {
 
 	@Column(name = "edad")
 	@NotNull
@@ -42,16 +42,9 @@ public class Anciano extends BaseEntity {
 	@NotBlank
 	private String cartaPresentacion;
 
-	@Column(name = "tieneSancion")
-	@NotNull
-	private Boolean tieneSancion;
-	
-	@Column(name = "tipoSancion")
-	private String tipoSancion;
-	
 	@Column(name = "tipoDependencia")
 	@NotNull
-	@Pattern(regexp = "^NA|leve|moderada|grave")
+	@Pattern(regexp = "^NA|leve|moderada|grave$")
 	private String tipoDependencia;
 	
 	//
@@ -76,14 +69,6 @@ public class Anciano extends BaseEntity {
 	public void setCartaPresentacion(String cartaPresentacion) {
 		this.cartaPresentacion = cartaPresentacion;
 	}
-
-	public Boolean getTieneSancion() {
-		return tieneSancion;
-	}
-
-	public void setTieneSancion(Boolean tieneSancion) {
-		this.tieneSancion = tieneSancion;
-	}
 	
 	public User getUser() {
 		return user;
@@ -92,16 +77,13 @@ public class Anciano extends BaseEntity {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
-	
 	
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)
 
-				.append("id", this.getId()).append("new", this.isNew()).append("edad", this.edad).append("cartaPresentacion", this.cartaPresentacion)
-				.append("tieneSancion", this.tieneSancion).append("tipoSancion", this.tipoSancion)
-				.append("tipoDependencia", this.tipoDependencia).toString();
+				.append("id", this.getId()).append("new", this.isNew()).append("edad", this.edad)
+				.append("cartaPresentacion", this.cartaPresentacion).append("tipoDependencia", this.tipoDependencia).toString();
 	}
 
 }
