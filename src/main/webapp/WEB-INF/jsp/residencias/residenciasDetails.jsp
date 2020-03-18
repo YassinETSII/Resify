@@ -51,10 +51,19 @@
             <td><c:out value="${residencia.edadMaxima}"/></td>
         </tr>
     </table>
-	
-    <spring:url value="{residenciaId}/edit" var="editUrl">
-        <spring:param name="residenciaId" value="${residencia.id}"/>
-    </spring:url>
+    
+    <c:if test="${pageContext['request'].userPrincipal.name == residencia.manager.user.username}"> 
+    	<spring:url value="{residenciaId}/edit" var="editUrl">
+       		<spring:param name="residenciaId" value="${residencia.id}"/>
+    	</spring:url>
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar residencia</a>
+    </c:if>
+    
+    <c:if test="${fn:contains(pageContext['request'].userPrincipal.authorities, 'anciano')}"> 
+    	<spring:url value="inscripciones/new/{residenciaId}" var="inscribirseUrl">
+    		<spring:param name="residenciaId" value="${residencia.id}"/>
+    	</spring:url>
+   		<a href="${inscribirseUrl}" class="btn btn-default">Inscribirse en la residencia</a>
+    </c:if>
 
 </resify:layout>

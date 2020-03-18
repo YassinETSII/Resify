@@ -5,35 +5,35 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="resify" tagdir="/WEB-INF/tags" %>
 
-<resify:layout pageName="residencias">
-    <h2>Residencias</h2>
+<resify:layout pageName="inscripciones">
+    <h2>Inscripciones</h2>
 
     <table id="residenciasTable" class="table table-striped">
         <thead>
         <tr>
             <th style="width: 150px;">Nombre</th>
-            <th style="width: 200px;">Hora apertura</th>
-            <th style="width: 200px;">Hora cierre</th>
+            <th style="width: 200px;">Residencia</th>
+            <th style="width: 200px;">Fecha</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${residencias}" var="residencia">
+        <c:forEach items="${inscripciones}" var="inscripcion">
             <tr>
                 <td>
-               		<spring:url value="/residencias/{residenciaId}" var="residenciaUrl">
-                        <spring:param name="residenciaId" value="${residencia.id}"/>
+               		<spring:url value="/inscripciones/{inscripcionId}" var="inscripcionUrl">
+                        <spring:param name="inscripcionId" value="${inscripcion.id}"/>
                     </spring:url>
-                    <a href="${fn:escapeXml(residenciaUrl)}"><c:out value="${residencia.nombre}"/></a>
+                    <a href="${fn:escapeXml(inscripcionUrl)}"><c:out value="${inscripcion.anciano.nombre} ${inscripcion.anciano.apellidos}"/></a>
                 </td>
                 <td>
-                    <c:out value="${residencia.horaApertura}"/>
+                    <c:out value="${inscripcion.residencia.nombre}"/>
                 </td>
                 <td>
-                    <c:out value="${residencia.horaCierre}"/>
+                    <fmt:formatDate value="${inscripcion.fecha}" pattern="yyyy/MM/dd"/>
                 </td>
+                
             </tr>
         </c:forEach>
         </tbody>
-    </table>
-    
+    </table>    
 </resify:layout>

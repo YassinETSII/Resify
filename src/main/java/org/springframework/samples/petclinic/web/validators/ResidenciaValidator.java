@@ -38,8 +38,8 @@ public class ResidenciaValidator implements Validator {
 			errors.rejectValue("direccion", "requerido", "requerido");
 		}
 
-		if (residencia.getAforo() == null) {
-			errors.rejectValue("aforo", "requerido", "requerido");
+		if (residencia.getAforo() == null || residencia.getAforo() < 10) {
+			errors.rejectValue("aforo", "debe ser superior o igual a 10", "debe ser superior o igual a 10");
 		}
 
 		if (!residencia.getMasInfo().isEmpty() && !residencia.getMasInfo().matches("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]")) {
