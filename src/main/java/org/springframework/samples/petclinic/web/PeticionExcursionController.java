@@ -23,6 +23,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Excursion;
+import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.PeticionExcursion;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.service.ExcursionService;
@@ -45,7 +46,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class PeticionExcursionController {
 
-	private static final String VIEWS_PETICION_EXCURSION_CREATE_OR_UPDATE_FORM = "manager/createPeticionExcursionForm";
+	private static final String VIEWS_PETICION_EXCURSION_CREATE_OR_UPDATE_FORM = "peticionesExcursion/createPeticionExcursionForm";
 
 	@Autowired
 	private PeticionExcursionService peticionExcursionService;
@@ -62,12 +63,20 @@ public class PeticionExcursionController {
 	}
 	
 	@GetMapping(value = "/manager/excursiones/{excursionId}/peticiones-excursion/new")
-	public String initCreationForm(Map<String, Object> model, Principal p) {
+	public String initCreationForm(@PathVariable("excursionId") int excursionId, Map<String, Object> model, Principal p) {
 		
 		PeticionExcursion peticionExcursion = new PeticionExcursion();
 		
 		peticionExcursion.setFecha(LocalDate.now());
 		peticionExcursion.setEstado("pendiente");
+		
+		Excursion excursion = this.excursionService.findExcursionById(excursionId);
+		Manager manager = managerService.findManagerByUserName(p.getName());
+		Integer peticiones = managerService.CountPeticionesByExcursion(excursion, manager);
+		Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
+		
+		model.put("hasPeticion", peticiones != 0);
+		model.put("hasResidencia", residencia != null);
 
 		model.put("peticionExcursion", peticionExcursion);
 		return VIEWS_PETICION_EXCURSION_CREATE_OR_UPDATE_FORM;
@@ -81,14 +90,14 @@ public class PeticionExcursionController {
 			return VIEWS_PETICION_EXCURSION_CREATE_OR_UPDATE_FORM;
 		}
 		else {
-			Residencia residencia = managerService.findresidenciaByManagerUsername(p.getName());
+			Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
 			Excursion excursion = excursionService.findExcursionById(excursionId);
 			peticionExcursion.setResidencia(residencia);
 			peticionExcursion.setExcursion(excursion);
 			peticionExcursion.setEstado("pendiente");
 			peticionExcursionService.save(peticionExcursion);
 			model.put("message", "Se ha enviado la peticion correctamente");
-			return "redirect:manager/excursiones";
+			return "redirect:/manager/excursiones/{excursionId}";
 		}
 	}
 }

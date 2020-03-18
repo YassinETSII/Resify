@@ -17,6 +17,7 @@ package org.springframework.samples.petclinic.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Excursion;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.repository.springdatajpa.ManagerRepository;
@@ -51,8 +52,19 @@ public class ManagerService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Residencia findresidenciaByManagerUsername(String username) throws DataAccessException {
+	public Manager findManagerByUserName(String username) throws DataAccessException {
+		return managerRepository.findByUsername(username);
+	
+	}
+	
+	@Transactional(readOnly = true)
+	public Residencia findResidenciaByManagerUsername(String username) throws DataAccessException {
 		return managerRepository.findResidenciaByManagerUsername(username);
+	}
+	
+	@Transactional(readOnly = true)
+	public int CountPeticionesByExcursion(Excursion excursion, Manager manager) throws DataAccessException {
+		return managerRepository.countPeticionesByExcursion(excursion,manager);
 	}
 
 	@Transactional

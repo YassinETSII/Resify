@@ -12,6 +12,7 @@
         <h2>
             <c:out value="${manager}"/>
         </h2>
+        <c:if test="${!hasPeticion && hasResidencia}">
         <form:form modelAttribute="peticionExcursion"
                    class="form-horizontal">
             <input type="hidden" name="id" value="${peticionExcursion.id}"/>
@@ -26,5 +27,14 @@
                 </div>
             </div>
         </form:form>
+        </c:if>
+    <c:if test="${hasPeticion && hasResidencia}">
+    <td><c:out value="YA LE HA ENVIADO UNA PECICION"/></td>
+    </c:if>
+    
+    <c:if test="${!hasResidencia}">
+    <td><c:out value="NO TIENE UNA RESIDENCIA QUE INSCRIBIR"/></td>
+    </c:if>
+        
     </jsp:body>
 </petclinic:layout>

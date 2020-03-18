@@ -44,11 +44,28 @@
         </tr>
     </table>
 	
-	<c:if test="${!excursion.finalMode}">
+	<c:if test="${!excursion.finalMode && isOrganizador}">
     <spring:url value="{excursionId}/edit" var="editUrl">
         <spring:param name="excursionId" value="${excursion.id}"/>
     </spring:url>
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar excursion</a>
     </c:if>
+
+    <c:if test="${isManager && !hasPeticion && hasResidencia}">
+    <spring:url value="/manager/excursiones/{excursionId}/peticiones-excursion/new" var="editUrl">
+        <spring:param name="excursionId" value="${excursion.id}"/>
+    </spring:url>
+    <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Inscribirse</a>
+    </c:if>
+    
+    <c:if test="${isManager && hasPeticion && hasResidencia}">
+    <td><c:out value="YA LE HA ENVIADO UNA PECICION"/></td>
+    </c:if>
+    
+    <c:if test="${isManager && !hasResidencia}">
+    <td><c:out value="NO TIENE UNA RESIDENCIA QUE INSCRIBIR"/></td>
+    </c:if>
+    
+    
 
 </petclinic:layout>

@@ -22,9 +22,17 @@
         <c:forEach items="${excursiones}" var="excursion">
             <tr>
                 <td>
-               		<spring:url value="/organizador/excursiones/{excursionId}" var="excursionUrl">
-                        <spring:param name="excursionId" value="${excursion.id}"/>
-                    </spring:url>
+                    <c:if test="${isOrganizador}">
+               			<spring:url value="/organizador/excursiones/{excursionId}" var="excursionUrl">
+                        	<spring:param name="excursionId" value="${excursion.id}"/>
+                    	</spring:url>
+                    </c:if>
+                    <c:if test="${isManager}">
+               			<spring:url value="/manager/excursiones/{excursionId}" var="excursionUrl">
+                        	<spring:param name="excursionId" value="${excursion.id}"/>
+                    	</spring:url>
+                    </c:if>
+
                     <a href="${fn:escapeXml(excursionUrl)}"><c:out value="${excursion.titulo}"/></a>
                 </td>
                 <td>
@@ -45,8 +53,9 @@
         </tbody>
     </table>
     
-    <spring:url value="/organizador/excursiones/new" var="addUrl">
-    </spring:url>
-    <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Añadir nueva excursion</a>
-    
+    <c:if test="${isOrganizador}">
+    	<spring:url value="/organizador/excursiones/new" var="addUrl">
+    	</spring:url>
+    	<a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Añadir nueva excursion</a>
+    </c:if>
 </petclinic:layout>

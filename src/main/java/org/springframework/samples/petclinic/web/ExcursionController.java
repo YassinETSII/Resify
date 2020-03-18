@@ -22,8 +22,11 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Excursion;
+import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Organizador;
+import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.service.ExcursionService;
+import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.service.OrganizadorService;
 import org.springframework.samples.petclinic.web.validators.ExcursionValidator;
 import org.springframework.stereotype.Controller;
@@ -34,7 +37,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -53,6 +55,9 @@ public class ExcursionController {
 
 	@Autowired
 	private OrganizadorService organizadorService;
+	
+	@Autowired
+	private ManagerService managerService;
 
 	@InitBinder("organizador")
 	public void initOrganizadorBinder(WebDataBinder dataBinder) {
@@ -69,6 +74,7 @@ public class ExcursionController {
 		Organizador organizador = organizadorService.findOrganizadorByUsername(p.getName());
 		Iterable<Excursion> excursiones = excursionService.findAllMine(organizador);
 		model.put("excursiones", excursiones);
+		model.put("isOrganizador", true);
 		return "excursiones/excursionesList";
 	}
 	
@@ -76,7 +82,8 @@ public class ExcursionController {
 	public String listExcursiones(Map<String, Object> model, Principal p) {
 		Iterable<Excursion> excursiones = excursionService.findAll();
 		model.put("excursiones", excursiones);
-		return "manager/excursionesList";
+		model.put("isManager", true);
+		return "excursiones/excursionesList";
 	}
 	
 	@GetMapping(value = "/organizador/excursiones/new")
@@ -123,16 +130,24 @@ public class ExcursionController {
 	}
 
 	@GetMapping("/organizador/excursiones/{excursionId}")
-	public ModelAndView showExcursionOrganizador(@PathVariable("excursionId") int excursionId) {
+	public ModelAndView showExcursionOrganizador(@PathVariable("excursionId") int excursionId, Map<String, Object> model) {
 		ModelAndView mav = new ModelAndView("excursiones/excursionesDetails");
 		mav.addObject(this.excursionService.findExcursionById(excursionId));
+		model.put("isOrganizador", true);
 		return mav;
 	}
 	
 	@GetMapping("/manager/excursiones/{excursionId}")
-	public ModelAndView showExcursionManager(@PathVariable("excursionId") int excursionId) {
-		ModelAndView mav = new ModelAndView("manager/excursionesDetails");
-		mav.addObject(this.excursionService.findExcursionById(excursionId));
+	public ModelAndView showExcursionManager(@PathVariable("excursionId") int excursionId, Map<String, Object> model, Principal p) {
+		ModelAndView mav = new ModelAndView("excursiones/excursionesDetails");
+		Excursion excursion = this.excursionService.findExcursionById(excursionId);
+		mav.addObject(excursion);
+		Manager manager = managerService.findManagerByUserName(p.getName());
+		Integer peticiones = managerService.CountPeticionesByExcursion(excursion, manager);
+		Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
+		model.put("isManager", true);
+		model.put("hasPeticion", peticiones != 0);
+		model.put("hasResidencia", residencia != null);
 		return mav;
 	}
 }
