@@ -51,6 +51,7 @@ INSERT INTO ancianos VALUES (6, 'Prieto', 'Dolores', 'Presentacion2', 80, true, 
 -- Inscripciones
 
 INSERT INTO inscripciones VALUES (1, 'Declaración1', 'pendiente', '2020-02-01', null , 5, 1);
+INSERT INTO inscripciones VALUES (2, 'Declaración2', 'pendiente', '2020-02-01', null , 6, 1);
 
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');

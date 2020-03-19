@@ -12,6 +12,7 @@
         <thead>
         <tr>
             <th style="width: 150px;">Nombre</th>
+             <th style="width: 200px;">Estado</th>
             <th style="width: 200px;">Residencia</th>
             <th style="width: 200px;">Fecha</th>
         </tr>
@@ -24,6 +25,9 @@
                         <spring:param name="inscripcionId" value="${inscripcion.id}"/>
                     </spring:url>
                     <a href="${fn:escapeXml(inscripcionUrl)}"><c:out value="${inscripcion.anciano.nombre} ${inscripcion.anciano.apellidos}"/></a>
+                </td>
+                <td>
+                    <c:out value="${inscripcion.estado}"/>
                 </td>
                 <td>
                     <c:out value="${inscripcion.residencia.nombre}"/>

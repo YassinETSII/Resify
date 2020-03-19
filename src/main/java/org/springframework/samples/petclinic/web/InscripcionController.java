@@ -17,6 +17,8 @@
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
@@ -32,13 +34,14 @@ import org.springframework.samples.petclinic.service.AncianoService;
 import org.springframework.samples.petclinic.service.InscripcionService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.service.ResidenciaService;
+import org.springframework.samples.petclinic.web.validators.InscripcionValidator;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,9 +72,21 @@ public class InscripcionController {
 	private ManagerService		managerService;
 
 
-	@InitBinder("anciano")
-	public void initAncianoBinder(final WebDataBinder dataBinder) {
+	@ModelAttribute("estados")
+	public Collection<String> getEstados() {
+		Collection<String> estados = new ArrayList<String>();
+		estados.add("pendiente");
+		estados.add("aceptada");
+		estados.add("rechazada");
+		return estados;
+	}
+
+	@InitBinder("inscripcion")
+	public void initInscripcionBinder(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
+		dataBinder.setDisallowedFields("residencia");
+		dataBinder.setDisallowedFields("fecha");
+		dataBinder.setValidator(new InscripcionValidator());
 	}
 
 	@InitBinder
@@ -97,7 +112,7 @@ public class InscripcionController {
 	}
 
 	@GetMapping(value = "/new/{residenciaId}")
-	public String initCreationForm(final Map<String, Object> model, final Principal p, @PathVariable("residenciaId") final int residenciaId) {
+	public String initCreationForm(final ModelMap model, final Principal p, @PathVariable("residenciaId") final int residenciaId) {
 		Inscripcion inscripcion = new Inscripcion();
 		inscripcion.setEstado("pendiente");
 		Residencia residencia = this.residenciaService.findResidenciaById(residenciaId);
@@ -107,9 +122,11 @@ public class InscripcionController {
 	}
 
 	@PostMapping(value = "/new/{residenciaId}")
-	public String processCreationForm(@Valid final Inscripcion inscripcion, final BindingResult result, final Map<String, Object> model, final Principal p) {
+	public String processCreationForm(@Valid final Inscripcion inscripcion, final BindingResult result, final ModelMap model, final Principal p, @PathVariable("residenciaId") final int residenciaId) {
 		Date hoy = new Date(System.currentTimeMillis() - 1);
 		inscripcion.setFecha(hoy);
+		Residencia residencia = this.residenciaService.findResidenciaById(residenciaId);
+		inscripcion.setResidencia(residencia);
 		if (result.hasErrors()) {
 			model.put("inscripcion", inscripcion);
 			return InscripcionController.VIEWS_INSCRIPCION_CREATE_OR_UPDATE_FORM;
@@ -123,7 +140,7 @@ public class InscripcionController {
 	}
 
 	@GetMapping(value = "/{inscripcionId}/edit")
-	public String initUpdateInscripcionForm(@PathVariable("inscripcionId") final int inscripcionId, final Model model, final Principal p) {
+	public String initUpdateInscripcionForm(@PathVariable("inscripcionId") final int inscripcionId, final ModelMap model, final Principal p) {
 		Inscripcion inscripcion = this.inscripcionService.findInscripcionById(inscripcionId);
 		Manager manager = this.managerService.findManagerByUsername(p.getName());
 		if (!(inscripcion.getResidencia().getManager() == manager)) {
@@ -145,7 +162,7 @@ public class InscripcionController {
 			model.put("inscripcion", inscripcion);
 			return InscripcionController.VIEWS_INSCRIPCION_CREATE_OR_UPDATE_FORM;
 		} else {
-			BeanUtils.copyProperties(inscripcion, inscripcionToUpdate, "id", "anciano", "residencia");
+			BeanUtils.copyProperties(inscripcion, inscripcionToUpdate, "id", "anciano", "residencia", "fecha");
 			this.inscripcionService.saveInscripcion(inscripcionToUpdate);
 			return "redirect:/inscripciones";
 		}

@@ -27,6 +27,16 @@
             <td><c:out value="${inscripcion.fecha}"/></td>
         </tr>
         <tr>
+            <th>Estado</th>
+            <td><c:out value="${inscripcion.estado}"/></td>
+        </tr>
+        <c:if test="${inscripcion.estado == 'rechazada'}">
+        <tr>
+            <th>Justificación</th>
+            <td><c:out value="${inscripcion.justificacion}"/></td>
+        </tr>
+        </c:if>
+        <tr>
         	<th>Tiene dependencia grave</th>
         <c:choose>
         	<c:when test="${inscripcion.anciano.tieneDependenciaGrave}">
