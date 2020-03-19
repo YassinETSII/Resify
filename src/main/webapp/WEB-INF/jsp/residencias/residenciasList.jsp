@@ -36,8 +36,4 @@
         </tbody>
     </table>
     
-    <spring:url value="residencias/new" var="addUrl">
-    </spring:url>
-    <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Añadir nueva residencia</a>
-    
 </resify:layout>
