@@ -23,8 +23,10 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Anciano;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
+import org.springframework.samples.petclinic.service.AncianoService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.service.ResidenciaService;
 import org.springframework.samples.petclinic.web.validators.ResidenciaValidator;
@@ -58,6 +60,9 @@ public class ResidenciaController {
 	@Autowired
 	private ManagerService		managerService;
 
+	@Autowired
+	private AncianoService		ancianoService;
+
 
 	@InitBinder("manager")
 	public void initManagerBinder(final WebDataBinder dataBinder) {
@@ -71,8 +76,7 @@ public class ResidenciaController {
 
 	@GetMapping()
 	public String listResidencias(final Map<String, Object> model, final Principal p) {
-		Manager manager = this.managerService.findManagerByUsername(p.getName());
-		Iterable<Residencia> residencias = this.residenciaService.findAllMine(manager);
+		Iterable<Residencia> residencias = this.residenciaService.findAll();
 		model.put("residencias", residencias);
 		return "residencias/residenciasList";
 	}
@@ -80,6 +84,7 @@ public class ResidenciaController {
 	@GetMapping(value = "/new")
 	public String initCreationForm(final Map<String, Object> model, final Principal p) {
 		Residencia residencia = new Residencia();
+		residencia.setAceptaDependenciaGrave(false);
 		model.put("residencia", residencia);
 		return ResidenciaController.VIEWS_RESIDENCIA_CREATE_OR_UPDATE_FORM;
 	}
@@ -99,14 +104,22 @@ public class ResidenciaController {
 	}
 
 	@GetMapping(value = "/{residenciaId}/edit")
-	public String initUpdateResidenciaForm(@PathVariable("residenciaId") final int residenciaId, final Model model) {
+	public String initUpdateResidenciaForm(@PathVariable("residenciaId") final int residenciaId, final Model model, final Principal p) {
 		Residencia residencia = this.residenciaService.findResidenciaById(residenciaId);
+		Manager manager = this.managerService.findManagerByUsername(p.getName());
+		if (!residencia.getManager().equals(manager)) {
+			return "exception";
+		}
 		model.addAttribute(residencia);
 		return ResidenciaController.VIEWS_RESIDENCIA_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/{residenciaId}/edit")
-	public String processUpdateResidenciaForm(@Valid final Residencia residencia, final BindingResult result, @PathVariable("residenciaId") final int residenciaId, final ModelMap model) {
+	public String processUpdateResidenciaForm(@Valid final Residencia residencia, final BindingResult result, @PathVariable("residenciaId") final int residenciaId, final ModelMap model, final Principal p) {
+		Manager manager = this.managerService.findManagerByUsername(p.getName());
+		if (!residencia.getManager().equals(manager)) {
+			return "exception";
+		}
 		if (result.hasErrors()) {
 			model.put("residencia", residencia);
 			return ResidenciaController.VIEWS_RESIDENCIA_CREATE_OR_UPDATE_FORM;
@@ -119,8 +132,14 @@ public class ResidenciaController {
 	}
 
 	@GetMapping("/{residenciaId}")
-	public ModelAndView showResidencia(@PathVariable("residenciaId") final int residenciaId) {
+	public ModelAndView showResidencia(@PathVariable("residenciaId") final int residenciaId, final Principal p) {
+		Residencia residencia = this.residenciaService.findResidenciaById(residenciaId);
+		Manager manager = this.managerService.findManagerByUsername(p.getName());
+		Anciano anciano = this.ancianoService.findAncianoByUsername(p.getName());
 		ModelAndView mav = new ModelAndView("residencias/residenciasDetails");
+		if (anciano == null && !residencia.getManager().equals(manager)) {
+			mav = new ModelAndView("exception");
+		}
 		mav.addObject(this.residenciaService.findResidenciaById(residenciaId));
 		return mav;
 	}

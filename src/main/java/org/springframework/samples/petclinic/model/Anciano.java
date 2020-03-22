@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.model;
 
 import javax.persistence.CascadeType;
@@ -23,11 +24,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.core.style.ToStringCreator;
-
 
 @Entity
 @Table(name = "ancianos")
@@ -35,55 +34,61 @@ public class Anciano extends Persona {
 
 	@Column(name = "edad")
 	@NotNull
-	@Size(min=66, max=110)
-	private Integer edad;
+	@Size(min = 66, max = 110)
+	private Integer	edad;
 
 	@Column(name = "cartaPresentacion")
 	@NotBlank
-	private String cartaPresentacion;
+	private String	cartaPresentacion;
 
-	@Column(name = "tipoDependencia")
+	@Column(name = "tieneDependenciaGrave")
 	@NotNull
-	@Pattern(regexp = "^NA|leve|moderada|grave$")
-	private String tipoDependencia;
-	
+	private boolean	tieneDependenciaGrave;
+
 	//
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "username", referencedColumnName = "username")
-	private User user;
+	@JoinColumn(name = "username", referencedColumnName = "username")
+	private User	user;
 	//
-	
+
 
 	public Integer getEdad() {
-		return edad;
+		return this.edad;
 	}
 
-	public void setEdad(Integer edad) {
+	public void setEdad(final Integer edad) {
 		this.edad = edad;
 	}
 
 	public String getCartaPresentacion() {
-		return cartaPresentacion;
+		return this.cartaPresentacion;
 	}
 
-	public void setCartaPresentacion(String cartaPresentacion) {
+	public void setCartaPresentacion(final String cartaPresentacion) {
 		this.cartaPresentacion = cartaPresentacion;
 	}
-	
+
 	public User getUser() {
-		return user;
+		return this.user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(final User user) {
 		this.user = user;
 	}
-	
+
+	public boolean getTieneDependenciaGrave() {
+		return this.tieneDependenciaGrave;
+	}
+
+	public void setTieneDependenciaGrave(final boolean bool) {
+		this.tieneDependenciaGrave = bool;
+	}
+
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)
 
-				.append("id", this.getId()).append("new", this.isNew()).append("edad", this.edad)
-				.append("cartaPresentacion", this.cartaPresentacion).append("tipoDependencia", this.tipoDependencia).toString();
+			.append("id", this.getId()).append("new", this.isNew()).append("edad", this.edad).append("cartaPresentacion", this.cartaPresentacion).append("tieneDependenciaGrave", this.tieneDependenciaGrave).toString();
 	}
 
 }

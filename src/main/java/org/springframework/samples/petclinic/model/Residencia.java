@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.model;
 
 import java.time.LocalTime;
@@ -30,143 +31,157 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
 
-
 @Entity
 @Table(name = "residencias")
 public class Residencia extends BaseEntity {
 
 	@NotBlank
 	@Column(name = "nombre")
-	private String nombre;
-	
+	private String		nombre;
+
 	@NotBlank
 	@Column(name = "direccion")
-	private String direccion;
-	
+	private String		direccion;
+
 	@NotBlank
 	@Column(name = "descripcion")
-	private String descripcion;
-	
+	private String		descripcion;
+
 	@Column(name = "aforo")
-	private int aforo;
-	
+	private int			aforo;
+
 	@URL
 	@Column(name = "mas_info")
-	private String masInfo;
-	
-	@NotNull
+	private String		masInfo;
+
+	@NotBlank
 	@Column(name = "telefono")
 	@Digits(fraction = 0, integer = 10)
-	private String telefono;
-	
-	@NotNull
+	private String		telefono;
+
+	@NotBlank
 	@Email
 	@Column(name = "correo")
-	private String correo;
-	
+	private String		correo;
+
 	@NotNull
 	@DateTimeFormat(pattern = "HH:mm")
 	@Column(name = "hora_apertura")
-	private LocalTime horaApertura;
-	
+	private LocalTime	horaApertura;
+
 	@NotNull
 	@DateTimeFormat(pattern = "HH:mm")
 	@Column(name = "hora_cierre")
-	private LocalTime horaCierre;
-	
+	private LocalTime	horaCierre;
+
 	@Column(name = "edad_maxima")
-	private Integer edadMaxima;
-	
+	@NotNull
+	private Integer		edadMaxima;
+
+	@Column(name = "acepta_dependencia_grave")
+	@NotNull
+	private boolean		aceptaDependenciaGrave;
+
+
 	public Integer getEdadMaxima() {
-		return edadMaxima;
+		return this.edadMaxima;
 	}
 
-	public void setEdadMaxima(Integer edadMaxima) {
+	public void setEdadMaxima(final Integer edadMaxima) {
 		this.edadMaxima = edadMaxima;
 	}
 
-	public String getTelefono() {
-		return telefono;
+	public boolean getAceptaDependenciaGrave() {
+		return this.aceptaDependenciaGrave;
 	}
 
-	public void setTelefono(String telefono) {
+	public void setAceptaDependenciaGrave(final boolean bool) {
+		this.aceptaDependenciaGrave = bool;
+	}
+
+	public String getTelefono() {
+		return this.telefono;
+	}
+
+	public void setTelefono(final String telefono) {
 		this.telefono = telefono;
 	}
 
 	public String getCorreo() {
-		return correo;
+		return this.correo;
 	}
 
-	public void setCorreo(String correo) {
+	public void setCorreo(final String correo) {
 		this.correo = correo;
 	}
 
 	public LocalTime getHoraApertura() {
-		return horaApertura;
+		return this.horaApertura;
 	}
 
-	public void setHoraApertura(LocalTime horaApertura) {
+	public void setHoraApertura(final LocalTime horaApertura) {
 		this.horaApertura = horaApertura;
 	}
 
 	public LocalTime getHoraCierre() {
-		return horaCierre;
+		return this.horaCierre;
 	}
 
-	public void setHoraCierre(LocalTime horaCierre) {
+	public void setHoraCierre(final LocalTime horaCierre) {
 		this.horaCierre = horaCierre;
 	}
+
 
 	@ManyToOne
 	@JoinColumn(name = "manager_id")
 	private Manager manager;
 
-	
+
 	public String getNombre() {
-		return nombre;
+		return this.nombre;
 	}
 
-	public void setNombre(String nombre) {
+	public void setNombre(final String nombre) {
 		this.nombre = nombre;
 	}
 
 	public String getDireccion() {
-		return direccion;
+		return this.direccion;
 	}
 
-	public void setDireccion(String direccion) {
+	public void setDireccion(final String direccion) {
 		this.direccion = direccion;
 	}
 
 	public String getDescripcion() {
-		return descripcion;
+		return this.descripcion;
 	}
 
-	public void setDescripcion(String descripcion) {
+	public void setDescripcion(final String descripcion) {
 		this.descripcion = descripcion;
 	}
 
 	public Integer getAforo() {
-		return aforo;
+		return this.aforo;
 	}
 
-	public void setAforo(Integer aforo) {
+	public void setAforo(final Integer aforo) {
 		this.aforo = aforo;
 	}
 
 	public String getMasInfo() {
-		return masInfo;
+		return this.masInfo;
 	}
 
-	public void setMasInfo(String masInfo) {
+	public void setMasInfo(final String masInfo) {
 		this.masInfo = masInfo;
 	}
-	
+
 	public Manager getManager() {
-		return manager;
+		return this.manager;
 	}
-	
-	public void setManager(Manager manager) {
+
+	public void setManager(final Manager manager) {
 		this.manager = manager;
 	}
 

@@ -14,22 +14,48 @@ INSERT INTO authorities VALUES ('organizador1','organizador');
 INSERT INTO users(username,password,enabled) VALUES ('organizador2','0rg4n1z4d0r',TRUE);
 INSERT INTO authorities VALUES ('organizador2','organizador');
 
-INSERT INTO users(username,password,enabled) VALUES ('manager1','m4n4g3r',TRUE);
+INSERT INTO organizadores VALUES (1, 'Fernández', 'Juan', 'Prueba1', 'Prueba1', 'organizador1');
+INSERT INTO organizadores VALUES (2,  'Limón', 'Maria', 'Prueba2', 'Prueba2', 'organizador2');
+
+INSERT INTO excursiones VALUES (1, 'Descripcion de prueba', '2010-09-07',  '22:30', '17:00', 
+	'Prueba', '100', '2010-09-07', FALSE, '2.0', 1);
+	
+-- Managers
+
+INSERT INTO users(username,password,enabled) VALUES ('manager1','manager1',TRUE);
 INSERT INTO authorities VALUES ('manager1','manager');
 
-INSERT INTO organizadores VALUES (1, 'Juan', 'Fernandez', 'Prueba1', 'Prueba1', 'organizador1');
-INSERT INTO organizadores VALUES (2, 'Maria', 'Limon', 'Prueba2', 'Prueba2', 'organizador2');
+INSERT INTO users(username,password,enabled) VALUES ('manager2','manager2',TRUE);
+INSERT INTO authorities VALUES ('manager2','manager');
 
-INSERT INTO managers VALUES (1, 'Manager', 'Prueba', 'Prueba1', 'Prueba1', 'manager1');
+INSERT INTO managers VALUES (3, 'Rodríguez', 'Rosa', 'Prueba1', 'Prueba1', 'manager1');
+INSERT INTO managers VALUES (4, 'Domínguez', 'Carlos', 'Prueba2', 'Prueba2', 'manager2');
 
-INSERT INTO excursiones VALUES (1, 'Descripcion de prueba', '2020-09-07',  '22:30', '17:00', 
-	'Prueba', '100', '2020-09-07', FALSE, '2.0', 1);
-	
-INSERT INTO residencias VALUES (1, 200, 'ejemplo@us.es', 'Prueba', 'C/Prueba', 90, '09:00', '22:00', 'Mas info', 'Residencia', 
-	'666666666', 1);
-	
+-- Residencias
+
+INSERT INTO residencias VALUES (1, false, 100, 'residencia1@mail.es', 'Descripcion de prueba', 'Direccion', '70', '07:00', '21:00', 
+	'http://www.resi1.com', 'Residencia 1', '987654321', 3);
+  
+-- Actividades
+
 INSERT INTO actividades VALUES (1, 'Descripcion de prueba', '2010-09-07',  '22:30', '17:00', 
 	'Prueba', '2020-09-07', 1);
+	
+-- Ancianos
+
+INSERT INTO users(username,password,enabled) VALUES ('anciano1','anciano1',TRUE);
+INSERT INTO authorities VALUES ('anciano1','anciano');
+
+INSERT INTO users(username,password,enabled) VALUES ('anciano2','anciano2',TRUE);
+INSERT INTO authorities VALUES ('anciano2','anciano');
+
+INSERT INTO ancianos VALUES (5, 'García', 'Anacleto', 'Presentacion1', 65, false, 'anciano1');
+INSERT INTO ancianos VALUES (6, 'Prieto', 'Dolores', 'Presentacion2', 80, true, 'anciano2');
+	
+-- Inscripciones
+
+INSERT INTO inscripciones VALUES (1, 'Declaración1', 'pendiente', '2020-02-01', null , 5, 1);
+INSERT INTO inscripciones VALUES (2, 'Declaración2', 'pendiente', '2020-02-01', null , 6, 1);
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');

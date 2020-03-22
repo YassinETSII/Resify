@@ -26,6 +26,7 @@
                 <resify:inputField label="Hora Apertura" name="horaApertura"/>
                 <resify:inputField label="Hora Cierre" name="horaCierre"/>
                 <resify:inputField label="Edad Maxima" name="edadMaxima"/>
+                <input type="checkbox" name="aceptaDependenciaGrave"/>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
