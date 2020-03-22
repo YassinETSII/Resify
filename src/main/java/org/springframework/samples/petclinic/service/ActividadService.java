@@ -17,9 +17,9 @@ package org.springframework.samples.petclinic.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Excursion;
-import org.springframework.samples.petclinic.model.Organizador;
-import org.springframework.samples.petclinic.repository.springdatajpa.ExcursionRepository;
+import org.springframework.samples.petclinic.model.Actividad;
+import org.springframework.samples.petclinic.model.Manager;
+import org.springframework.samples.petclinic.repository.springdatajpa.ActividadRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,10 +30,10 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Michael Isvy
  */
 @Service
-public class ExcursionService {
+public class ActividadService {
 
 	@Autowired
-	private ExcursionRepository excursionRepository;	
+	private ActividadRepository actividadRepository;	
 	
 //	@Autowired
 //	private UserService userService;
@@ -42,38 +42,28 @@ public class ExcursionService {
 //	private AuthoritiesService authoritiesService;
 
 //	@Autowired
-//	public ExcursionService(ExcursionRepository excursionRepository) {
-//		this.excursionRepository = excursionRepository;
+//	public ActividadService(ActividadRepository actividadRepository) {
+//		this.actividadRepository = actividadRepository;
 //	}	
 
 	@Transactional(readOnly = true)
-	public Excursion findExcursionById(int id) throws DataAccessException {
-		return excursionRepository.findById(id);
+	public Actividad findActividadById(int id) throws DataAccessException {
+		return actividadRepository.findById(id);
 	}
 
 	@Transactional
-	public void saveExcursion(Excursion excursion) throws DataAccessException {
-		excursionRepository.save(excursion);	
+	public void saveActividad(Actividad actividad) throws DataAccessException {
+		actividadRepository.save(actividad);	
 	}
 	
 	@Transactional
-	public void deleteExcursion(Excursion excursion) throws DataAccessException {
-		excursionRepository.delete(excursion);	
+	public Iterable<Actividad> findAllMine(Manager manager) {
+		return actividadRepository.findAllMine(manager.getId());
 	}
-
-	@Transactional
-	public Iterable<Excursion> findAllMine(Organizador organizador) {
-		return excursionRepository.findAllMine(organizador.getId());
-	}	
 	
 	@Transactional
-	public Iterable<Excursion> findAllPublished() {
-		return excursionRepository.findAllPublished();
-	}	
-	
-	@Transactional
-	public Iterable<Excursion> findAll() {
-		return excursionRepository.findAll();
+	public Iterable<Actividad> findAll() {
+		return actividadRepository.findAll();
 	}		
 	
 	

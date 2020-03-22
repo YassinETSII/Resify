@@ -36,14 +36,6 @@ public class ExcursionValidator implements Validator {
 			errors.rejectValue("descripcion", "requerido", "requerido");
 		}
 
-		if (excursion.getRatioAceptacion() == null) {
-			errors.rejectValue("ratioAceptacion", "requerido", "requerido");
-		}
-
-		if (excursion.getAforo() == null) {
-			errors.rejectValue("aforo", "requerido", "requerido");
-		}
-
 		if (excursion.getFechaInicio() == null || !excursion.getFechaInicio().isAfter(currentDate)) {
 			errors.rejectValue("fechaInicio", "debe ser fecha futura", "debe ser fecha futura");
 		}
@@ -58,6 +50,14 @@ public class ExcursionValidator implements Validator {
 
 		if (excursion.getHoraFin() == null) {
 			errors.rejectValue("horaFin", "requerido", "requerido");
+		}
+		
+		if(excursion.getAforo() < 10) {
+			errors.rejectValue("aforo", "debe ser mayor que 10", "debe ser mayor que 10");
+		}
+		
+		if(excursion.getRatioAceptacion() < 1) {
+			errors.rejectValue("ratioAceptacion", "debe ser mayor que 1", "debe ser mayor que 1");
 		}
 
 		if (excursion.getFechaFin() != null && excursion.getFechaInicio() != null && excursion.getHoraInicio() != null
