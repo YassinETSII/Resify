@@ -14,4 +14,7 @@ public interface ExcursionRepository extends  CrudRepository<Excursion, String>{
 	@Query("SELECT excursion FROM Excursion excursion WHERE excursion.organizador.id =:id")
 	Iterable<Excursion> findAllMine(@Param("id") int id) throws DataAccessException;
 	
+	@Query("SELECT excursion FROM Excursion excursion WHERE excursion.finalMode = true")
+	Iterable<Excursion> findAllPublished() throws DataAccessException;
+	
 }

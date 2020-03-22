@@ -23,8 +23,11 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Excursion;
+import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Organizador;
+import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.service.ExcursionService;
+import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.service.OrganizadorService;
 import org.springframework.samples.petclinic.web.validators.ExcursionValidator;
 import org.springframework.stereotype.Controller;
@@ -36,7 +39,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -46,7 +48,6 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Michael Isvy
  */
 @Controller
-@RequestMapping("/excursiones")
 public class ExcursionController {
 
 	private static final String VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM = "excursiones/createOrUpdateExcursionForm";
@@ -57,89 +58,121 @@ public class ExcursionController {
 	@Autowired
 	private OrganizadorService organizadorService;
 
+	@Autowired
+	private ManagerService managerService;
+
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	
+
 	@InitBinder("organizador")
 	public void initOrganizadorBinder(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	
+
 	@InitBinder("excursion")
 	public void initExcursionBinder(WebDataBinder dataBinder) {
 		dataBinder.setValidator(new ExcursionValidator());
 	}
 
-	@GetMapping()
-	public String listExcursiones(Map<String, Object> model, Principal p) {
+	@GetMapping("/organizador/excursiones")
+	public String listExcursionesOrganizador(Map<String, Object> model, Principal p) {
 		Organizador organizador = organizadorService.findOrganizadorByUsername(p.getName());
 		Iterable<Excursion> excursiones = excursionService.findAllMine(organizador);
 		model.put("excursiones", excursiones);
 		return "excursiones/excursionesList";
 	}
-	
-	@GetMapping(value = "/new")
+
+	@GetMapping("/manager/excursiones")
+	public String listExcursionesManager(Map<String, Object> model, Principal p) {
+		Iterable<Excursion> excursiones = excursionService.findAllPublished();
+		model.put("excursiones", excursiones);
+		return "excursiones/excursionesList";
+	}
+
+	@GetMapping(value = "/organizador/excursiones/new")
 	public String initCreationForm(Map<String, Object> model, Principal p) {
 		Excursion excursion = new Excursion();
 		model.put("excursion", excursion);
 		return VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/new")
-	public String processCreationForm(@Valid Excursion excursion, BindingResult result, Map<String, Object> model, Principal p) {
+	@PostMapping(value = "/organizador/excursiones/new")
+	public String processCreationForm(@Valid Excursion excursion, BindingResult result, Map<String, Object> model,
+			Principal p) {
 		if (result.hasErrors()) {
 			model.put("excursion", excursion);
 			return VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
-		}
-		else {
+		} else {
 			Organizador organizador = organizadorService.findOrganizadorByUsername(p.getName());
 			excursion.setOrganizador(organizador);
-			excursion.setFinalMode(false);
 			excursionService.saveExcursion(excursion);
 			model.put("message", "Se ha registrado la excursion correctamente");
-			return "redirect:/excursiones";
+			return "redirect:/organizador/excursiones";
 		}
 	}
 
-	@GetMapping(value = "/{excursionId}/edit")
-	public String initUpdateExcursionForm(@PathVariable("excursionId") int excursionId, Model model, Principal p) {
+	@GetMapping(value = "/organizador/excursiones/{excursionId}/edit")
+	public String initUpdateExcursionForm(@PathVariable("excursionId") int excursionId, Model model) {
 		Excursion excursion = this.excursionService.findExcursionById(excursionId);
-		Organizador organizador = organizadorService.findOrganizadorByUsername(p.getName());
-		if(!excursion.getOrganizador().equals(organizador)) {
-			return "exception";
-		}
 		model.addAttribute(excursion);
 		return VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/{excursionId}/edit")
+	@PostMapping(value = "/organizador/excursiones/{excursionId}/edit")
 	public String processUpdateExcursionForm(@Valid Excursion excursion, BindingResult result,
-			@PathVariable("excursionId") int excursionId, final ModelMap model) {
+			@PathVariable("excursionId") int excursionId, final ModelMap model, Principal p) {
 		if (result.hasErrors()) {
 			model.put("excursion", excursion);
 			return VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
-		}
-		else {
+		} else {
+			Organizador organizador = organizadorService.findOrganizadorByUsername(p.getName());
 			Excursion excursionToUpdate = this.excursionService.findExcursionById(excursionId);
+			if (!excursionToUpdate.getOrganizador().equals(organizador) || excursionToUpdate.isFinalMode()) {
+				return "exception";
+			}
 			BeanUtils.copyProperties(excursion, excursionToUpdate, "id", "organizador");
-//			excursion.setId(excursionId);
-			this.excursionService.saveExcursion(excursion);
-			return "redirect:/excursiones/{excursionId}";
+			this.excursionService.saveExcursion(excursionToUpdate);
+			return "redirect:/organizador/excursiones/{excursionId}";
 		}
 	}
 
-	@GetMapping("/{excursionId}")
-	public ModelAndView showExcursion(@PathVariable("excursionId") int excursionId, Principal p) {
+	@GetMapping("/organizador/excursiones/{excursionId}")
+	public ModelAndView showExcursionOrganizador(@PathVariable("excursionId") int excursionId, Principal p) {
 		Excursion excursion = this.excursionService.findExcursionById(excursionId);
 		Organizador organizador = organizadorService.findOrganizadorByUsername(p.getName());
 		ModelAndView mav = new ModelAndView("excursiones/excursionesDetails");
 		mav.addObject(excursion);
-		if(!excursion.getOrganizador().equals(organizador)) {
+		if (!excursion.getOrganizador().equals(organizador)) {
 			mav = new ModelAndView("exception");
 		}
 		return mav;
+	}
+
+	@GetMapping("/manager/excursiones/{excursionId}")
+	public ModelAndView showExcursionManager(@PathVariable("excursionId") int excursionId, Map<String, Object> model,
+			Principal p) {
+		ModelAndView mav = new ModelAndView("excursiones/excursionesDetails");
+		Excursion excursion = this.excursionService.findExcursionById(excursionId);
+		mav.addObject(excursion);
+		Manager manager = managerService.findManagerByUserName(p.getName());
+		Integer peticiones = managerService.countPeticionesByExcursion(excursion, manager);
+		Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
+		model.put("hasPeticion", peticiones != 0);
+		model.put("hasResidencia", residencia != null);
+		return mav;
+	}
+
+	@GetMapping("/organizador/{excursionId}/delete")
+	public String deleteExcursion(@PathVariable("excursionId") int excursionId, Principal p) {
+		Excursion excursion = this.excursionService.findExcursionById(excursionId);
+		Organizador organizador = organizadorService.findOrganizadorByUsername(p.getName());
+		if (!excursion.getOrganizador().equals(organizador) || excursion.isFinalMode()) {
+			return "exception";
+		}
+		this.excursionService.deleteExcursion(excursion);
+		return "redirect:/organizador/excursiones";
 	}
 
 }
