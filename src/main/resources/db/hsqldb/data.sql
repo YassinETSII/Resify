@@ -17,8 +17,8 @@ INSERT INTO authorities VALUES ('organizador2','organizador');
 INSERT INTO organizadores VALUES (1, 'Fernández', 'Juan', 'Prueba1', 'Prueba1', 'organizador1');
 INSERT INTO organizadores VALUES (2,  'Limón', 'Maria', 'Prueba2', 'Prueba2', 'organizador2');
 
-INSERT INTO excursiones VALUES (1, 'Descripcion de prueba', '2010-09-07',  '22:30', '17:00', 
-	'Prueba', '100', '2010-09-07', FALSE, '2.0', 1);
+INSERT INTO excursiones VALUES (1, 'Descripcion de prueba', '2020-09-07',  '22:30', '17:00', 
+	'Prueba', '100', '2020-09-07', FALSE, '2.0', 1);
 	
 -- Managers
 

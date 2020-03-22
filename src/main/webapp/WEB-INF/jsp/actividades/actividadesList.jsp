@@ -21,7 +21,7 @@
         <c:forEach items="${actividades}" var="actividad">
             <tr>
                 <td>
-               		<spring:url value="/manager/actividades/{actividadId}" var="actividadUrl">
+               		<spring:url value="/actividades/{actividadId}" var="actividadUrl">
                         <spring:param name="actividadId" value="${actividad.id}"/>
                     </spring:url>
                     <a href="${fn:escapeXml(actividadUrl)}"><c:out value="${actividad.titulo}"/></a>
@@ -40,7 +40,7 @@
         </tbody>
     </table>
     
-    <spring:url value="/manager/actividades/new" var="addUrl">
+    <spring:url value="/actividades/new" var="addUrl">
     </spring:url>
     <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Añadir nueva actividad</a>
     

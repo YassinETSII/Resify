@@ -26,14 +26,14 @@
 				<tr>
 					<td><security:authorize access="hasAuthority('organizador')">
 
-							<spring:url value="/organizador/excursiones/{excursionId}"
+							<spring:url value="/excursiones/{excursionId}"
 								var="excursionUrl">
 								<spring:param name="excursionId" value="${excursion.id}" />
 							</spring:url>
 
 						</security:authorize> <security:authorize access="hasAuthority('manager')">
 
-							<spring:url value="/manager/excursiones/{excursionId}"
+							<spring:url value="/excursiones/{excursionId}"
 								var="excursionUrl">
 								<spring:param name="excursionId" value="${excursion.id}" />
 							</spring:url>

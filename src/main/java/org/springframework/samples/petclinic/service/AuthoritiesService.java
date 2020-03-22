@@ -19,7 +19,7 @@ package org.springframework.samples.petclinic.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authorities;
-import org.springframework.samples.petclinic.repository.AuthoritiesRepository;
+import org.springframework.samples.petclinic.repository.springdatajpa.AuthoritiesRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,5 +52,9 @@ public class AuthoritiesService {
 		authoritiesRepository.save(authority);
 	}
 
+	@Transactional
+	public String findAuthority(String username) throws DataAccessException {
+		return authoritiesRepository.findAuthority(username);
+	}
 
 }
