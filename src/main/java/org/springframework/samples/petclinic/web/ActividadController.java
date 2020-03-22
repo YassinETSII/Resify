@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -43,6 +44,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Michael Isvy
  */
 @Controller
+@RequestMapping("/actividades")
 public class ActividadController {
 
 	private static final String VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM = "actividades/createOrUpdateActividadForm";
@@ -68,7 +70,7 @@ public class ActividadController {
 		dataBinder.setValidator(new ActividadValidator());
 	}
 
-	@GetMapping("manager/actividades")
+	@GetMapping()
 	public String listActividades(Map<String, Object> model, Principal p) {
 		Manager manager = managerService.findManagerByUsername(p.getName());
 		Iterable<Actividad> actividades = actividadService.findAllMine(manager);
@@ -76,14 +78,14 @@ public class ActividadController {
 		return "actividades/actividadesList";
 	}
 	
-	@GetMapping(value = "manager/actividades/new")
+	@GetMapping(value = "/new")
 	public String initCreationForm(Map<String, Object> model, Principal p) {
 		Actividad actividad = new Actividad();
 		model.put("actividad", actividad);
 		return VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "manager/actividades/new")
+	@PostMapping(value = "/new")
 	public String processCreationForm(@Valid Actividad actividad, BindingResult result, Map<String, Object> model, Principal p) {
 		if (result.hasErrors()) {
 			model.put("actividad", actividad);
@@ -94,11 +96,11 @@ public class ActividadController {
 			actividad.setResidencia(residencia);
 			actividadService.saveActividad(actividad);
 			model.put("message", "Se ha registrado la actividad correctamente");
-			return "redirect:/manager/actividades";
+			return "redirect:/actividades";
 		}
 	}
 
-	@GetMapping("manager/actividades/{actividadId}")
+	@GetMapping("/{actividadId}")
 	public ModelAndView showActividad(@PathVariable("actividadId") int actividadId, Principal p) {
 		Actividad actividad = this.actividadService.findActividadById(actividadId);
 		Manager manager = managerService.findManagerByUsername(p.getName());

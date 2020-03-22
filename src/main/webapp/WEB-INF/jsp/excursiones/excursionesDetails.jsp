@@ -74,7 +74,7 @@
 		<c:if test="${hasResidencia }">
 			<c:if test="${!hasPeticion }">
 				<spring:url
-					value="/manager/excursiones/{excursionId}/peticiones-excursion/new"
+					value="/excursiones/{excursionId}/peticiones-excursion/new"
 					var="editUrl">
 					<spring:param name="excursionId" value="${excursion.id}" />
 				</spring:url>

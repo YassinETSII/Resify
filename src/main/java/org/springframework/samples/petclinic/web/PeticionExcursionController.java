@@ -16,7 +16,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @author Juergen Hoeller
@@ -44,6 +45,7 @@ import org.springframework.web.bind.annotation.PostMapping;
  * @author Michael Isvy
  */
 @Controller
+@RequestMapping("/excursiones/{excursionId}/peticiones-excursion")
 public class PeticionExcursionController {
 
 	private static final String VIEWS_PETICION_EXCURSION_CREATE_OR_UPDATE_FORM = "peticionesExcursion/createPeticionExcursionForm";
@@ -62,13 +64,13 @@ public class PeticionExcursionController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@GetMapping(value = "/manager/excursiones/{excursionId}/peticiones-excursion/new")
+	@GetMapping(value = "/new")
 	public String initCreationForm(@PathVariable("excursionId") int excursionId, Map<String, Object> model,
 			Principal p) {
 
 		PeticionExcursion peticionExcursion = new PeticionExcursion();
 
-		peticionExcursion.setFecha(LocalDate.now());
+		peticionExcursion.setFecha(new Date());
 		peticionExcursion.setEstado("pendiente");
 
 		Excursion excursion = this.excursionService.findExcursionById(excursionId);
@@ -83,7 +85,7 @@ public class PeticionExcursionController {
 		return VIEWS_PETICION_EXCURSION_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/manager/excursiones/{excursionId}/peticiones-excursion/new")
+	@PostMapping(value = "/new")
 	public String processCreationForm(@PathVariable("excursionId") int excursionId,
 			@Valid PeticionExcursion peticionExcursion, BindingResult result, Map<String, Object> model, Principal p) {
 
@@ -93,12 +95,14 @@ public class PeticionExcursionController {
 		} else {
 			Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
 			Excursion excursion = excursionService.findExcursionById(excursionId);
+			Date fecha = new Date();
 			peticionExcursion.setResidencia(residencia);
 			peticionExcursion.setExcursion(excursion);
 			peticionExcursion.setEstado("pendiente");
+			peticionExcursion.setFecha(fecha);
 			peticionExcursionService.save(peticionExcursion);
 			model.put("message", "Se ha enviado la peticion correctamente");
-			return "redirect:/manager/excursiones/{excursionId}";
+			return "redirect:/excursiones/{excursionId}";
 		}
 	}
 }
