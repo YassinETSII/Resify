@@ -25,15 +25,21 @@ import org.springframework.validation.Validator;
 
 public class InscripcionValidator implements Validator {
 
-	public InscripcionService inscripcionService;
+	public InscripcionService	inscripcionService;
 
+	public Residencia			res;
+	public Anciano				anc;
+
+
+	public InscripcionValidator(final Residencia res, final Anciano anc) {
+		this.anc = anc;
+		this.res = res;
+	}
 
 	@Override
 	public void validate(final Object obj, final Errors errors) {
 		Inscripcion inscripcion = (Inscripcion) obj;
 
-		Residencia residencia = this.inscripcionService.findInscripcionById(inscripcion.getId()).getResidencia();
-		Anciano anciano = this.inscripcionService.findInscripcionById(inscripcion.getId()).getAnciano();
 		if (inscripcion.getDeclaracion().isEmpty()) {
 			errors.rejectValue("declaracion", "requerido", "requerido");
 		}
@@ -43,11 +49,11 @@ public class InscripcionValidator implements Validator {
 		}
 
 		if (inscripcion.getEstado().equals("aceptada")) {
-			if (residencia.getAceptaDependenciaGrave() == false && anciano.getTieneDependenciaGrave() == true) {
+			if (this.res.getAceptaDependenciaGrave() == false && this.anc.getTieneDependenciaGrave() == true) {
 				errors.rejectValue("estado", "su residencia no acepta personas con dependencia grave", "su residencia no acepta personas con dependencia grave");
 			}
-			if (residencia.getEdadMaxima() < anciano.getEdad()) {
-				errors.rejectValue("estado", "su residencia no acepta personas mayores de " + residencia.getEdadMaxima() + " años", "su residencia no acepta personas mayores de " + residencia.getEdadMaxima() + " años");
+			if (this.res.getEdadMaxima() < this.anc.getEdad()) {
+				errors.rejectValue("estado", "su residencia no acepta personas mayores de " + this.res.getEdadMaxima() + " años", "su residencia no acepta personas mayores de " + this.res.getEdadMaxima() + " años");
 			}
 		}
 	}

@@ -12,8 +12,6 @@
         <form:form modelAttribute="inscripcion"
                    class="form-horizontal">
             <input type="hidden" name="id" value="${inscripcion.id}"/>
-            <input type="hidden" name="fecha" value="${inscripcion.fecha}"/>
-            <input type="hidden" name="residencia" value="${inscripcion.residencia}"/>
             <c:choose>
 				<c:when test="${inscripcion['new']}">
 					<input type="hidden" name="estado" value="${inscripcion.estado}"/>
