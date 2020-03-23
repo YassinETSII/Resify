@@ -7,13 +7,11 @@
 <resify:layout pageName="inscripciones">
     <jsp:body>
         <h2>
-            <c:if test="${inscripcion['new']}">Nueva </c:if> Inscripci髇
+            <c:if test="${inscripcion['new']}">Nueva </c:if> Inscripci贸n
         </h2>
         <form:form modelAttribute="inscripcion"
                    class="form-horizontal">
             <input type="hidden" name="id" value="${inscripcion.id}"/>
-            <input type="hidden" name="fecha" value="${inscripcion.fecha}"/>
-            <input type="hidden" name="residencia" value="${inscripcion.residencia}"/>
             <c:choose>
 				<c:when test="${inscripcion['new']}">
 					<input type="hidden" name="estado" value="${inscripcion.estado}"/>
@@ -30,14 +28,14 @@
 				</c:when>
 				<c:otherwise>
 					<div class="form-group has-feedback">
-						<resify:inputField label="Justificaci髇" name="justificacion"/>
+						<resify:inputField label="Justificaci贸n" name="justificacion"/>
 					</div>
 				</c:otherwise>
             </c:choose>
             <c:choose>
 				<c:when test="${inscripcion['new']}">
 					<div class="form-group has-feedback">
-                		<resify:inputField label="Declaraci髇" name="declaracion"/>
+                		<resify:inputField label="Declaraci贸n" name="declaracion"/>
             		</div>
 				</c:when>
 				<c:otherwise>
@@ -48,10 +46,10 @@
                 <div class="col-sm-offset-2 col-sm-10">
                     <c:choose>
                         <c:when test="${inscripcion['new']}">
-                            <button class="btn btn-default" type="submit">Registrar Inscripci髇</button>
+                            <button class="btn btn-default" type="submit">Registrar Inscripci贸n</button>
                         </c:when>
                         <c:otherwise>
-                            <button class="btn btn-default" type="submit">Actualizar Inscripci髇</button>
+                            <button class="btn btn-default" type="submit">Actualizar Inscripci贸n</button>
                         </c:otherwise>
                     </c:choose>
                 </div>
