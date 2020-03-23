@@ -16,6 +16,10 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Manager;
@@ -36,7 +40,6 @@ public class ResidenciaService {
 	@Autowired
 	private ResidenciaRepository residenciaRepository;
 
-
 	@Transactional(readOnly = true)
 	public Residencia findResidenciaById(final int id) throws DataAccessException {
 		return this.residenciaRepository.findById(id);
@@ -55,6 +58,21 @@ public class ResidenciaService {
 	@Transactional
 	public Iterable<Residencia> findAll() {
 		return this.residenciaRepository.findAll();
+	}
+
+	@Transactional
+	public List<Residencia> findTop(int nResults) {
+		List<Residencia> list = new ArrayList<>();
+		Iterator<Residencia> lt = this.residenciaRepository.findTop().iterator();
+		int i = 0;
+		while (i < nResults) {
+			if (lt.hasNext()) {
+				list.add(lt.next());
+				System.out.println(lt.next());
+			}
+			i++;
+		}
+		return list;
 	}
 
 }

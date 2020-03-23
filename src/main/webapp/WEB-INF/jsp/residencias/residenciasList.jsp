@@ -36,4 +36,13 @@
         </tbody>
     </table>
     
+		<c:if test="${puedeVerTop }">
+				<spring:url
+					value="/residencias/top"
+					var="topUrl">
+				</spring:url>
+				<a href="${fn:escapeXml(topUrl)}" class="btn btn-default">Ver Top 5 Residencias</a>
+		</c:if>
+    
+    
 </resify:layout>

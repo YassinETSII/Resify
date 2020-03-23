@@ -22,7 +22,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name = "actividades")
+@Table(name = "buenas_acciones")
 public class BuenaAccion extends ActionEntity {
 
 	@ManyToOne

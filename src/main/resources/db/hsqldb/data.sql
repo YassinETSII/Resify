@@ -35,11 +35,31 @@ INSERT INTO managers VALUES (4, 'Domínguez', 'Carlos', 'Prueba2', 'Prueba2', 'm
 
 INSERT INTO residencias VALUES (1, false, 100, 'residencia1@mail.es', 'Descripcion de prueba', 'Direccion', '70', '07:00', '21:00', 
 	'http://www.resi1.com', 'Residencia 1', '987654321', 3);
+	
+INSERT INTO residencias VALUES (2, false, 100, 'residencia2@mail.es', 'Descripcion de prueba 2', 'Direccion 2', '70', '07:00', '21:00', 
+	'http://www.resi2.com', 'Residencia 2', '987654321', 4);
   
+-- Acciones
+
+	
+INSERT INTO buenas_acciones VALUES (1, 'descrip', '2020-10-10', 1);
+	
+INSERT INTO buenas_acciones VALUES (2, 'descrip', '2020-10-10', 1);
+
+INSERT INTO buenas_acciones VALUES (3, 'descrip', '2020-10-10', 1);
+
+INSERT INTO buenas_acciones VALUES (4, 'descrip', '2020-10-10', 2); 
+
+INSERT INTO incidencias VALUES (1, 'descrip', '2020-10-10', 1);
+
+INSERT INTO incidencias VALUES (2, 'descrip', '2020-10-10', 2);
+
+
+
 -- Actividades
 
 INSERT INTO actividades VALUES (1, 'Descripcion de prueba', '2010-09-07',  '22:30', '17:00', 
-	'Prueba', '2020-09-07', 1);
+	'Prueba', 1);
 	
 -- Ancianos
 
