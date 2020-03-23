@@ -71,6 +71,10 @@ public class InscripcionController {
 	@Autowired
 	private ManagerService		managerService;
 
+	//Objetos para el validate
+	private Residencia			res;
+	private Anciano				anc;
+
 
 	@ModelAttribute("estados")
 	public Collection<String> getEstados() {
@@ -86,7 +90,7 @@ public class InscripcionController {
 		dataBinder.setDisallowedFields("id");
 		dataBinder.setDisallowedFields("residencia");
 		dataBinder.setDisallowedFields("fecha");
-		dataBinder.setValidator(new InscripcionValidator());
+		dataBinder.setValidator(new InscripcionValidator(this.res, this.anc));
 	}
 
 	@InitBinder
@@ -147,6 +151,8 @@ public class InscripcionController {
 			return "exception";
 		}
 		model.addAttribute(inscripcion);
+		this.res = inscripcion.getResidencia();
+		this.anc = inscripcion.getAnciano();
 		return InscripcionController.VIEWS_INSCRIPCION_CREATE_OR_UPDATE_FORM;
 	}
 
@@ -155,6 +161,7 @@ public class InscripcionController {
 		Manager manager = this.managerService.findManagerByUsername(p.getName());
 		Inscripcion inscripcionToUpdate = this.inscripcionService.findInscripcionById(inscripcionId);
 		inscripcion.setResidencia(inscripcionToUpdate.getResidencia());
+		inscripcion.setFecha(inscripcionToUpdate.getFecha());
 		if (!inscripcion.getResidencia().getManager().equals(manager)) {
 			return "exception";
 		}
