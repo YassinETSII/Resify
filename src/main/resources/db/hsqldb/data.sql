@@ -51,6 +51,10 @@ INSERT INTO ancianos VALUES (6, 'Prieto', 'Dolores', 'Presentacion2', 80, true, 
 
 INSERT INTO incidencias VALUES (1, 'Descripcion de incidencia', '2010-09-07', 'titulo1', 1);
 
+-- Buenas acciones
+
+INSERT INTO buenas_acciones VALUES (1, 'Descripcion de buena acción', '2010-09-07', 'titulo1', 1);
+
 -- Inscripciones
 
 INSERT INTO inscripciones VALUES (1, 'Declaración1', 'pendiente', '2020-02-01', null , 5, 1);
