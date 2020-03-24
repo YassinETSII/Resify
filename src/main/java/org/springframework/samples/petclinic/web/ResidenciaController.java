@@ -85,6 +85,7 @@ public class ResidenciaController {
 	public String initCreationForm(final Map<String, Object> model, final Principal p) {
 		Residencia residencia = new Residencia();
 		residencia.setAceptaDependenciaGrave(false);
+		residencia.setAforo(10);
 		model.put("residencia", residencia);
 		return ResidenciaController.VIEWS_RESIDENCIA_CREATE_OR_UPDATE_FORM;
 	}

@@ -162,6 +162,7 @@ public class InscripcionController {
 		Inscripcion inscripcionToUpdate = this.inscripcionService.findInscripcionById(inscripcionId);
 		inscripcion.setResidencia(inscripcionToUpdate.getResidencia());
 		inscripcion.setFecha(inscripcionToUpdate.getFecha());
+		inscripcion.setId(inscripcionToUpdate.getId());
 		if (!inscripcion.getResidencia().getManager().equals(manager)) {
 			return "exception";
 		}
