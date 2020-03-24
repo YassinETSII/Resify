@@ -32,9 +32,8 @@ public class BuenaAccion extends ActionEntity {
 	@JoinColumn(name = "residencia_id")
 	private Residencia residencia;
 	
-	@Valid
-	@NotNull
-	@Column(name = "anciano")
+	@ManyToOne
+	@JoinColumn(name = "anciano_id")
 	private Anciano anciano;
 
 	public Residencia getResidencia() {

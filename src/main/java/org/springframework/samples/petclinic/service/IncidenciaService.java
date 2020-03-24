@@ -29,7 +29,6 @@ public class IncidenciaService {
 	@Autowired
 	private IncidenciaRepository incidenciaRepository;	
 
-
 	@Transactional(readOnly = true)
 	public Incidencia findIncidenciaById(int id) throws DataAccessException {
 		return incidenciaRepository.findById(id);

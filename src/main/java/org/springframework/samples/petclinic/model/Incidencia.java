@@ -15,13 +15,11 @@
  */
 package org.springframework.samples.petclinic.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "incidencias")
@@ -31,11 +29,12 @@ public class Incidencia extends ActionEntity {
 	@JoinColumn(name = "residencia_id")
 	private Residencia residencia;
 	
-	@Valid
-	@NotNull
-	@Column(name = "anciano")
-	private Anciano anciano;
-
+	/*@ManyToOne
+	@JoinColumn(name = "anciano_id")
+	private Anciano anciano;*/
+	
+	@NotBlank
+	private String titulo;
 
 	public Residencia getResidencia() {
 		return residencia;
@@ -45,12 +44,20 @@ public class Incidencia extends ActionEntity {
 		this.residencia = residencia;
 	}
 	
-	public Anciano getAnciano() {
+	/*public Anciano getAnciano() {
 		return anciano;
 	}
 
 	public void setAnciano(Anciano anciano) {
 		this.anciano = anciano;
+	}*/
+	
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
 	}
 
 }
