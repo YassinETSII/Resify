@@ -16,9 +16,7 @@ INSERT INTO authorities VALUES ('organizador2','organizador');
 
 INSERT INTO organizadores VALUES (1, 'Fernández', 'Juan', 'Prueba1', 'Prueba1', 'organizador1');
 INSERT INTO organizadores VALUES (2,  'Limón', 'Maria', 'Prueba2', 'Prueba2', 'organizador2');
-
-INSERT INTO excursiones VALUES (1, 'Descripcion de prueba', '2020-09-07',  '22:30', '17:00', 
-	'Prueba', '100', '2020-09-07', FALSE, '2.0', 1);
+	
 	
 -- Managers
 
@@ -56,6 +54,14 @@ INSERT INTO ancianos VALUES (6, 'Prieto', 'Dolores', 'Presentacion2', 80, true, 
 
 INSERT INTO inscripciones VALUES (1, 'Declaración1', 'pendiente', '2020-02-01', null , 5, 1);
 INSERT INTO inscripciones VALUES (2, 'Declaración2', 'pendiente', '2020-02-01', null , 6, 1);
+
+-- Excursiones
+
+INSERT INTO excursiones VALUES (1, 'Descripcion de prueba', '2020-09-07',  '22:30', '17:00', 
+	'Prueba', '100', '2020-09-07', TRUE, '2.0', 1);
+INSERT INTO excursiones VALUES (2, 'Descripcion de prueba2', '2020-09-07',  '22:30', '17:00', 
+	'Prueba2', '100', '2020-09-07', TRUE, '0.0', 1);
+
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');

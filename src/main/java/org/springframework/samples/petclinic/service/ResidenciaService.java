@@ -36,7 +36,6 @@ public class ResidenciaService {
 	@Autowired
 	private ResidenciaRepository residenciaRepository;
 
-
 	@Transactional(readOnly = true)
 	public Residencia findResidenciaById(final int id) throws DataAccessException {
 		return this.residenciaRepository.findById(id);
@@ -56,5 +55,19 @@ public class ResidenciaService {
 	public Iterable<Residencia> findAll() {
 		return this.residenciaRepository.findAll();
 	}
+	
+	@Transactional
+	public Double getRatio(final Residencia residencia) {
+		Double res = 0.;
+		Double buenasAcciones = this.residenciaRepository.countBuenasAccionesByResidenciaId(residencia.getId());
+		Double incidencias = this.residenciaRepository.countIncidenciasByResidenciaId(residencia.getId());
+		if(incidencias == 0) {
+			res = buenasAcciones;
+		}else {
+			res = buenasAcciones/incidencias;
+		}
+		return res;
+	}
+
 
 }
