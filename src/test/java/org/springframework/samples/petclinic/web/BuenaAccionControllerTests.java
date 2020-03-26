@@ -1,18 +1,9 @@
 
 package org.springframework.samples.petclinic.web;
 
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
 import java.util.Date;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -24,8 +15,8 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.BuenaAccion;
 import org.springframework.samples.petclinic.model.Manager;
-import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Residencia;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.BuenaAccionService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -42,6 +33,8 @@ class BuenaAccionControllerTests {
 
 	private static final int		TEST_BUENA_ACCION_ID	= 1;
 
+	private static final String		TEST_MANAGER_NOMBRE		= "manager";
+
 	@Autowired
 	private BuenaAccionController	buenaAccionController;
 
@@ -54,60 +47,64 @@ class BuenaAccionControllerTests {
 	@Autowired
 	private MockMvc					mockMvc;
 
-	private BuenaAccion ba;
-	private Date hoy = new Date(System.currentTimeMillis() - 1);
-	
+	private BuenaAccion				ba;
+	private Date					hoy						= new Date(System.currentTimeMillis() - 1);
+	private Residencia				resi					= new Residencia();
+	Manager							man						= new Manager();
+	User							user					= new User();
+
+
 	@BeforeEach
 	void setup() {
-
-		ba = new BuenaAccion();
-		ba.setId(TEST_BUENA_ACCION_ID);
-		ba.setTitulo("Prueba");
-		ba.setDescripcion("Prueba desc");
-		ba.setFecha(hoy);
-		ba.setResidencia(new Residencia());
-		given(this.buenaAccionService.findBuenaAccionById(TEST_BUENA_ACCION_ID)).willReturn(ba);
-
+		this.user.setUsername(BuenaAccionControllerTests.TEST_MANAGER_NOMBRE);
+		this.man.setUser(this.user);
+		this.resi.setManager(this.man);
+		this.ba = new BuenaAccion();
+		this.ba.setId(BuenaAccionControllerTests.TEST_BUENA_ACCION_ID);
+		this.ba.setTitulo("Prueba");
+		this.ba.setDescripcion("Prueba desc");
+		this.ba.setFecha(this.hoy);
+		this.ba.setResidencia(this.resi);
+		this.buenaAccionService.saveBuenaAccion(this.ba);
+		BDDMockito.given(this.buenaAccionService.findBuenaAccionById(BuenaAccionControllerTests.TEST_BUENA_ACCION_ID)).willReturn(this.ba);
+		BDDMockito.given(this.managerService.findManagerByUsername(BuenaAccionControllerTests.TEST_MANAGER_NOMBRE)).willReturn(this.man);
 	}
 
-	@WithMockUser(value = "spring")
+	@WithMockUser(username = "manager1")
+	@Test
+	void testProcessFindFormSuccess() throws Exception {
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/buenas-acciones")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("buenasAcciones/buenasAccionesList"));
+	}
+
+	@WithMockUser(roles = "manager")
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/buenas-acciones/new")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("buenasAcciones/createOrUpdateBuenaAccionForm"))
 			.andExpect(MockMvcResultMatchers.model().attributeExists("buenaAccion"));
 	}
 
-	@WithMockUser(value = "spring")
+	@WithMockUser(roles = "manager")
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
-		mockMvc.perform(post("/buenas-acciones/new")
-			.param("titulo", "Prueba")
-			.param("descripcion", "Prueba descrip")
-			.with(csrf())
-			.param("fecha", "2020/01/01"))
-		.andExpect(status().is3xxRedirection());
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/buenas-acciones/new").param("titulo", "Prueba").param("descripcion", "Prueba descrip").with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", "2020/01/01"))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
-	@WithMockUser(value = "spring")
-    @Test
-    void testProcessCreationFormHasErrors() throws Exception {
-		mockMvc.perform(post("/buenas-acciones/new")
-						.param("titulo", "Prueba")
-						.param("fecha", "2020/01/01"))
-			.andExpect(status().isOk())
-			.andExpect(model().attributeHasErrors("buenaAccion"))
-			.andExpect(model().attributeHasFieldErrors("buenaAccion", "descripcion"))
-			.andExpect(view().name("buenasAcciones/createOrUpdateBuenaAccionForm"));
+	@WithMockUser(authorities = "manager")
+	@Test
+	void testProcessCreationFormHasErrors() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/buenas-acciones/new").param("titulo", "Prueba").with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", "2020/01/01").param("descripcion", ""))
+			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("buenaAccion")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("buenasAcciones/createOrUpdateBuenaAccionForm"));
 	}
-	
-    @WithMockUser(value = "spring")
+
+	@WithMockUser(username = BuenaAccionControllerTests.TEST_MANAGER_NOMBRE)
 	@Test
 	void testShowBuenaAccion() throws Exception {
-		mockMvc.perform(get("/buenas-acciones/{buenaAccionId}", TEST_BUENA_ACCION_ID)).andExpect(status().isOk())
-				.andExpect(model().attribute("buenaAccion", hasProperty("descripcion", is("Prueba desc"))))
-				.andExpect(model().attribute("buenaAccion", hasProperty("titulo", is("Prueba"))))
-				.andExpect(model().attribute("buenaAccion", hasProperty("fecha", is(hoy))))
-				.andExpect(view().name("buenas-acciones/buenasAccionesDetails"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/buenas-acciones/{buenaAccionId}", BuenaAccionControllerTests.TEST_BUENA_ACCION_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("buenaAccion")).andExpect(MockMvcResultMatchers.model().attribute("buenaAccion", Matchers.hasProperty("descripcion", Matchers.is("Prueba desc"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("buenaAccion", Matchers.hasProperty("titulo", Matchers.is("Prueba")))).andExpect(MockMvcResultMatchers.model().attribute("buenaAccion", Matchers.hasProperty("fecha", Matchers.is(this.hoy))))
+			.andExpect(MockMvcResultMatchers.view().name("buenasAcciones/buenasAccionesDetails"));
 	}
 
 }

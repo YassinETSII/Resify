@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
@@ -41,66 +42,66 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/buenas-acciones")
 public class BuenaAccionController {
 
-	private static final String VIEWS_BUENA_ACCION_CREATE_OR_UPDATE_FORM = "buenasAcciones/createOrUpdateBuenaAccionForm";
+	private static final String	VIEWS_BUENA_ACCION_CREATE_OR_UPDATE_FORM	= "buenasAcciones/createOrUpdateBuenaAccionForm";
 
 	@Autowired
-	private BuenaAccionService buenaAccionService;
+	private BuenaAccionService	buenaAccionService;
 
 	@Autowired
-	private ManagerService managerService;
+	private ManagerService		managerService;
+
 
 	@InitBinder
-	public void setAllowedFields(WebDataBinder dataBinder) {
+	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	
+
 	@InitBinder("manager")
-	public void initManagerBinder(WebDataBinder dataBinder) {
+	public void initManagerBinder(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	
+
 	@InitBinder("buenaAccion")
-	public void initBuenaAccionBinder(WebDataBinder dataBinder) {
+	public void initBuenaAccionBinder(final WebDataBinder dataBinder) {
 		dataBinder.setValidator(new BuenaAccionValidator());
 	}
 
 	@GetMapping()
-	public String listBuenasAcciones(Map<String, Object> model, Principal p) {
-		Manager manager = managerService.findManagerByUsername(p.getName());
-		Iterable<BuenaAccion> buenasAcciones = buenaAccionService.findAllMine(manager);
+	public String listBuenasAcciones(final Map<String, Object> model, final Principal p) {
+		Manager manager = this.managerService.findManagerByUsername(p.getName());
+		Iterable<BuenaAccion> buenasAcciones = this.buenaAccionService.findAllMine(manager);
 		model.put("buenasAcciones", buenasAcciones);
 		return "buenasAcciones/buenasAccionesList";
 	}
-	
+
 	@GetMapping(value = "/new")
-	public String initCreationForm(Map<String, Object> model, Principal p) {
+	public String initCreationForm(final Map<String, Object> model, final Principal p) {
 		BuenaAccion buenaAccion = new BuenaAccion();
 		model.put("buenaAccion", buenaAccion);
-		return VIEWS_BUENA_ACCION_CREATE_OR_UPDATE_FORM;
+		return BuenaAccionController.VIEWS_BUENA_ACCION_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/new")
-	public String processCreationForm(@Valid BuenaAccion buenaAccion, BindingResult result, Map<String, Object> model, Principal p) {
+	public String processCreationForm(@Valid final BuenaAccion buenaAccion, final BindingResult result, final Map<String, Object> model, final Principal p) {
 		if (result.hasErrors()) {
 			model.put("buenaAccion", buenaAccion);
-			return VIEWS_BUENA_ACCION_CREATE_OR_UPDATE_FORM;
-		}
-		else {
+			return BuenaAccionController.VIEWS_BUENA_ACCION_CREATE_OR_UPDATE_FORM;
+		} else {
 			Residencia residencia = this.managerService.findResidenciaByManagerUsername(p.getName());
 			buenaAccion.setResidencia(residencia);
-			buenaAccionService.saveBuenaAccion(buenaAccion);
+			this.buenaAccionService.saveBuenaAccion(buenaAccion);
 			model.put("message", "Se ha registrado la buena acción correctamente");
 			return "redirect:/buenas-acciones";
 		}
 	}
 
 	@GetMapping("/{buenaAccionId}")
-	public ModelAndView showBuenaAccion(@PathVariable("buenaAccionId") int buenaAccionId, Principal p) {
+	public ModelAndView showBuenaAccion(@PathVariable("buenaAccionId") final int buenaAccionId, final Principal p) {
 		BuenaAccion buenaAccion = this.buenaAccionService.findBuenaAccionById(buenaAccionId);
-		Manager manager = managerService.findManagerByUsername(p.getName());
+		Manager manager = this.managerService.findManagerByUsername(p.getName());
 		ModelAndView mav = new ModelAndView("buenasAcciones/buenasAccionesDetails");
 		mav.addObject(buenaAccion);
-		if(!buenaAccion.getResidencia().getManager().equals(manager)) {
+		if (!buenaAccion.getResidencia().getManager().equals(manager)) {
 			mav = new ModelAndView("exception");
 		}
 		return mav;

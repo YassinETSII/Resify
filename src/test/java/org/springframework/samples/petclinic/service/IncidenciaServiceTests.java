@@ -111,7 +111,7 @@ class IncidenciaServiceTests {
 			basc2.add(b2);
 		}
 
-		//Comprueba que se ha añadido a las buenas acciones del manager
+		//Comprueba que se ha añadido a las incidencias del manager
 		Assertions.assertTrue(basc2.size() == total + 1);
 
 		//Comprueba que su id ya no es nulo
