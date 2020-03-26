@@ -19,7 +19,8 @@ public interface ResidenciaRepository extends CrudRepository<Residencia, String>
 	//			+ "Residencia r WHERE (r.id = b.residencia.id AND r.id = i.residencia.id) GROUP BY r.id ORDER BY ratioAcciones DESC")
 	//	@Query("SELECT r, COUNT(DISTINCT b.id) AS ratioAcciones FROM BuenaAccion b join "
 	//			+ "Residencia r where r.id = b.residencia.id group by r.id")
-	@Query("SELECT r, COUNT(b) FROM BuenaAccion b JOIN b.residencia r GROUP BY r.id ORDER BY COUNT(b) desc")
+	//	@Query("SELECT r, COUNT(b) FROM BuenaAccion b JOIN b.residencia r GROUP BY r.id ORDER BY COUNT(b) desc")
+	@Query("SELECT r, CASE WHEN (COUNT(DISTINCT b.id) = 0) THEN 0 WHEN (COUNT(DISTINCT i.id) = 0) THEN COUNT(DISTINCT b.id) ELSE (COUNT(DISTINCT b)/COUNT(DISTINCT i)) END AS ratioAcciones FROM BuenaAccion b, Incidencia i JOIN b.residencia r WHERE r.id = i.residencia.id GROUP BY r.id ORDER BY ratioAcciones desc")
 	Iterable<Object[]> findTop() throws DataAccessException;
 
 	//	SELECT residencias.nombre, CASE WHEN (COUNT(DISTINCT buenas_acciones.id) = 0) THEN 0 WHEN (COUNT(DISTINCT incidencias.id) = 0)
