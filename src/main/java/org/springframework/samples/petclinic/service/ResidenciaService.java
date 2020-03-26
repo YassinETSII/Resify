@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.util.Pair;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.repository.springdatajpa.ResidenciaRepository;
@@ -40,6 +39,7 @@ public class ResidenciaService {
 
 	@Autowired
 	private ResidenciaRepository residenciaRepository;
+
 
 	@Transactional(readOnly = true)
 	public Residencia findResidenciaById(final int id) throws DataAccessException {
@@ -62,14 +62,13 @@ public class ResidenciaService {
 	}
 
 	@Transactional
-	public List<Residencia> findTop(int nResults) {
+	public List<Residencia> findTop(final int nResults) {
 		List<Residencia> list = new ArrayList<>();
 		Iterator<Object[]> lt = this.residenciaRepository.findTop().iterator();
 		int i = 0;
 		while (i < nResults) {
 			if (lt.hasNext()) {
 				list.add((Residencia) lt.next()[0]);
-				System.out.println(lt.next());
 			}
 			i++;
 		}
