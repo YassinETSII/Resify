@@ -7,7 +7,7 @@
 <resify:layout pageName="inscripciones">
     <jsp:body>
         <h2>
-            <c:if test="${inscripcion['new']}">Nueva </c:if> Inscripción
+            <c:if test="${inscripcion['new']}">Nueva </c:if> Inscripcion
         </h2>
         <form:form modelAttribute="inscripcion"
                    class="form-horizontal">
@@ -28,14 +28,14 @@
 				</c:when>
 				<c:otherwise>
 					<div class="form-group has-feedback">
-						<resify:inputField label="Justificación" name="justificacion"/>
+						<resify:inputField label="Justificacion" name="justificacion"/>
 					</div>
 				</c:otherwise>
             </c:choose>
             <c:choose>
 				<c:when test="${inscripcion['new']}">
 					<div class="form-group has-feedback">
-                		<resify:inputField label="Declaración" name="declaracion"/>
+                		<resify:inputField label="Declaracion" name="declaracion"/>
             		</div>
 				</c:when>
 				<c:otherwise>
@@ -46,10 +46,10 @@
                 <div class="col-sm-offset-2 col-sm-10">
                     <c:choose>
                         <c:when test="${inscripcion['new']}">
-                            <button class="btn btn-default" type="submit">Registrar Inscripción</button>
+                            <button class="btn btn-default" type="submit">Registrar Inscripcion</button>
                         </c:when>
                         <c:otherwise>
-                            <button class="btn btn-default" type="submit">Actualizar Inscripción</button>
+                            <button class="btn btn-default" type="submit">Actualizar Inscripcion</button>
                         </c:otherwise>
                     </c:choose>
                 </div>
