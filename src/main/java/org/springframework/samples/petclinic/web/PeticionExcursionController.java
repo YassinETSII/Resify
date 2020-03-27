@@ -115,15 +115,18 @@ public class PeticionExcursionController {
 		Manager manager = this.managerService.findManagerByUserName(p.getName());
 		Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
 		Integer peticiones = this.managerService.countPeticionesByExcursion(excursion, manager);
-		
 		PeticionExcursion peticionExcursion = new PeticionExcursion();
+
 		peticionExcursion.setEstado("pendiente");
 		peticionExcursion.setExcursion(excursion);
 		Date fecha = new Date(System.currentTimeMillis() - 1);
 		peticionExcursion.setFecha(fecha);
 		peticionExcursion.setResidencia(residencia);
 
-
+		if (!(peticionExcursion.getExcursion().isFinalMode())) {
+			return "exception";
+		}
+		
 		model.put("hasPeticion", peticiones != 0);
 		model.put("hasResidencia", residencia != null);
 
