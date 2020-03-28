@@ -64,11 +64,11 @@ public class Excursion extends ActivityEntity {
 		this.ratioAceptacion = ratio;
 	}
 
-	public Integer getNumeroResidencias() {
+	public int getNumeroResidencias() {
 		return numeroResidencias;
 	}
 
-	public void setAforo(Integer numeroResidencias) {
+	public void setNumeroResidencias(int numeroResidencias) {
 		this.numeroResidencias = numeroResidencias;
 	}
 	

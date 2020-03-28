@@ -173,7 +173,7 @@ public class PeticionExcursionController {
 	public String initUpdatePeticionExcursionForm(@PathVariable("peticionExcursionId") final int peticionExcursionId, final ModelMap model, final Principal p) {
 		PeticionExcursion peticionExcursion = this.peticionExcursionService.findPeticionExcursionById(peticionExcursionId);
 		Organizador organizador = this.organizadorService.findOrganizadorByUsername(p.getName());
-		if (!(peticionExcursion.getExcursion().getOrganizador() == organizador)) {
+		if (!(peticionExcursion.getExcursion().getOrganizador() == organizador) || peticionExcursion.getExcursion().getFechaInicio().isBefore(new Date(peticionExcursion.getFecha().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate())) {
 			return "exception";
 		}
 		model.addAttribute(peticionExcursion);
@@ -186,7 +186,7 @@ public class PeticionExcursionController {
 		PeticionExcursion peticionExcursionToUpdate = this.peticionExcursionService.findPeticionExcursionById(peticionExcursionId);
 		
 		peticionExcursion.setExcursion(peticionExcursionToUpdate.getExcursion());
-		if (!peticionExcursion.getExcursion().getOrganizador().equals(organizador)) {
+		if (!peticionExcursion.getExcursion().getOrganizador().equals(organizador) || peticionExcursion.getExcursion().getFechaInicio().isBefore(new Date(peticionExcursion.getFecha().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate())) {
 			return "exception";
 		}
 		if (peticionExcursion.getEstado().equals("aceptada")) {

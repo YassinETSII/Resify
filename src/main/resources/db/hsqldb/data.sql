@@ -57,10 +57,10 @@ INSERT INTO inscripciones VALUES (2, 'Declaración2', 'pendiente', '2020-02-01',
 
 -- Excursiones
 
-INSERT INTO excursiones VALUES (1, 'Descripcion de prueba', '2020-09-07',  '22:30', '17:00', 
-	'Prueba', '100', '2020-09-07', TRUE, '2.0', 1);
+INSERT INTO excursiones VALUES (1, 'Descripcion de prueba', '2020-01-01',  '22:30', '17:00', 
+	'Prueba', '2020-09-07', TRUE, '100', '2.0', 1);
 INSERT INTO excursiones VALUES (2, 'Descripcion de prueba2', '2020-09-07',  '22:30', '17:00', 
-	'Prueba2', '100', '2020-09-07', TRUE, '0.0', 1);
+	'Prueba2', '2020-09-07', TRUE, '100', '0.0', 1);
 
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');

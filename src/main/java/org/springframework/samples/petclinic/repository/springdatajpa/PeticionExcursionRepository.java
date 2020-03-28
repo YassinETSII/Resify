@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
+import java.time.LocalDate;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -10,8 +12,8 @@ public interface PeticionExcursionRepository extends CrudRepository<PeticionExcu
 
 	PeticionExcursion findById(int id) throws DataAccessException;
 	
-	@Query("SELECT peticion FROM PeticionExcursion peticion WHERE peticion.residencia.id =:id")
-	Iterable<PeticionExcursion> findByResidencia(@Param("id") int id) throws DataAccessException;
+	@Query("SELECT peticion FROM PeticionExcursion peticion WHERE peticion.residencia.id =:id AND peticion.excursion.fechaInicio > :today")
+	Iterable<PeticionExcursion> findByResidencia(@Param("id") int id, @Param("today") LocalDate today) throws DataAccessException;
 
 	@Query("SELECT peticion FROM PeticionExcursion peticion WHERE peticion.excursion.organizador.id =:id AND peticion.estado = 'pendiente'")
 	Iterable<PeticionExcursion> findByOrganizador(@Param("id") int id) throws DataAccessException;

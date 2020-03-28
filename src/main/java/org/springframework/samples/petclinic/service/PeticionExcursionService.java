@@ -15,6 +15,8 @@
  */
 package org.springframework.samples.petclinic.service;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Excursion;
@@ -44,7 +46,7 @@ public class PeticionExcursionService {
 	
 	@Transactional
 	public Iterable<PeticionExcursion> findAllMineResidencia(Residencia residencia) throws DataAccessException {
-		return peticionExcursionRepository.findByResidencia(residencia.getId());
+		return peticionExcursionRepository.findByResidencia(residencia.getId(),LocalDate.now());
 	}
 
 	@Transactional
