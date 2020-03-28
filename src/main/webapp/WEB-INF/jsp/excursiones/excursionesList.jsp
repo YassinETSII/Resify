@@ -24,22 +24,12 @@
 		<tbody>
 			<c:forEach items="${excursiones}" var="excursion">
 				<tr>
-					<td><security:authorize access="hasAuthority('organizador')">
-
-							<spring:url value="/excursiones/{excursionId}"
-								var="excursionUrl">
-								<spring:param name="excursionId" value="${excursion.id}" />
-							</spring:url>
-
-						</security:authorize> <security:authorize access="hasAuthority('manager')">
-
-							<spring:url value="/excursiones/{excursionId}"
-								var="excursionUrl">
-								<spring:param name="excursionId" value="${excursion.id}" />
-							</spring:url>
-
-						</security:authorize> <a href="${fn:escapeXml(excursionUrl)}"><c:out
-								value="${excursion.titulo}" /></a></td>
+					<td><spring:url value="/excursiones/{excursionId}"
+							var="excursionUrl">
+							<spring:param name="excursionId" value="${excursion.id}" />
+						</spring:url>
+					<a href="${fn:escapeXml(excursionUrl)}">
+					<c:out value="${excursion.titulo}" /></a></td>
 					<td><c:out value="${excursion.fechaInicio}" /></td>
 					<td><c:out value="${excursion.horaInicio}" /></td>
 					<td><c:out value="${excursion.fechaFin}" /></td>

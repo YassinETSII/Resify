@@ -16,9 +16,7 @@ INSERT INTO authorities VALUES ('organizador2','organizador');
 
 INSERT INTO organizadores VALUES (1, 'Fernández', 'Juan', 'Prueba1', 'Prueba1', 'organizador1');
 INSERT INTO organizadores VALUES (2,  'Limón', 'Maria', 'Prueba2', 'Prueba2', 'organizador2');
-
-INSERT INTO excursiones VALUES (1, 'Descripcion de prueba', '2020-09-07',  '22:30', '17:00', 
-	'Prueba', '100', '2020-09-07', FALSE, '2.0', 1);
+	
 	
 -- Managers
 
@@ -35,7 +33,29 @@ INSERT INTO managers VALUES (4, 'Domínguez', 'Carlos', 'Prueba2', 'Prueba2', 'm
 
 INSERT INTO residencias VALUES (1, false, 100, 'residencia1@mail.es', 'Descripcion de prueba', 'Direccion', '70', '07:00', '21:00', 
 	'http://www.resi1.com', 'Residencia 1', '987654321', 3);
+  
+INSERT INTO residencias VALUES (2, false, 100, 'residencia2@mail.es', 'Descripcion de prueba 2', 'Direccion 2', '70', '07:00', '21:00', 
+	'http://www.resi2.com', 'Residencia 2', '987654321', 4);
+  
+-- Acciones
+INSERT INTO buenas_acciones VALUES (1, 'descrip', '2020-10-10', 1);
 	
+INSERT INTO buenas_acciones VALUES (2, 'descrip', '2020-10-10', 1);
+
+INSERT INTO buenas_acciones VALUES (3, 'descrip', '2020-10-10', 1);
+
+INSERT INTO buenas_acciones VALUES (4, 'descrip', '2020-10-10', 2); 
+
+INSERT INTO incidencias VALUES (1, 'descrip', '2020-10-10', 1);
+
+INSERT INTO incidencias VALUES (2, 'descrip', '2020-10-10', 2);
+
+
+
+-- Actividades
+
+INSERT INTO actividades VALUES (1, 'Descripcion de prueba', '2010-09-07',  '22:30', '17:00', 
+	'Prueba', 1);	
 -- Ancianos
 
 INSERT INTO users(username,password,enabled) VALUES ('anciano1','anciano1',TRUE);
@@ -44,7 +64,7 @@ INSERT INTO authorities VALUES ('anciano1','anciano');
 INSERT INTO users(username,password,enabled) VALUES ('anciano2','anciano2',TRUE);
 INSERT INTO authorities VALUES ('anciano2','anciano');
 
-INSERT INTO ancianos VALUES (5, 'García', 'Anacleto', 'Presentacion1', 65, false, 'anciano1');
+INSERT INTO ancianos VALUES (5, 'García', 'Anacleto', 'Presentacion1', 70, false, 'anciano1');
 INSERT INTO ancianos VALUES (6, 'Prieto', 'Dolores', 'Presentacion2', 80, true, 'anciano2');
 
 -- Incidencias
@@ -59,6 +79,14 @@ INSERT INTO buenas_acciones VALUES (1, 'Descripcion de buena acción', '2010-09-
 
 INSERT INTO inscripciones VALUES (1, 'Declaración1', 'pendiente', '2020-02-01', null , 5, 1);
 INSERT INTO inscripciones VALUES (2, 'Declaración2', 'pendiente', '2020-02-01', null , 6, 1);
+
+-- Excursiones
+
+INSERT INTO excursiones VALUES (1, 'Descripcion de prueba', '2020-01-01',  '22:30', '17:00', 
+	'Prueba', '2020-09-07', TRUE, '100', '2.0', 1);
+INSERT INTO excursiones VALUES (2, 'Descripcion de prueba2', '2020-09-07',  '22:30', '17:00', 
+	'Prueba2', '2020-09-07', TRUE, '100', '0.0', 1);
+
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');

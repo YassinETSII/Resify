@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -43,7 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/excursiones/**").hasAnyAuthority("organizador", "manager")
 				.antMatchers("/excursiones/{excursionId}/edit").hasAnyAuthority("organizador")
 				.antMatchers("/excursiones/{excursionId}/new").hasAnyAuthority("organizador")
-				.antMatchers("/peticiones-excursion/**").hasAnyAuthority("manager")
+				.antMatchers("/peticiones-excursion/**").hasAnyAuthority("organizador")
 				.antMatchers("/residencias/new").hasAnyAuthority("manager")
 				.antMatchers("/residencias").hasAnyAuthority("anciano")
 				.antMatchers("/residencias/**").hasAnyAuthority("anciano", "manager")
@@ -51,7 +50,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/inscripciones").hasAnyAuthority("anciano", "manager")
 				.antMatchers("/inscripciones/**").hasAnyAuthority("anciano", "manager")
 				.antMatchers("/admin/**").hasAnyAuthority("admin")
-				.antMatchers("/owners/**").hasAnyAuthority("owner","admin")				
+				.antMatchers("/owners/**").hasAnyAuthority("owner","admin")
+				.antMatchers("/ancianos/**").hasAnyAuthority("admin")
+				.antMatchers("/organizadores/**").hasAnyAuthority("admin")
+				.antMatchers("/managers/**").hasAnyAuthority("admin")
 				.antMatchers("/vets/**").authenticated()
 				.anyRequest().denyAll()
 				.and()

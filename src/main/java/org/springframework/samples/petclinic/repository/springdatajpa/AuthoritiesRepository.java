@@ -12,5 +12,5 @@ public interface AuthoritiesRepository extends  CrudRepository<Authorities, Stri
 	
 	@Query("SELECT a.authority FROM Authorities a WHERE a.username LIKE :username%")
 	String findAuthority(@Param("username") String username) throws DataAccessException;
-	
+			
 }

@@ -15,6 +15,8 @@
  */
 package org.springframework.samples.petclinic.service;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Excursion;
@@ -68,7 +70,7 @@ public class ExcursionService {
 	
 	@Transactional
 	public Iterable<Excursion> findAllPublished() {
-		return excursionRepository.findAllPublished();
+		return excursionRepository.findAllPublished(LocalDate.now());
 	}	
 	
 	@Transactional

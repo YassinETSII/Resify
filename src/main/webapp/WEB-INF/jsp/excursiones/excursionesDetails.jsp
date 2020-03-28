@@ -48,8 +48,8 @@
 			<td><c:out value="${excursion.ratioAceptacion}" /></td>
 		</tr>
 		<tr>
-			<th>Aforo</th>
-			<td><c:out value="${excursion.aforo}" /></td>
+			<th>Numero maximo de residencias</th>
+			<td><c:out value="${excursion.numeroResidencias}" /></td>
 		</tr>
 	</table>
 

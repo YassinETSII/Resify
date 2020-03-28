@@ -41,8 +41,8 @@ public class Excursion extends ActivityEntity {
 	private double ratioAceptacion;
 	
 	@Positive
-	@Column(name = "aforo")
-	private int aforo;
+	@Column(name = "numeroResidencias")
+	private int numeroResidencias;
 
 	@NotNull
 	@Column(name = "fecha_fin")        
@@ -64,12 +64,12 @@ public class Excursion extends ActivityEntity {
 		this.ratioAceptacion = ratio;
 	}
 
-	public Integer getAforo() {
-		return aforo;
+	public int getNumeroResidencias() {
+		return numeroResidencias;
 	}
 
-	public void setAforo(Integer aforo) {
-		this.aforo = aforo;
+	public void setNumeroResidencias(int numeroResidencias) {
+		this.numeroResidencias = numeroResidencias;
 	}
 	
 	public Organizador getOrganizador() {
