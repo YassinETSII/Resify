@@ -17,6 +17,7 @@ package org.springframework.samples.petclinic.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Excursion;
 import org.springframework.samples.petclinic.model.Organizador;
 import org.springframework.samples.petclinic.model.PeticionExcursion;
 import org.springframework.samples.petclinic.model.Residencia;
@@ -49,6 +50,11 @@ public class PeticionExcursionService {
 	@Transactional
 	public Iterable<PeticionExcursion> findAllMineOrganizador(Organizador organizador) throws DataAccessException {
 		return peticionExcursionRepository.findByOrganizador(organizador.getId());
+	}
+	
+	@Transactional
+	public Double countPeticionExcursionAceptadaByExcursion(Excursion excursion) throws DataAccessException {
+		return peticionExcursionRepository.findByExcursionAceptada(excursion.getId());
 	}
 
 	@Transactional

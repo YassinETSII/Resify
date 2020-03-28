@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -123,7 +124,7 @@ public class PeticionExcursionController {
 		peticionExcursion.setFecha(fecha);
 		peticionExcursion.setResidencia(residencia);
 
-		if (!(peticionExcursion.getExcursion().isFinalMode())) {
+		if (!(peticionExcursion.getExcursion().isFinalMode()) || peticionExcursion.getExcursion().getFechaInicio().isBefore(new Date(peticionExcursion.getFecha().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate())) {
 			return "exception";
 		}
 		
@@ -147,9 +148,11 @@ public class PeticionExcursionController {
 		Excursion excursion = this.excursionService.findExcursionById(excursionId);
 		peticionExcursion.setExcursion(excursion);
 		peticionExcursion.setResidencia(residencia);
-
-		System.out.println("inisialisa");
-		if (result.hasErrors()) {
+		
+		if (!(peticionExcursion.getExcursion().isFinalMode()) || peticionExcursion.getExcursion().getFechaInicio().isBefore(new Date(peticionExcursion.getFecha().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate())) {
+			return "exception";
+			
+		} else if (result.hasErrors()) {
 			Manager manager = this.managerService.findManagerByUserName(p.getName());
 			Integer peticiones = this.managerService.countPeticionesByExcursion(excursion, manager);
 
@@ -160,11 +163,7 @@ public class PeticionExcursionController {
 			return VIEWS_PETICION_EXCURSION_CREATE_OR_UPDATE_FORM;
 	
 		} else {
-			System.out.println("sin errores");
-
 			peticionExcursionService.save(peticionExcursion);
-			System.out.println("guarda");
-
 			model.put("message", "Se ha enviado la peticion correctamente");
 			return "redirect:/excursiones/{excursionId}";
 		}
@@ -193,6 +192,9 @@ public class PeticionExcursionController {
 		if (peticionExcursion.getEstado().equals("aceptada")) {
 			if (residenciaService.getRatio(peticionExcursionToUpdate.getResidencia()) < peticionExcursionToUpdate.getExcursion().getRatioAceptacion()) {
 				result.rejectValue("estado", "la excursion no acepta residencias con un ratio menor de " + peticionExcursionToUpdate.getExcursion().getRatioAceptacion() , "la excursion no acepta residencias con un ratio menor de " + peticionExcursionToUpdate.getExcursion().getRatioAceptacion());
+			}
+			if (peticionExcursionService.countPeticionExcursionAceptadaByExcursion(peticionExcursion.getExcursion())>=peticionExcursion.getExcursion().getNumeroResidencias()) {
+				result.rejectValue("estado", "la excursión no acepta más residencias, número máximo de residencias alcanzado", "la excursión no acepta más residencias, número máximo de residencias alcanzado");
 			}
 		}
 		if (result.hasErrors()) {

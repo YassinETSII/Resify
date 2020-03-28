@@ -15,6 +15,9 @@ public interface PeticionExcursionRepository extends CrudRepository<PeticionExcu
 
 	@Query("SELECT peticion FROM PeticionExcursion peticion WHERE peticion.excursion.organizador.id =:id AND peticion.estado = 'pendiente'")
 	Iterable<PeticionExcursion> findByOrganizador(@Param("id") int id) throws DataAccessException;
+	
+	@Query("SELECT count(peticion.id) FROM PeticionExcursion peticion WHERE peticion.excursion.id =:id AND peticion.estado = 'aceptada'")
+	Double findByExcursionAceptada(@Param("id") int id) throws DataAccessException;
 
 
 }
