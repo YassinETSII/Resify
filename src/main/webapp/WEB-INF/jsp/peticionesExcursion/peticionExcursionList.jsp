@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="resify" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <resify:layout pageName="inscripciones">
     <h2>
@@ -15,28 +16,50 @@
         <tr>
             <th style="width: 150px;">Residencia</th>
              <th style="width: 200px;">Estado</th>
-            <th style="width: 200px;">Excursion</th>
-            <th style="width: 200px;">Fecha</th>
+            <th style="width: 200px;">Excursión</th>
+            <security:authorize access="hasAuthority('organizador')"> 
+               <th style="width: 200px;">Fecha</th>
+            </security:authorize>
+            <security:authorize access="hasAuthority('manager')"> 
+               <th style="width: 200px;">Justificación</th>
+            </security:authorize>
+            
+            
         </tr>
         </thead>
         <tbody>
         <c:forEach items="${peticionesExcursion}" var="peticionExcursion">
             <tr>
+               	<security:authorize access="hasAuthority('organizador')">
+            
                 <td>
                		<spring:url value="/peticiones-excursion/{peticionExcursionId}/edit" var="peticionExcursionUrl">
                         <spring:param name="peticionExcursionId" value="${peticionExcursion.id}"/>
                     </spring:url>
-                    <a href="${fn:escapeXml(peticionExcursionUrl)}"><c:out value="${peticionExcursion.residencia.nombre} ${inscripcion.anciano.apellidos}"/></a>
+                    <a href="${fn:escapeXml(peticionExcursionUrl)}"><c:out value="${peticionExcursion.residencia.nombre}"/></a>
                 </td>
+                </security:authorize>
+                <security:authorize access="hasAuthority('manager')"> 
+                <td>
+                    <c:out value="${peticionExcursion.residencia.nombre}"/>
+                </td>
+                </security:authorize> 
                 <td>
                     <c:out value="${peticionExcursion.estado}"/>
                 </td>
                 <td>
                     <c:out value="${peticionExcursion.excursion.titulo}"/>
                 </td>
+                <security:authorize access="hasAuthority('organizador')"> 
                 <td>
                     <fmt:formatDate value="${peticionExcursion.fecha}" pattern="yyyy/MM/dd"/>
                 </td>
+                </security:authorize>
+                <security:authorize access="hasAuthority('manager')">
+                <td>
+                    <c:out value="${peticionExcursion.justificacion}"/>
+                </td>
+                </security:authorize>
                 
             </tr>
         </c:forEach>

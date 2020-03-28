@@ -30,7 +30,6 @@ public class PeticionExcursionValidator implements Validator {
 
 	@Override
 	public void validate(final Object obj, final Errors errors) {
-
 		PeticionExcursion peticionExcursion = (PeticionExcursion) obj;
 
 		if (peticionExcursion.getDeclaracion().isEmpty()) {
@@ -38,7 +37,7 @@ public class PeticionExcursionValidator implements Validator {
 		}
 
 		if (peticionExcursion.getEstado().equals("rechazada") && peticionExcursion.getJustificacion().isEmpty()) {
-			errors.rejectValue("justificacion", "si rechaza la inscripcion, debe presentar una justificación", "si rechaza la inscripcion, debe presentar una justificación");
+			errors.rejectValue("justificacion", "si rechaza la peticion, debe presentar una justificación", "si rechaza la inscripcion, debe presentar una justificación");
 		}
 
 	}
