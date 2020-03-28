@@ -13,6 +13,13 @@ public interface ResidenciaRepository extends CrudRepository<Residencia, String>
 
 	@Query("SELECT residencia FROM Residencia residencia WHERE residencia.manager.id =:id")
 	Iterable<Residencia> findAllMine(@Param("id") int id) throws DataAccessException;
+	
+	@Query("SELECT count(buenaAccion.id) FROM BuenaAccion buenaAccion WHERE buenaAccion.residencia.id =:id")
+	Double countBuenasAccionesByResidenciaId(@Param("id") int id) throws DataAccessException;
+	
+	@Query("SELECT count(incidencia.id) FROM Incidencia incidencia WHERE incidencia.residencia.id =:id")
+	Double countIncidenciasByResidenciaId(@Param("id") int id) throws DataAccessException;
+
 
 	//	@Query("SELECT r, CASE WHEN (COUNT(DISTINCT b.id) = 0) THEN 0 WHEN (COUNT(DISTINCT i.id) = 0) THEN COUNT(DISTINCT b.id) "
 	//			+ "ELSE (COUNT(DISTINCT b.id)/COUNT(DISTINCT i.id)) END AS ratioAcciones FROM BuenaAccion b, Incidencia i JOIN "

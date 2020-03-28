@@ -27,7 +27,7 @@
                 <resify:inputField label="Hora Inicio" name="horaInicio"/>
                 <resify:inputField label="Fecha Fin" name="fechaFin"/>
                 <resify:inputField label="Hora Fin" name="horaFin"/>
-                <resify:inputField label="Aforo" name="aforo"/>
+                <resify:inputField label="NumeroResidencias" name="numeroResidencias"/>
                 <resify:inputField label="Ratio de aceptacion" name="ratioAceptacion"/>
                 <label class="col-sm-2 control-label"><input type="checkbox" name="finalMode"/>  ¿Publicar Excursion?</label>
             </div>

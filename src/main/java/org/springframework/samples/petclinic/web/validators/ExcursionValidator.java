@@ -52,8 +52,8 @@ public class ExcursionValidator implements Validator {
 			errors.rejectValue("horaFin", "requerido", "requerido");
 		}
 		
-		if(excursion.getAforo() < 10) {
-			errors.rejectValue("aforo", "debe ser mayor que 10", "debe ser mayor que 10");
+		if(excursion.getNumeroResidencias() < 0) {
+			errors.rejectValue("numeroResidencias", "debe ser mayor que 0", "debe ser mayor que 0");
 		}
 		
 		if(excursion.getRatioAceptacion() < 1) {
