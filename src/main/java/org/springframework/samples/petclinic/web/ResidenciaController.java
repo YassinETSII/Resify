@@ -77,6 +77,14 @@ public class ResidenciaController {
 	@GetMapping()
 	public String listResidencias(final Map<String, Object> model, final Principal p) {
 		Iterable<Residencia> residencias = this.residenciaService.findAll();
+		model.put("puedeVerTop", true);
+		model.put("residencias", residencias);
+		return "residencias/residenciasList";
+	}
+	
+	@GetMapping(value = "/top")
+	public String listTopResidencias(final Map<String, Object> model, final Principal p) {
+		Iterable<Residencia> residencias = this.residenciaService.findTop(5);
 		model.put("residencias", residencias);
 		return "residencias/residenciasList";
 	}

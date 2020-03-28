@@ -16,6 +16,10 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Manager;
@@ -55,6 +59,20 @@ public class ResidenciaService {
 	@Transactional
 	public Iterable<Residencia> findAll() {
 		return this.residenciaRepository.findAll();
+	}
+
+	@Transactional
+	public List<Residencia> findTop(final int nResults) {
+		List<Residencia> list = new ArrayList<>();
+		Iterator<Object[]> lt = this.residenciaRepository.findTop().iterator();
+		int i = 0;
+		while (i < nResults) {
+			if (lt.hasNext()) {
+				list.add((Residencia) lt.next()[0]);
+			}
+			i++;
+		}
+		return list;
 	}
 
 }
