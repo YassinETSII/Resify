@@ -186,7 +186,7 @@ public class PeticionExcursionController {
 		PeticionExcursion peticionExcursionToUpdate = this.peticionExcursionService.findPeticionExcursionById(peticionExcursionId);
 		
 		peticionExcursion.setExcursion(peticionExcursionToUpdate.getExcursion());
-		if (!peticionExcursion.getExcursion().getOrganizador().equals(organizador) || peticionExcursion.getExcursion().getFechaInicio().isBefore(new Date(peticionExcursion.getFecha().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate())) {
+		if (!peticionExcursion.getExcursion().getOrganizador().equals(organizador) || peticionExcursionToUpdate.getExcursion().getFechaInicio().isBefore(new Date(peticionExcursionToUpdate.getFecha().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate())) {
 			return "exception";
 		}
 		if (peticionExcursion.getEstado().equals("aceptada")) {
@@ -204,7 +204,7 @@ public class PeticionExcursionController {
 			BeanUtils.copyProperties(peticionExcursion, peticionExcursionToUpdate, "id", "residencia", "excursion", "fecha");
 			
 			this.peticionExcursionService.save(peticionExcursionToUpdate);
-			return "redirect:/peticiones-excursion";
+			return "redirect:/peticiones-excursion/";
 		}
 	}
 
