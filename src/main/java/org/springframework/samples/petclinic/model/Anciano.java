@@ -22,10 +22,11 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Range;
 import org.springframework.core.style.ToStringCreator;
 
 @Entity
@@ -34,7 +35,7 @@ public class Anciano extends Persona {
 
 	@Column(name = "edad")
 	@NotNull
-	@Size(min = 66, max = 110)
+	@Range(min = 66, max = 110)
 	private Integer	edad;
 
 	@Column(name = "cartaPresentacion")
@@ -46,6 +47,7 @@ public class Anciano extends Persona {
 	private boolean	tieneDependenciaGrave;
 
 	//
+	@Valid
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "username", referencedColumnName = "username")
 	private User	user;

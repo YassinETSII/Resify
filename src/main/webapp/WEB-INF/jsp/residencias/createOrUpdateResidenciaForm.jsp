@@ -22,11 +22,11 @@
                 <resify:inputField label="Aforo" name="aforo"/>
                 <resify:inputField label="Mas Info" name="masInfo"/>
                 <resify:inputField label="Telefono" name="telefono"/>
-                <resify:inputField label="correo" name="correo"/>
+                <resify:inputField label="Correo" name="correo"/>
                 <resify:inputField label="Hora Apertura" name="horaApertura"/>
                 <resify:inputField label="Hora Cierre" name="horaCierre"/>
                 <resify:inputField label="Edad Maxima" name="edadMaxima"/>
-                <input type="checkbox" name="aceptaDependenciaGrave"/>
+                <label class="col-sm-2 control-label">¿Acepta personas con dependecia grave?</label><input type="checkbox" name="aceptaDependenciaGrave"/>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">

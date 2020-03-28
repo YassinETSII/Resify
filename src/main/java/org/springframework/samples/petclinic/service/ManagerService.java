@@ -53,6 +53,11 @@ public class ManagerService {
 	}
 
 	@Transactional(readOnly = true)
+	public Iterable<Manager> findManagers() throws DataAccessException {
+		return this.managerRepository.findAll();
+	}
+	
+	@Transactional(readOnly = true)
 	public Manager findManagerByUserName(String username) throws DataAccessException {
 		return managerRepository.findByUsername(username);
 	}

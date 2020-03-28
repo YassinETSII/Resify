@@ -21,6 +21,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.core.style.ToStringCreator;
@@ -38,6 +39,7 @@ public class Organizador extends Persona{
 	@NotBlank
 	private String sector;
 	//
+	@Valid
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "username", referencedColumnName = "username")
 	private User user;
