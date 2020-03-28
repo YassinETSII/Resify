@@ -44,7 +44,7 @@ INSERT INTO authorities VALUES ('anciano1','anciano');
 INSERT INTO users(username,password,enabled) VALUES ('anciano2','anciano2',TRUE);
 INSERT INTO authorities VALUES ('anciano2','anciano');
 
-INSERT INTO ancianos VALUES (5, 'García', 'Anacleto', 'Presentacion1', 65, false, 'anciano1');
+INSERT INTO ancianos VALUES (5, 'García', 'Anacleto', 'Presentacion1', 70, false, 'anciano1');
 INSERT INTO ancianos VALUES (6, 'Prieto', 'Dolores', 'Presentacion2', 80, true, 'anciano2');
 
 -- Incidencias

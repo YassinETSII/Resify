@@ -47,6 +47,11 @@ public class AncianoService {
 	}
 
 	@Transactional(readOnly = true)
+	public Iterable<Anciano> findAncianos() throws DataAccessException {
+		return this.ancianoRepository.findAll();
+	}
+	
+	@Transactional(readOnly = true)
 	public Anciano findAncianoById(final int id) throws DataAccessException {
 		return this.ancianoRepository.findById(id);
 	}

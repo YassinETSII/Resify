@@ -50,6 +50,11 @@ public class OrganizadorService {
 	}
 	
 	@Transactional(readOnly = true)
+	public Iterable<Organizador> findOrganizadores() throws DataAccessException {
+		return organizadorRepository.findAll();
+	}
+	
+	@Transactional(readOnly = true)
 	public Organizador findOrganizadorByUsername(String username) throws DataAccessException {
 		return organizadorRepository.findByUsername(username);
 	}
