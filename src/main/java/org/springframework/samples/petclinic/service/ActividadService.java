@@ -57,6 +57,11 @@ public class ActividadService {
 	}
 	
 	@Transactional
+	public void deleteActividad(Actividad actividad) throws DataAccessException {
+		actividadRepository.delete(actividad);	
+	}
+	
+	@Transactional
 	public Iterable<Actividad> findAllMine(Manager manager) {
 		return actividadRepository.findAllMine(manager.getId());
 	}
