@@ -17,7 +17,10 @@
 package org.springframework.samples.petclinic.service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
+
+import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -27,6 +30,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Excursion;
 import org.springframework.samples.petclinic.model.Organizador;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 class ExcursionServiceTests {
@@ -87,54 +91,87 @@ class ExcursionServiceTests {
 		Assertions.assertTrue(excursion1.getTitulo().equals("Prueba1"));
 	}
 
+	@Test
+	@Transactional
+	public void debeCrearExcursion() {
+		Organizador organizador = this.organizadorService.findOrganizadorById(1);
+		Iterable<Excursion> exc1 = this.excursionService.findAllMine(organizador);
+		ArrayList<Excursion> excursiones1 = new ArrayList<Excursion>();
+		for (Excursion b : exc1) {
+			excursiones1.add(b);
+		}
+
+		int total = excursiones1.size();
+
+		Excursion excursion = new Excursion();
+		excursion.setTitulo("Prueba");
+		excursion.setDescripcion("Prueba desc");
+		excursion.setFechaInicio(LocalDate.now().plusDays(9));
+		excursion.setFechaFin(LocalDate.now().plusDays(10));
+		excursion.setHoraInicio(LocalTime.of(9, 0));
+		excursion.setHoraFin(LocalTime.of(20, 0));
+		excursion.setRatioAceptacion(1.0);
+		excursion.setNumeroResidencias(5);
+		excursion.setOrganizador(organizador);
+		excursion.setFinalMode(false);
+
+		this.excursionService.saveExcursion(excursion);
+
+		Iterable<Excursion> exc2 = this.excursionService.findAllMine(organizador);
+		ArrayList<Excursion> excursiones2 = new ArrayList<Excursion>();
+		for (Excursion e : exc2) {
+			excursiones2.add(e);
+		}
+
+		Assertions.assertTrue(excursiones2.size() == total + 1);
+
+		Assertions.assertTrue(excursion.getId() != null);
+	}
+
+	@Test
+	@Transactional
+	public void debeLanzarExcepcionCreandoExcursionEnBlanco() {
+
+		Excursion exc = new Excursion();
+
+		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+			this.excursionService.saveExcursion(exc);
+		});
+	}
+	
 //	@Test
 //	@Transactional
-//	public void debeCrearBuenaAccion() {
-//		Manager m = this.managerService.findManagerById(3);
-//		Iterable<Excursion> bas = this.excursionService.findAllMine(m);
-//		ArrayList<Excursion> basc = new ArrayList<Excursion>();
-//		for (Excursion b : bas) {
-//			basc.add(b);
+//	public void debeEliminarExcursion() {
+//		Organizador organizador = this.organizadorService.findOrganizadorById(1);
+//		Iterable<Excursion> exc1 = this.excursionService.findAllMine(organizador);
+//		ArrayList<Excursion> excursiones1 = new ArrayList<Excursion>();
+//		for (Excursion b : exc1) {
+//			excursiones1.add(b);
 //		}
 //
-//		int total = basc.size();
+//		int total = excursiones1.size();
 //
-//		Iterable<Residencia> res = this.residenciaService.findAllMine(m);
-//		ArrayList<Residencia> ress = new ArrayList<Residencia>();
-//		for (Residencia r : res) {
-//			ress.add(r);
+//		Excursion excursion = excursiones1.get(0);
+//		System.out.println("dadafsdfsadfs "+excursiones1.get(0).getId());
+//		this.excursionService.deleteExcursion(excursion);;
+//
+//		Iterable<Excursion> exc2 = this.excursionService.findAllMine(organizador);
+//		if(exc2 != null) {
+//			ArrayList<Excursion> excursiones2 = new ArrayList<Excursion>();
+//			for (Excursion e : exc2) {
+//				excursiones2.add(e);
+//
+//			}				
+//			Assertions.assertTrue(excursiones2.size() == total - 1);
+//			Assertions.assertTrue(excursion.getId() == null);
+//
+//		}else {
+//			Assertions.assertTrue(exc2 == null);
 //		}
+//		
 //
-//		Excursion ba = new Excursion();
-//		ba.setTitulo("Prueba");
-//		ba.setFecha(new Date(System.currentTimeMillis() - 1));
-//		ba.setDescripcion("Prueba descripcion");
-//		ba.setResidencia(ress.get(0));
 //
-//		this.excursionService.saveBuenaAccion(ba);
-//
-//		Iterable<Excursion> bas2 = this.excursionService.findAllMine(m);
-//		ArrayList<Excursion> basc2 = new ArrayList<Excursion>();
-//		for (Excursion b2 : bas2) {
-//			basc2.add(b2);
-//		}
-//
-//		//Comprueba que se ha añadido a las buenas acciones del manager
-//		Assertions.assertTrue(basc2.size() == total + 1);
-//
-//		//Comprueba que su id ya no es nulo
-//		Assertions.assertTrue(ba.getId() != null);
 //	}
-//
-//	@Test
-//	@Transactional
-//	public void debeLanzarExcepcionCreandoBuenaAccionEnBlanco() {
-//
-//		Excursion ba = new Excursion();
-//
-//		Assertions.assertThrows(ConstraintViolationException.class, () -> {
-//			this.excursionService.saveBuenaAccion(ba);
-//		});
-//	}
+
 
 }

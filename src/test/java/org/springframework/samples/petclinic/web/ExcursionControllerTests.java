@@ -1,7 +1,15 @@
 package org.springframework.samples.petclinic.web;
 
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -149,5 +157,97 @@ class ExcursionControllerTests {
 			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("ratioAceptacion", Matchers.is(1.0))))
 			.andExpect(MockMvcResultMatchers.view().name("excursiones/excursionesDetails"));
 	}
+
+	@WithMockUser(username = ExcursionControllerTests.TEST_ORGANIZADOR_NOMBRE)
+	@Test
+	void testInitUpdateExcursionForm() throws Exception {
+		mockMvc.perform(get("/excursiones/{excursionId}/edit", ExcursionControllerTests.TEST_EXCURSION_ID))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(model().attributeExists("excursion"))
+				.andExpect(model().attribute("excursion", hasProperty("descripcion", is("Prueba desc"))))
+				.andExpect(model().attribute("excursion", hasProperty("titulo", is("Prueba"))))
+				.andExpect(model().attribute("excursion", hasProperty("fechaInicio", is(this.diaini))))
+				.andExpect(model().attribute("excursion", hasProperty("fechaFin", is(this.diafin))))
+				.andExpect(model().attribute("excursion", hasProperty("finalMode", is(true))))
+				.andExpect(model().attribute("excursion", hasProperty("horaInicio", is(this.horini))))
+				.andExpect(model().attribute("excursion", hasProperty("horaFin", is(this.horfin))))
+				.andExpect(model().attribute("excursion", hasProperty("numeroResidencias", is(6))))
+				.andExpect(model().attribute("excursion", hasProperty("ratioAceptacion", is(1.0))))				
+				.andExpect(view().name("excursiones/createOrUpdateExcursionForm"));
+	}
+	
+	@WithMockUser(username = ExcursionControllerTests.TEST_ORGANIZADOR_NOMBRE)
+	@Test
+	void testProcessUpdateFormFinalModeTrue() throws Exception {
+		this.exc.setFinalMode(true);
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/excursiones/{excursionId}/edit",ExcursionControllerTests.TEST_EXCURSION_ID)
+				.param("finalMode", "true")
+				.param("titulo", "Prueba")
+				.param("descripcion", "Prueba descrip")
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaInicio", "2030/01/01")
+				.param("horaInicio", "10:00")
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaFin", "2031/01/01")
+				.param("horaFin", "20:00")
+				.param("numeroResidencias", "10")
+				.param("ratioAceptacion", "1.0"))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+	
+	@WithMockUser(username = ExcursionControllerTests.TEST_ORGANIZADOR_NOMBRE)
+	@Test
+	void testProcessUpdateFormSuccess() throws Exception {
+		this.exc.setFinalMode(false);
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/excursiones/{excursionId}/edit",ExcursionControllerTests.TEST_EXCURSION_ID)
+				.param("titulo", "Prueba2")
+				.param("descripcion", "Prueba descrip")
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaInicio", "2030/01/01")
+				.param("horaInicio", "10:00")
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaFin", "2031/01/01")
+				.param("horaFin", "20:00")
+				.param("numeroResidencias", "10")
+				.param("ratioAceptacion", "1.0")
+				.param("finalMode", "true"))
+		.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+	}
+
+	@WithMockUser(username = ExcursionControllerTests.TEST_ORGANIZADOR_NOMBRE)
+	@Test
+	void testProcessUpdateFormHasErrors() throws Exception {
+		this.exc.setFinalMode(false);
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/excursiones/{excursionId}/edit",ExcursionControllerTests.TEST_EXCURSION_ID)
+				.param("titulo", "Prueba")
+				.param("descripcion", "")
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaInicio", "2030/01/01")
+				.param("horaInicio", "10:00")
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaFin", "2031/01/01")
+				.param("horaFin", "20:00")
+				.param("numeroResidencias", "10")
+				.param("ratioAceptacion", "1.0"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("excursion"))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.view().name("excursiones/createOrUpdateExcursionForm"));
+	}
+	
+	@WithMockUser(username = ExcursionControllerTests.TEST_ORGANIZADOR_NOMBRE)
+	@Test
+	void testProcessDeleteSuccess() throws Exception {
+		this.exc.setFinalMode(false);
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/excursiones/{excursionId}/delete",ExcursionControllerTests.TEST_EXCURSION_ID))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+	}
+	
+	@WithMockUser(username = ExcursionControllerTests.TEST_ORGANIZADOR_NOMBRE)
+	@Test
+	void testProcessDeleteFinalModeTrue() throws Exception {
+		this.exc.setFinalMode(true);
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/excursiones/{excursionId}/delete",ExcursionControllerTests.TEST_EXCURSION_ID))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+
+
+
+
 
 }

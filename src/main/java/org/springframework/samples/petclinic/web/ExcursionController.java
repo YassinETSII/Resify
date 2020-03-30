@@ -182,7 +182,9 @@ public class ExcursionController {
 		if (!excursion.getOrganizador().equals(organizador) || excursion.isFinalMode()) {
 			return "exception";
 		}
+		System.out.println("antes delete");
 		this.excursionService.deleteExcursion(excursion);
+		System.out.println("despues delete");
 		return "redirect:/excursiones";
 	}
 
