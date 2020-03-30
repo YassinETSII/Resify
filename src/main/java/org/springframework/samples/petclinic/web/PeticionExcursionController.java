@@ -181,7 +181,7 @@ public class PeticionExcursionController {
 		if (!(peticionExcursion.getExcursion().getOrganizador() == organizador) || peticionExcursion.getExcursion().getFechaInicio().isBefore(new Date(peticionExcursion.getFecha().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate())) {
 			return "exception";
 		}
-		model.addAttribute(peticionExcursion);
+		model.addAttribute("peticionExcursion", peticionExcursion);
 		return VIEWS_PETICION_EXCURSION_CREATE_OR_UPDATE_FORM;
 	}
 
