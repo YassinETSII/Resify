@@ -19,7 +19,6 @@ package org.springframework.samples.petclinic.service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.validation.ConstraintViolationException;
 
@@ -29,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Actividad;
-import org.springframework.samples.petclinic.model.BuenaAccion;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.stereotype.Service;
@@ -49,83 +47,88 @@ class ActividadServiceTests {
 
 
 	@Test
-	void debeEncontrarActividadConIdCorrecto() {
-		Actividad a = this.actividadService.findActividadById(1);
-		Assertions.assertTrue(a.getTitulo().equals("Prueba1"));
-		Assertions.assertTrue(a.getResidencia().getNombre().equals("Residencia 1"));
+	void debeEncontrarAcrividadConIdCorrecto() {
+		Actividad act = this.actividadService.findActividadById(1);
+		Assertions.assertTrue(act.getTitulo().equals("Prueba1"));
+		Assertions.assertTrue(act.getResidencia().getNombre().equals("Residencia 1"));
 
 	}
 
 	@Test
-	void debeEncontrarTodasLasActividades() {
+	void debeEncontrarTodasLasBuenasAcciones() {
 		Iterable<Actividad> acts = this.actividadService.findAll();
 
-		ArrayList<Actividad> actsn = new ArrayList<Actividad>();
-		for (Actividad a: acts) {
-			actsn.add(a);
+		ArrayList<Actividad> actividades = new ArrayList<Actividad>();
+		for (Actividad a : acts) {
+			actividades.add(a);
 		}
-		Actividad a = actsn.get(0);
-		Assertions.assertTrue(a.getTitulo().equals("Prueba1"));
+		Actividad actividad = actividades.get(0);
+		Assertions.assertTrue(actividad.getTitulo().equals("Prueba1"));
 	}
 
 	@Test
-	void debeEncontrarTodasLasActividadesPorManager() {
-		Manager m = this.managerService.findManagerById(4);
+	void debeEncontrarTodasLasBuenasAccionesPorManager() {
+		Manager m = this.managerService.findManagerById(3);
 		Iterable<Actividad> acts = this.actividadService.findAllMine(m);
 
-		ArrayList<Actividad> actsn = new ArrayList<Actividad>();
+		ArrayList<Actividad> actividades = new ArrayList<Actividad>();
 		for (Actividad a : acts) {
-			actsn.add(a);
+			actividades.add(a);
 		}
 
-		Actividad a = actsn.get(0);
-		Assertions.assertTrue(a.getTitulo().equals("Prueba4"));
+		Actividad actividad = actividades.get(0);
+		Assertions.assertTrue(actividad.getTitulo().equals("Prueba1"));
 	}
 
 	@Test
 	@Transactional
-	public void debeCrearActividadYGenerarId() {
-		Manager m = this.managerService.findManagerById(4);
-		Iterable<Actividad> acts = this.actividadService.findAllMine(m);
-		ArrayList<Actividad> actsn = new ArrayList<Actividad>();
+	public void debeCrearBuenaAccion() {
+		Manager manager = this.managerService.findManagerById(3);
+		Iterable<Actividad> acts = this.actividadService.findAllMine(manager);
+		ArrayList<Actividad> actividades1 = new ArrayList<Actividad>();
 		for (Actividad a : acts) {
-			actsn.add(a);
+			actividades1.add(a);
 		}
 
-		int total = actsn.size();
+		int total = actividades1.size();
 
-		Actividad a = new Actividad();
-		a.setTitulo("Test");
-		a.setDescripcion("Test descripcion");
-		a.setFechaInicio(LocalDate.now().plusDays(2));
-		a.setHoraFin(LocalTime.of(20, 0));
-		a.setHoraInicio(LocalTime.of(17, 0));
-		Residencia resi = this.residenciaService.findAllMine(m).iterator().next();
-		a.setResidencia(resi);
+		Iterable<Residencia> res = this.residenciaService.findAllMine(manager);
+		ArrayList<Residencia> ress = new ArrayList<Residencia>();
+		for (Residencia r : res) {
+			ress.add(r);
+		}
 
-		this.actividadService.saveActividad(a);
+		Actividad act = new Actividad();
+		act.setTitulo("Prueba");
+		act.setDescripcion("Prueba desc");
+		act.setFechaInicio(LocalDate.now().plusDays(5));
+		act.setHoraInicio(LocalTime.of(9, 0));
+		act.setHoraFin(LocalTime.of(22, 0));
+		act.setResidencia(ress.get(0));
 
-		Iterable<Actividad> acts2 = this.actividadService.findAllMine(m);
-		ArrayList<Actividad> actsn2 = new ArrayList<Actividad>();
-		for (Actividad a2 : acts2) {
-			actsn2.add(a2);
+		this.actividadService.saveActividad(act);
+
+		Iterable<Actividad> bas2 = this.actividadService.findAllMine(manager);
+		ArrayList<Actividad> basc2 = new ArrayList<Actividad>();
+		for (Actividad b2 : bas2) {
+			basc2.add(b2);
 		}
 
 		//Comprueba que se ha añadido a las buenas acciones del manager
-		Assertions.assertTrue(actsn2.size() == total + 1);
+		Assertions.assertTrue(basc2.size() == total + 1);
 
 		//Comprueba que su id ya no es nulo
-		Assertions.assertTrue(a.getId() != null);
+		Assertions.assertTrue(act.getId() != null);
 	}
 
 	@Test
 	@Transactional
-	public void debeLanzarExcepcionCreandoActividadEnBlanco() {
+	public void debeLanzarExcepcionCreandoBuenaAccionEnBlanco() {
 
-		Actividad a = new Actividad();
+		Actividad ba = new Actividad();
 
 		Assertions.assertThrows(ConstraintViolationException.class, () -> {
-			this.actividadService.saveActividad(a);
+			this.actividadService.saveActividad(ba);
 		});
 	}
 

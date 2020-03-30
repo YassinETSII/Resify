@@ -84,12 +84,12 @@ INSERT INTO inscripciones VALUES (3, 'Declaración4', 'rechazada', '2020-02-01',
 
 -- Excursiones
 
-INSERT INTO excursiones VALUES (1, 'Descripcion de prueba1', '2021-01-01',  '22:30', '17:00', 
-	'Prueba1', '2021-09-07', TRUE, '4', '2.0', 1);
-INSERT INTO excursiones VALUES (2, 'Descripcion de prueba2', '2021-09-07',  '22:30', '17:00', 
-	'Prueba2', '2021-09-07', FALSE, '7', '1.0', 1);
-INSERT INTO excursiones VALUES (3, 'Descripcion de prueba3', '2021-09-07',  '22:30', '17:00', 
-	'Prueba3', '2021-09-07', TRUE, '2', '1.0', 1);
+INSERT INTO excursiones VALUES (1, 'Descripcion de prueba1', '2020-01-01',  '22:30', '17:00', 
+	'Prueba1', '2020-09-07', TRUE, '4', '2.0', 1);
+INSERT INTO excursiones VALUES (2, 'Descripcion de prueba2', '2020-09-07',  '22:30', '17:00', 
+	'Prueba2', '2020-09-07', FALSE, '7', '1.0', 1);
+INSERT INTO excursiones VALUES (3, 'Descripcion de prueba3', '2020-09-07',  '22:30', '17:00', 
+	'Prueba3', '2020-09-07', TRUE, '2', '1.0', 1);
 	
 -- PeticionesExcursion
 
