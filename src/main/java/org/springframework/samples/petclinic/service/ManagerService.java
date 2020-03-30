@@ -72,11 +72,6 @@ public class ManagerService {
 		return managerRepository.findResidenciaByManagerUsername(username);
 	}
 
-	@Transactional(readOnly = true)
-	public int countPeticionesByExcursion(Excursion excursion, Manager manager) throws DataAccessException {
-		return managerRepository.countPeticionesByExcursion(excursion, manager);
-	}
-
 	@Transactional
 	public void saveManager(final Manager manager) throws DataAccessException {
 		// creating manager
