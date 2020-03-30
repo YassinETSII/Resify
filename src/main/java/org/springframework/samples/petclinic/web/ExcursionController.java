@@ -31,6 +31,7 @@ import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ExcursionService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.service.OrganizadorService;
+import org.springframework.samples.petclinic.service.PeticionExcursionService;
 import org.springframework.samples.petclinic.web.validators.ExcursionValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -67,6 +68,10 @@ public class ExcursionController {
 
 	@Autowired
 	private AuthoritiesService authoritiesService;
+
+
+	@Autowired
+	private PeticionExcursionService peticionExcursionService;
 
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
@@ -162,7 +167,7 @@ public class ExcursionController {
 
 		else if (authority.equals("manager")) {
 			Manager manager = managerService.findManagerByUserName(p.getName());
-			Integer peticiones = managerService.countPeticionesByExcursion(excursion, manager);
+			Integer peticiones = peticionExcursionService.countPeticionesByExcursion(excursion, manager);
 			Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
 			if (!excursion.isFinalMode()) {
 				mav = new ModelAndView("exception");

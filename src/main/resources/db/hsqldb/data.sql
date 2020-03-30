@@ -26,8 +26,12 @@ INSERT INTO authorities VALUES ('manager1','manager');
 INSERT INTO users(username,password,enabled) VALUES ('manager2','manager2',TRUE);
 INSERT INTO authorities VALUES ('manager2','manager');
 
+INSERT INTO users(username,password,enabled) VALUES ('manager3','manager3',TRUE);
+INSERT INTO authorities VALUES ('manager3','manager');
+
 INSERT INTO managers VALUES (3, 'Rodríguez', 'Rosa', 'Prueba1', 'Prueba1', 'manager1');
 INSERT INTO managers VALUES (4, 'Domínguez', 'Carlos', 'Prueba2', 'Prueba2', 'manager2');
+INSERT INTO managers VALUES (7, 'Sánchez', 'Roberto', 'Pureba3', 'Prueba3', 'manager3');
 
 -- Residencias
 

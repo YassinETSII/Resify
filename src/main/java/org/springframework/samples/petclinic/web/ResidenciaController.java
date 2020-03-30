@@ -71,6 +71,8 @@ public class ResidenciaController {
 
 	@InitBinder("residencia")
 	public void initResidenciaBinder(final WebDataBinder dataBinder) {
+		dataBinder.setDisallowedFields("id");
+		dataBinder.setDisallowedFields("manager");
 		dataBinder.setValidator(new ResidenciaValidator());
 	}
 
@@ -81,7 +83,7 @@ public class ResidenciaController {
 		model.put("residencias", residencias);
 		return "residencias/residenciasList";
 	}
-	
+
 	@GetMapping(value = "/top")
 	public String listTopResidencias(final Map<String, Object> model, final Principal p) {
 		Iterable<Residencia> residencias = this.residenciaService.findTop(5);
@@ -91,6 +93,17 @@ public class ResidenciaController {
 
 	@GetMapping(value = "/new")
 	public String initCreationForm(final Map<String, Object> model, final Principal p) {
+		Manager manager = this.managerService.findManagerByUsername(p.getName());
+		boolean tieneResidencia = true;
+		Iterable<Residencia> res = this.residenciaService.findAllMine(manager);
+		if (res.toString() == "[]") {
+			tieneResidencia = false;
+		}
+
+		if (tieneResidencia == true) {
+			return "exception";
+		}
+
 		Residencia residencia = new Residencia();
 		residencia.setAceptaDependenciaGrave(false);
 		residencia.setAforo(10);
@@ -108,7 +121,7 @@ public class ResidenciaController {
 			residencia.setManager(manager);
 			this.residenciaService.saveResidencia(residencia);
 			model.put("message", "Se ha registrado la residencia correctamente");
-			return "redirect:/residencias";
+			return "redirect:../../";
 		}
 	}
 
@@ -125,6 +138,8 @@ public class ResidenciaController {
 
 	@PostMapping(value = "/{residenciaId}/edit")
 	public String processUpdateResidenciaForm(@Valid final Residencia residencia, final BindingResult result, @PathVariable("residenciaId") final int residenciaId, final ModelMap model, final Principal p) {
+		Residencia residenciaToUpdate = this.residenciaService.findResidenciaById(residenciaId);
+		residencia.setManager(residenciaToUpdate.getManager());
 		Manager manager = this.managerService.findManagerByUsername(p.getName());
 		if (!residencia.getManager().equals(manager)) {
 			return "exception";
@@ -133,10 +148,9 @@ public class ResidenciaController {
 			model.put("residencia", residencia);
 			return ResidenciaController.VIEWS_RESIDENCIA_CREATE_OR_UPDATE_FORM;
 		} else {
-			Residencia residenciaToUpdate = this.residenciaService.findResidenciaById(residenciaId);
 			BeanUtils.copyProperties(residencia, residenciaToUpdate, "id", "manager");
 			this.residenciaService.saveResidencia(residenciaToUpdate);
-			return "redirect:/residencias";
+			return "redirect:../../";
 		}
 	}
 
