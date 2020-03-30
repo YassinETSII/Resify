@@ -17,6 +17,6 @@ public interface ExcursionRepository extends  CrudRepository<Excursion, String>{
 	Iterable<Excursion> findAllMine(@Param("id") int id) throws DataAccessException;
 	
 	@Query("SELECT excursion FROM Excursion excursion WHERE excursion.finalMode = true AND excursion.fechaInicio > :today")
-	Iterable<Excursion> findAllPublished(@Param("today") LocalDate today) throws DataAccessException;
+	Iterable<Excursion> findAllPublishedAndFuture(@Param("today") LocalDate today) throws DataAccessException;
 	
 }

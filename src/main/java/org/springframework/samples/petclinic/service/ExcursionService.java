@@ -70,7 +70,7 @@ public class ExcursionService {
 	
 	@Transactional
 	public Iterable<Excursion> findAllPublished() {
-		return excursionRepository.findAllPublished(LocalDate.now());
+		return excursionRepository.findAllPublishedAndFuture(LocalDate.now());
 	}	
 	
 	@Transactional
