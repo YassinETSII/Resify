@@ -60,7 +60,7 @@
     </c:if>
     
     <c:if test="${fn:contains(pageContext['request'].userPrincipal.authorities, 'anciano')}"> 
-    	<spring:url value="inscripciones/new/{residenciaId}" var="inscribirseUrl">
+    	<spring:url value="../inscripciones/new/{residenciaId}" var="inscribirseUrl">
     		<spring:param name="residenciaId" value="${residencia.id}"/>
     	</spring:url>
    		<a href="${inscribirseUrl}" class="btn btn-default">Inscribirse en la residencia</a>
