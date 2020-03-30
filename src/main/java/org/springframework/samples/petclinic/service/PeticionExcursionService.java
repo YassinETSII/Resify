@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Excursion;
+import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Organizador;
 import org.springframework.samples.petclinic.model.PeticionExcursion;
 import org.springframework.samples.petclinic.model.Residencia;
@@ -62,6 +63,11 @@ public class PeticionExcursionService {
 	@Transactional
 	public void save(PeticionExcursion peticionExcursion) throws DataAccessException {
 		peticionExcursionRepository.save(peticionExcursion);
+	}
+	
+	@Transactional(readOnly = true)
+	public int countPeticionesByExcursion(Excursion excursion, Manager manager) throws DataAccessException {
+		return peticionExcursionRepository.countPeticionesByExcursion(excursion, manager);
 	}
 
 }

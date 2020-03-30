@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -115,7 +116,7 @@ public class PeticionExcursionController {
 		Excursion excursion = this.excursionService.findExcursionById(excursionId);
 		Manager manager = this.managerService.findManagerByUserName(p.getName());
 		Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
-		Integer peticiones = this.managerService.countPeticionesByExcursion(excursion, manager);
+		Integer peticiones = this.peticionExcursionService.countPeticionesByExcursion(excursion, manager);
 		PeticionExcursion peticionExcursion = new PeticionExcursion();
 
 		peticionExcursion.setEstado("pendiente");
@@ -148,13 +149,14 @@ public class PeticionExcursionController {
 		Excursion excursion = this.excursionService.findExcursionById(excursionId);
 		peticionExcursion.setExcursion(excursion);
 		peticionExcursion.setResidencia(residencia);
+		peticionExcursion.setEstado("pendiente");
 		
 		if (!(peticionExcursion.getExcursion().isFinalMode()) || peticionExcursion.getExcursion().getFechaInicio().isBefore(new Date(peticionExcursion.getFecha().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate())) {
 			return "exception";
 			
 		} else if (result.hasErrors()) {
 			Manager manager = this.managerService.findManagerByUserName(p.getName());
-			Integer peticiones = this.managerService.countPeticionesByExcursion(excursion, manager);
+			Integer peticiones = this.peticionExcursionService.countPeticionesByExcursion(excursion, manager);
 
 			model.put("hasPeticion", peticiones != 0);
 			model.put("hasResidencia", residencia != null);
@@ -173,6 +175,9 @@ public class PeticionExcursionController {
 	public String initUpdatePeticionExcursionForm(@PathVariable("peticionExcursionId") final int peticionExcursionId, final ModelMap model, final Principal p) {
 		PeticionExcursion peticionExcursion = this.peticionExcursionService.findPeticionExcursionById(peticionExcursionId);
 		Organizador organizador = this.organizadorService.findOrganizadorByUsername(p.getName());
+		System.out.println(peticionExcursion.getExcursion().getFechaInicio());
+		LocalDate d = new Date(peticionExcursion.getFecha().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		System.out.println(d);
 		if (!(peticionExcursion.getExcursion().getOrganizador() == organizador) || peticionExcursion.getExcursion().getFechaInicio().isBefore(new Date(peticionExcursion.getFecha().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate())) {
 			return "exception";
 		}

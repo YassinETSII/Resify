@@ -20,6 +20,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Actividad;
 import org.springframework.samples.petclinic.model.Manager;
@@ -28,6 +29,8 @@ import org.springframework.samples.petclinic.service.ActividadService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.web.validators.ActividadValidator;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,12 +62,12 @@ public class ActividadController {
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	
+
 	@InitBinder("manager")
 	public void initManagerBinder(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	
+
 	@InitBinder("actividad")
 	public void initActividadBinder(WebDataBinder dataBinder) {
 		dataBinder.setValidator(new ActividadValidator());
@@ -77,7 +80,7 @@ public class ActividadController {
 		model.put("actividades", actividades);
 		return "actividades/actividadesList";
 	}
-	
+
 	@GetMapping(value = "/new")
 	public String initCreationForm(Map<String, Object> model, Principal p) {
 		Actividad actividad = new Actividad();
@@ -86,17 +89,42 @@ public class ActividadController {
 	}
 
 	@PostMapping(value = "/new")
-	public String processCreationForm(@Valid Actividad actividad, BindingResult result, Map<String, Object> model, Principal p) {
+	public String processCreationForm(@Valid Actividad actividad, BindingResult result, Map<String, Object> model,
+			Principal p) {
 		if (result.hasErrors()) {
 			model.put("actividad", actividad);
 			return VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM;
-		}
-		else {
+		} else {
 			Residencia residencia = this.managerService.findResidenciaByManagerUsername(p.getName());
 			actividad.setResidencia(residencia);
 			actividadService.saveActividad(actividad);
 			model.put("message", "Se ha registrado la actividad correctamente");
 			return "redirect:/actividades";
+		}
+	}
+
+	@GetMapping(value = "/{actividadId}/edit")
+	public String initUpdateActividadForm(@PathVariable("actividadId") int actividadId, Model model) {
+		Actividad actividad = this.actividadService.findActividadById(actividadId);
+		model.addAttribute(actividad);
+		return VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM;
+	}
+
+	@PostMapping(value = "/{actividadId}/edit")
+	public String processUpdateActividadForm(@Valid Actividad actividad, BindingResult result,
+			@PathVariable("actividadId") int actividadId, final ModelMap model, Principal p) {
+		if (result.hasErrors()) {
+			model.put("actividad", actividad);
+			return VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM;
+		} else {
+			Manager manager = managerService.findManagerByUsername(p.getName());
+			Actividad actividadToUpdate = this.actividadService.findActividadById(actividadId);
+			if (!actividadToUpdate.getResidencia().getManager().equals(manager)) {
+				return "exception";
+			}
+			BeanUtils.copyProperties(actividad, actividadToUpdate, "id", "residencia");
+			this.actividadService.saveActividad(actividadToUpdate);
+			return "redirect:/actividades/{actividadId}";
 		}
 	}
 
@@ -106,10 +134,21 @@ public class ActividadController {
 		Manager manager = managerService.findManagerByUsername(p.getName());
 		ModelAndView mav = new ModelAndView("actividades/actividadesDetails");
 		mav.addObject(actividad);
-		if(!actividad.getResidencia().getManager().equals(manager)) {
+		if (!actividad.getResidencia().getManager().equals(manager)) {
 			mav = new ModelAndView("exception");
 		}
 		return mav;
+	}
+
+	@GetMapping("/{actividadId}/delete")
+	public String deleteExcursion(@PathVariable("actividadId") int actividadId, Principal p) {
+		Actividad actividad = this.actividadService.findActividadById(actividadId);
+		Manager manager = managerService.findManagerByUsername(p.getName());
+		if (!actividad.getResidencia().getManager().equals(manager)) {
+			return "exception";
+		}
+		this.actividadService.deleteActividad(actividad);
+		return "redirect:/actividades";
 	}
 
 }

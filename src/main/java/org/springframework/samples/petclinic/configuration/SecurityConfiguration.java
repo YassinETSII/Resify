@@ -42,7 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/excursiones/**").hasAnyAuthority("organizador", "manager")
 				.antMatchers("/excursiones/{excursionId}/edit").hasAnyAuthority("organizador")
 				.antMatchers("/excursiones/{excursionId}/new").hasAnyAuthority("organizador")
-				.antMatchers("/peticiones-excursion").hasAnyAuthority("manager")
+				.antMatchers("/peticiones-excursion").hasAnyAuthority("manager", "organizador")
 				.antMatchers("/peticiones-excursion/**").hasAnyAuthority("organizador")
 				.antMatchers("/residencias/new").hasAnyAuthority("manager")
 				.antMatchers("/residencias").hasAnyAuthority("anciano")
