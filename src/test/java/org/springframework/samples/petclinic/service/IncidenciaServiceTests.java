@@ -54,7 +54,7 @@ class IncidenciaServiceTests {
 	}
 
 	@Test
-	void debeEncontrarTodasLasBuenasAcciones() {
+	void debeEncontrarTodasLasIncidencias() {
 		Iterable<Incidencia> bas = this.incidenciaService.findAll();
 
 		ArrayList<Incidencia> basc = new ArrayList<Incidencia>();
@@ -66,7 +66,7 @@ class IncidenciaServiceTests {
 	}
 
 	@Test
-	void debeEncontrarTodasLasBuenasAccionesPorManager() {
+	void debeEncontrarTodasLasIncidenciasPorManager() {
 		Manager m = this.managerService.findManagerById(3);
 		Iterable<Incidencia> bas = this.incidenciaService.findAllMine(m);
 
