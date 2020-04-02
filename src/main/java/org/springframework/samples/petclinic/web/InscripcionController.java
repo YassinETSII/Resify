@@ -107,7 +107,23 @@ public class InscripcionController {
 			model.put("inscripciones", inscripciones);
 		} else if (manager != null) {
 			Iterable<Inscripcion> inscripciones = this.inscripcionService.findAllMineManager(manager);
-			model.put("inscripciones", inscripciones);
+
+			ArrayList<Inscripcion> inscArray = new ArrayList<Inscripcion>();
+			for (Inscripcion i : inscripciones) {
+				Anciano a = i.getAnciano();
+				Iterable<Inscripcion> inscripcionesAnciano = this.inscripcionService.findAllMineAnciano(a);
+				boolean hayAceptada = false;
+				for (Inscripcion iA : inscripcionesAnciano) {
+					if (iA.getEstado().equals("aceptada")) {
+						hayAceptada = true;
+						break;
+					}
+				}
+				if (hayAceptada == false) {
+					inscArray.add(i);
+				}
+			}
+			model.put("inscripciones", inscArray);
 		} else {
 			return "exception";
 		}
@@ -149,6 +165,15 @@ public class InscripcionController {
 		Manager manager = this.managerService.findManagerByUsername(p.getName());
 		if (!(inscripcion.getResidencia().getManager() == manager)) {
 			return "exception";
+		} else {
+			Anciano a = inscripcion.getAnciano();
+			Iterable<Inscripcion> inscripcionesAnciano = this.inscripcionService.findAllMineAnciano(a);
+
+			for (Inscripcion ia : inscripcionesAnciano) {
+				if (ia.getEstado().equals("aceptada")) {
+					return "exception";
+				}
+			}
 		}
 		model.addAttribute(inscripcion);
 		this.res = inscripcion.getResidencia();
@@ -185,6 +210,15 @@ public class InscripcionController {
 
 		if (anciano != null && !inscripcion.getAnciano().equals(anciano) || manager != null && !inscripcion.getResidencia().getManager().equals(manager)) {
 			mav = new ModelAndView("exception");
+		} else if (manager != null) {
+			Anciano a = inscripcion.getAnciano();
+			Iterable<Inscripcion> inscripcionesAnciano = this.inscripcionService.findAllMineAnciano(a);
+
+			for (Inscripcion ia : inscripcionesAnciano) {
+				if (ia.getEstado().equals("aceptada")) {
+					mav = new ModelAndView("exception");
+				}
+			}
 		}
 		mav.addObject(this.inscripcionService.findInscripcionById(inscripcionId));
 		return mav;

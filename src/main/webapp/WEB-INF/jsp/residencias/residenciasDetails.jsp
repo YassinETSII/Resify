@@ -58,8 +58,7 @@
     	</spring:url>
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar residencia</a>
     </c:if>
-    
-    <c:if test="${fn:contains(pageContext['request'].userPrincipal.authorities, 'anciano')}"> 
+    <c:if test="${fn:contains(pageContext['request'].userPrincipal.authorities, 'anciano') && tienePendiente == false && tieneAceptada == false}"> 
     	<spring:url value="../inscripciones/new/{residenciaId}" var="inscribirseUrl">
     		<spring:param name="residenciaId" value="${residencia.id}"/>
     	</spring:url>
