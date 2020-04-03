@@ -6,7 +6,7 @@
 <%@ taglib prefix="resify" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
-<resify:layout pageName="inscripciones">
+<resify:layout pageName="peticionesExcursion">
     <h2>
         <c:if test="${peticionExcursion['new']}">Nueva </c:if>Petición De Excursion
     </h2>

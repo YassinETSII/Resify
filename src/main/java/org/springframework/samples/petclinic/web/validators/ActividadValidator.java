@@ -15,7 +15,7 @@
  */
 package org.springframework.samples.petclinic.web.validators;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import org.springframework.samples.petclinic.model.Actividad;
 import org.springframework.validation.Errors;
@@ -26,7 +26,7 @@ public class ActividadValidator implements Validator {
 	@Override
 	public void validate(Object obj, Errors errors) {
 		Actividad actividad = (Actividad) obj;
-		LocalDate currentDate = LocalDate.now();
+		Date currentDate = new Date();
 
 		if (actividad.getTitulo().isEmpty()) {
 			errors.rejectValue("titulo", "requerido", "requerido");
@@ -36,7 +36,7 @@ public class ActividadValidator implements Validator {
 			errors.rejectValue("descripcion", "requerido", "requerido");
 		}
 
-		if (actividad.getFechaInicio() == null || !actividad.getFechaInicio().isAfter(currentDate)) {
+		if (actividad.getFechaInicio() == null || !actividad.getFechaInicio().after(currentDate)) {
 			errors.rejectValue("fechaInicio", "debe ser fecha futura", "debe ser fecha futura");
 		}
 

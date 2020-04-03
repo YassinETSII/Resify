@@ -15,7 +15,7 @@
  */
 package org.springframework.samples.petclinic.web.validators;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import org.springframework.samples.petclinic.model.Excursion;
 import org.springframework.validation.Errors;
@@ -26,7 +26,7 @@ public class ExcursionValidator implements Validator {
 	@Override
 	public void validate(Object obj, Errors errors) {
 		Excursion excursion = (Excursion) obj;
-		LocalDate currentDate = LocalDate.now();
+		Date currentDate = new Date();
 
 		if (excursion.getTitulo().isEmpty()) {
 			errors.rejectValue("titulo", "requerido", "requerido");
@@ -36,7 +36,7 @@ public class ExcursionValidator implements Validator {
 			errors.rejectValue("descripcion", "requerido", "requerido");
 		}
 
-		if (excursion.getFechaInicio() == null || !excursion.getFechaInicio().isAfter(currentDate)) {
+		if (excursion.getFechaInicio() == null || !excursion.getFechaInicio().after(currentDate)) {
 			errors.rejectValue("fechaInicio", "debe ser fecha futura", "debe ser fecha futura");
 		}
 
@@ -62,10 +62,10 @@ public class ExcursionValidator implements Validator {
 
 		if (excursion.getFechaFin() != null && excursion.getFechaInicio() != null && excursion.getHoraInicio() != null
 				&& excursion.getHoraFin() != null) {
-			if (excursion.getFechaInicio().isAfter(excursion.getFechaFin())) {
+			if (excursion.getFechaInicio().after(excursion.getFechaFin())) {
 				errors.rejectValue("fechaFin", "debe ser igual o posterior a la fecha inicio",
 						"debe ser igual o posterior a la fecha inicio");
-			} else if (excursion.getFechaInicio().isEqual(excursion.getFechaFin())) {
+			} else if (excursion.getFechaInicio().equals(excursion.getFechaFin())) {
 				if (excursion.getHoraInicio().isAfter(excursion.getHoraFin())) {
 					errors.rejectValue("horaFin", "debe ser igual o posterior a la hora inicio",
 							"debe ser igual o posterior a la hora inicio");

@@ -15,8 +15,8 @@
  */
 package org.springframework.samples.petclinic.model;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -41,7 +41,7 @@ public class ActivityEntity extends BaseEntity {
 	@NotNull
 	@Column(name = "fecha_inicio")        
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private LocalDate fechaInicio;
+	private Date fechaInicio;
 	
 	@NotNull
 	@Column(name = "hora_inicio")
@@ -86,11 +86,11 @@ public class ActivityEntity extends BaseEntity {
 		this.descripcion = descripcion;
 	}
 
-	public LocalDate getFechaInicio() {
+	public Date getFechaInicio() {
 		return fechaInicio;
 	}
 
-	public void setFechaInicio(LocalDate fechaInicio) {
+	public void setFechaInicio(Date fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
 

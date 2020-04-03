@@ -113,7 +113,6 @@ public class ExcursionController {
 	public String processCreationForm(@Valid Excursion excursion, BindingResult result, Map<String, Object> model,
 			Principal p) {
 		result.getAllErrors().forEach(x->System.out.println(x.getDefaultMessage()));
-		System.out.println();
 		if (result.hasErrors()) {
 			model.put("excursion", excursion);
 			return VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
@@ -187,9 +186,7 @@ public class ExcursionController {
 		if (!excursion.getOrganizador().equals(organizador) || excursion.isFinalMode()) {
 			return "exception";
 		}
-		System.out.println("antes delete");
 		this.excursionService.deleteExcursion(excursion);
-		System.out.println("despues delete");
 		return "redirect:/excursiones";
 	}
 

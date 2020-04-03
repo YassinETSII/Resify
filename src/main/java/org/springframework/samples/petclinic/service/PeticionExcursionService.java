@@ -44,17 +44,17 @@ public class PeticionExcursionService {
 	public PeticionExcursion findPeticionExcursionById(int id) throws DataAccessException {
 		return peticionExcursionRepository.findById(id);
 	}
-	
+
 	@Transactional
 	public Iterable<PeticionExcursion> findAllMineResidencia(Residencia residencia) throws DataAccessException {
-		return peticionExcursionRepository.findByResidencia(residencia.getId(),LocalDate.now());
+		return peticionExcursionRepository.findByResidencia(residencia.getId(), java.sql.Date.valueOf(LocalDate.now()));
 	}
 
 	@Transactional
 	public Iterable<PeticionExcursion> findAllMineOrganizador(Organizador organizador) throws DataAccessException {
 		return peticionExcursionRepository.findByOrganizador(organizador.getId());
 	}
-	
+
 	@Transactional
 	public Double countPeticionExcursionAceptadaByExcursion(Excursion excursion) throws DataAccessException {
 		return peticionExcursionRepository.findByExcursionAceptada(excursion.getId());
@@ -64,7 +64,7 @@ public class PeticionExcursionService {
 	public void save(PeticionExcursion peticionExcursion) throws DataAccessException {
 		peticionExcursionRepository.save(peticionExcursion);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public int countPeticionesByExcursion(Excursion excursion, Manager manager) throws DataAccessException {
 		return peticionExcursionRepository.countPeticionesByExcursion(excursion, manager);
