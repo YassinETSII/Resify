@@ -16,8 +16,6 @@
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -82,7 +80,7 @@ public class PeticionExcursionController {
 		estados.add("rechazada");
 		return estados;
 	}
-	
+
 	@InitBinder("peticionExcursion")
 	public void initInscripcionBinder(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
@@ -90,29 +88,27 @@ public class PeticionExcursionController {
 		dataBinder.setDisallowedFields("fecha");
 		dataBinder.setValidator(new PeticionExcursionValidator());
 	}
-	
+
 	@GetMapping(value = "/peticiones-excursion")
 	public String listPeticionesExcursion(final Map<String, Object> model, final Principal p) {
 		Manager manager = this.managerService.findManagerByUsername(p.getName());
 		Organizador organizador = this.organizadorService.findOrganizadorByUsername(p.getName());
+		Iterable<PeticionExcursion> peticionesExcursion;
 		if (manager != null) {
 			Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
-			Iterable<PeticionExcursion> peticionesExcursion = this.peticionExcursionService.findAllMineResidencia(residencia);
-			model.put("peticionesExcursion", peticionesExcursion);
+			peticionesExcursion = this.peticionExcursionService.findAllMineResidencia(residencia);
 		} else if (organizador != null) {
-			Iterable<PeticionExcursion> peticionesExcursion = this.peticionExcursionService.findAllMineOrganizador(organizador);
-			model.put("peticionesExcursion", peticionesExcursion);
+			peticionesExcursion = this.peticionExcursionService.findAllMineOrganizador(organizador);
 		} else {
 			return "exception";
 		}
-
+		model.put("peticionesExcursion", peticionesExcursion);
 		return "peticionesExcursion/peticionExcursionList";
 	}
 
-
 	@GetMapping(value = "/excursiones/{excursionId}/peticiones-excursion/new")
-	public String initCreationForm(@PathVariable("excursionId") final int excursionId, final ModelMap model, final Principal p) {
-		
+	public String initCreationForm(@PathVariable("excursionId") final int excursionId, final ModelMap model,
+			final Principal p) {
 		Excursion excursion = this.excursionService.findExcursionById(excursionId);
 		Manager manager = this.managerService.findManagerByUserName(p.getName());
 		Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
@@ -125,10 +121,11 @@ public class PeticionExcursionController {
 		peticionExcursion.setFecha(fecha);
 		peticionExcursion.setResidencia(residencia);
 
-		if (!(peticionExcursion.getExcursion().isFinalMode()) || peticionExcursion.getExcursion().getFechaInicio().isBefore(new Date(peticionExcursion.getFecha().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate())) {
+		if (!(peticionExcursion.getExcursion().isFinalMode())
+				|| peticionExcursion.getExcursion().getFechaInicio().before(peticionExcursion.getFecha())) {
 			return "exception";
 		}
-		
+
 		model.put("hasPeticion", peticiones != 0);
 		model.put("hasResidencia", residencia != null);
 
@@ -138,22 +135,20 @@ public class PeticionExcursionController {
 
 	@PostMapping(value = "/excursiones/{excursionId}/peticiones-excursion/new")
 	public String processCreationForm(@PathVariable("excursionId") final int excursionId,
-			@Valid final PeticionExcursion peticionExcursion, 
-			final BindingResult result, 
-			final Map<String, Object> model, 
-			final Principal p) {
+			@Valid final PeticionExcursion peticionExcursion, final BindingResult result,
+			final ModelMap model, final Principal p) {
 		Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
-
 		Date fecha = new Date(System.currentTimeMillis() - 1);
 		peticionExcursion.setFecha(fecha);
 		Excursion excursion = this.excursionService.findExcursionById(excursionId);
 		peticionExcursion.setExcursion(excursion);
 		peticionExcursion.setResidencia(residencia);
 		peticionExcursion.setEstado("pendiente");
-		
-		if (!(peticionExcursion.getExcursion().isFinalMode()) || peticionExcursion.getExcursion().getFechaInicio().isBefore(new Date(peticionExcursion.getFecha().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate())) {
+
+		if (!(peticionExcursion.getExcursion().isFinalMode())
+				|| peticionExcursion.getExcursion().getFechaInicio().before(peticionExcursion.getFecha())) {
 			return "exception";
-			
+
 		} else if (result.hasErrors()) {
 			Manager manager = this.managerService.findManagerByUserName(p.getName());
 			Integer peticiones = this.peticionExcursionService.countPeticionesByExcursion(excursion, manager);
@@ -163,22 +158,22 @@ public class PeticionExcursionController {
 
 			model.put("peticionExcursion", peticionExcursion);
 			return VIEWS_PETICION_EXCURSION_CREATE_OR_UPDATE_FORM;
-	
+
 		} else {
 			peticionExcursionService.save(peticionExcursion);
 			model.put("message", "Se ha enviado la peticion correctamente");
 			return "redirect:/excursiones/{excursionId}";
 		}
 	}
-	
+
 	@GetMapping(value = "/peticiones-excursion/{peticionExcursionId}/edit")
-	public String initUpdatePeticionExcursionForm(@PathVariable("peticionExcursionId") final int peticionExcursionId, final ModelMap model, final Principal p) {
-		PeticionExcursion peticionExcursion = this.peticionExcursionService.findPeticionExcursionById(peticionExcursionId);
+	public String initUpdatePeticionExcursionForm(@PathVariable("peticionExcursionId") final int peticionExcursionId,
+			final ModelMap model, final Principal p) {
+		PeticionExcursion peticionExcursion = this.peticionExcursionService
+				.findPeticionExcursionById(peticionExcursionId);
 		Organizador organizador = this.organizadorService.findOrganizadorByUsername(p.getName());
-		System.out.println(peticionExcursion.getExcursion().getFechaInicio());
-		LocalDate d = new Date(peticionExcursion.getFecha().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		System.out.println(d);
-		if (!(peticionExcursion.getExcursion().getOrganizador() == organizador) || peticionExcursion.getExcursion().getFechaInicio().isBefore(new Date(peticionExcursion.getFecha().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate())) {
+		if (!(peticionExcursion.getExcursion().getOrganizador() == organizador)
+				|| peticionExcursion.getExcursion().getFechaFin().before(peticionExcursion.getFecha())) {
 			return "exception";
 		}
 		model.addAttribute("peticionExcursion", peticionExcursion);
@@ -186,28 +181,41 @@ public class PeticionExcursionController {
 	}
 
 	@PostMapping(value = "/peticiones-excursion/{peticionExcursionId}/edit")
-	public String processUpdatePeticionExcursionForm(@Valid final PeticionExcursion peticionExcursion, final BindingResult result, @PathVariable("peticionExcursionId") final int peticionExcursionId, final ModelMap model, final Principal p) {
+	public String processUpdatePeticionExcursionForm(@Valid final PeticionExcursion peticionExcursion,
+			final BindingResult result, @PathVariable("peticionExcursionId") final int peticionExcursionId,
+			final ModelMap model, final Principal p) {
 		Organizador organizador = this.organizadorService.findOrganizadorByUsername(p.getName());
-		PeticionExcursion peticionExcursionToUpdate = this.peticionExcursionService.findPeticionExcursionById(peticionExcursionId);
-		
+		PeticionExcursion peticionExcursionToUpdate = this.peticionExcursionService
+				.findPeticionExcursionById(peticionExcursionId);
+
 		peticionExcursion.setExcursion(peticionExcursionToUpdate.getExcursion());
-		if (!peticionExcursion.getExcursion().getOrganizador().equals(organizador) || peticionExcursionToUpdate.getExcursion().getFechaInicio().isBefore(new Date(peticionExcursionToUpdate.getFecha().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate())) {
+		if (!peticionExcursion.getExcursion().getOrganizador().equals(organizador)
+				|| peticionExcursion.getExcursion().getFechaFin().before(peticionExcursion.getFecha())) {
 			return "exception";
 		}
 		if (peticionExcursion.getEstado().equals("aceptada")) {
-			if (residenciaService.getRatio(peticionExcursionToUpdate.getResidencia()) < peticionExcursionToUpdate.getExcursion().getRatioAceptacion()) {
-				result.rejectValue("estado", "la excursion no acepta residencias con un ratio menor de " + peticionExcursionToUpdate.getExcursion().getRatioAceptacion() , "la excursion no acepta residencias con un ratio menor de " + peticionExcursionToUpdate.getExcursion().getRatioAceptacion());
+			if (residenciaService.getRatio(peticionExcursionToUpdate.getResidencia()) < peticionExcursionToUpdate
+					.getExcursion().getRatioAceptacion()) {
+				result.rejectValue("estado",
+						"la excursion no acepta residencias con un ratio menor de "
+								+ peticionExcursionToUpdate.getExcursion().getRatioAceptacion(),
+						"la excursion no acepta residencias con un ratio menor de "
+								+ peticionExcursionToUpdate.getExcursion().getRatioAceptacion());
 			}
-			if (peticionExcursionService.countPeticionExcursionAceptadaByExcursion(peticionExcursion.getExcursion())>=peticionExcursion.getExcursion().getNumeroResidencias()) {
-				result.rejectValue("estado", "la excursión no acepta más residencias, número máximo de residencias alcanzado", "la excursión no acepta más residencias, número máximo de residencias alcanzado");
+			if (peticionExcursionService.countPeticionExcursionAceptadaByExcursion(
+					peticionExcursion.getExcursion()) >= peticionExcursion.getExcursion().getNumeroResidencias()) {
+				result.rejectValue("estado",
+						"la excursión no acepta más residencias, número máximo de residencias alcanzado",
+						"la excursión no acepta más residencias, número máximo de residencias alcanzado");
 			}
 		}
 		if (result.hasErrors()) {
 			model.put("peticionExcursion", peticionExcursion);
 			return VIEWS_PETICION_EXCURSION_CREATE_OR_UPDATE_FORM;
 		} else {
-			BeanUtils.copyProperties(peticionExcursion, peticionExcursionToUpdate, "id", "residencia", "excursion", "fecha");
-			
+			BeanUtils.copyProperties(peticionExcursion, peticionExcursionToUpdate, "id", "residencia", "excursion",
+					"fecha");
+
 			this.peticionExcursionService.save(peticionExcursionToUpdate);
 			return "redirect:/peticiones-excursion/";
 		}

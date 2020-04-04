@@ -78,8 +78,8 @@ class ExcursionControllerTests {
 		this.exc.setId(ExcursionControllerTests.TEST_EXCURSION_ID);
 		this.exc.setDescripcion("Prueba desc");
 		this.exc.setTitulo("Prueba");
-		this.exc.setFechaInicio(diaini);
-		this.exc.setFechaFin(diafin);
+		this.exc.setFechaInicio(java.sql.Date.valueOf(diaini));
+		this.exc.setFechaFin(java.sql.Date.valueOf(diafin));
 		this.exc.setFinalMode(true);
 		this.exc.setHoraInicio(horini);
 		this.exc.setHoraFin(horfin);
@@ -148,8 +148,8 @@ class ExcursionControllerTests {
 			.andExpect(MockMvcResultMatchers.model().attributeExists("excursion"))
 			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("descripcion", Matchers.is("Prueba desc"))))
 			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("titulo", Matchers.is("Prueba"))))
-			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("fechaInicio", Matchers.is(this.diaini))))
-			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("fechaFin", Matchers.is(this.diafin))))
+			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("fechaInicio", Matchers.is(java.sql.Date.valueOf(this.diaini)))))
+			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("fechaFin", Matchers.is(java.sql.Date.valueOf(this.diafin)))))
 			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("finalMode", Matchers.is(true))))
 			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("horaInicio", Matchers.is(this.horini))))
 			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("horaFin", Matchers.is(this.horfin))))
@@ -166,8 +166,8 @@ class ExcursionControllerTests {
 				.andExpect(model().attributeExists("excursion"))
 				.andExpect(model().attribute("excursion", hasProperty("descripcion", is("Prueba desc"))))
 				.andExpect(model().attribute("excursion", hasProperty("titulo", is("Prueba"))))
-				.andExpect(model().attribute("excursion", hasProperty("fechaInicio", is(this.diaini))))
-				.andExpect(model().attribute("excursion", hasProperty("fechaFin", is(this.diafin))))
+				.andExpect(model().attribute("excursion", hasProperty("fechaInicio", is(java.sql.Date.valueOf(this.diaini)))))
+				.andExpect(model().attribute("excursion", hasProperty("fechaFin", is(java.sql.Date.valueOf(this.diafin)))))
 				.andExpect(model().attribute("excursion", hasProperty("finalMode", is(true))))
 				.andExpect(model().attribute("excursion", hasProperty("horaInicio", is(this.horini))))
 				.andExpect(model().attribute("excursion", hasProperty("horaFin", is(this.horfin))))

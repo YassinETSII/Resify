@@ -64,7 +64,7 @@ class ActividadControllerTests {
 		this.act.setId(ActividadControllerTests.TEST_ACTIVIDAD_ID);
 		this.act.setTitulo("Prueba");
 		this.act.setDescripcion("Prueba desc");
-		this.act.setFechaInicio(diaini);
+		this.act.setFechaInicio(java.sql.Date.valueOf(diaini));
 		this.act.setHoraInicio(horini);
 		this.act.setHoraFin(horfin);
 		this.act.setResidencia(this.resi);

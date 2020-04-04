@@ -106,8 +106,8 @@ class ExcursionServiceTests {
 		Excursion excursion = new Excursion();
 		excursion.setTitulo("Prueba");
 		excursion.setDescripcion("Prueba desc");
-		excursion.setFechaInicio(LocalDate.now().plusDays(9));
-		excursion.setFechaFin(LocalDate.now().plusDays(10));
+		excursion.setFechaInicio(java.sql.Date.valueOf(LocalDate.now().plusDays(9)));
+		excursion.setFechaFin(java.sql.Date.valueOf(LocalDate.now().plusDays(10)));
 		excursion.setHoraInicio(LocalTime.of(9, 0));
 		excursion.setHoraFin(LocalTime.of(20, 0));
 		excursion.setRatioAceptacion(1.0);
