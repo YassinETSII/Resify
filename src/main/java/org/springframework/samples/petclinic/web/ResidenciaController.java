@@ -24,9 +24,11 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Anciano;
+import org.springframework.samples.petclinic.model.Inscripcion;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.service.AncianoService;
+import org.springframework.samples.petclinic.service.InscripcionService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.service.ResidenciaService;
 import org.springframework.samples.petclinic.web.validators.ResidenciaValidator;
@@ -62,6 +64,12 @@ public class ResidenciaController {
 
 	@Autowired
 	private AncianoService		ancianoService;
+
+	@Autowired
+	private InscripcionService	inscripcionService;
+
+	private boolean				tienePendiente							= false;
+	private boolean				tieneAceptada							= false;
 
 
 	@InitBinder("manager")
@@ -162,6 +170,28 @@ public class ResidenciaController {
 		ModelAndView mav = new ModelAndView("residencias/residenciasDetails");
 		if (anciano == null && !residencia.getManager().equals(manager)) {
 			mav = new ModelAndView("exception");
+		}
+		if (anciano != null) {
+			Iterable<Inscripcion> ins = this.inscripcionService.findAllMineAnciano(anciano);
+
+			for (Inscripcion i : ins) {
+				if (i.getEstado().equals("pendiente") && i.getResidencia().equals(residencia)) {
+					this.tienePendiente = true;
+					break;
+				} else {
+					this.tienePendiente = false;
+
+				}
+				if (i.getEstado().equals("aceptada")) {
+					this.tieneAceptada = true;
+					break;
+				} else {
+					this.tieneAceptada = false;
+				}
+			}
+			mav.addObject("tienePendiente", this.tienePendiente);
+			mav.addObject("tieneAceptada", this.tieneAceptada);
+
 		}
 		mav.addObject(this.residenciaService.findResidenciaById(residenciaId));
 		return mav;
