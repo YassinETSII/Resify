@@ -80,6 +80,11 @@ public class PeticionExcursionController {
 		estados.add("rechazada");
 		return estados;
 	}
+	
+	@InitBinder("manager")
+	public void initOrganizadorBinder(WebDataBinder dataBinder) {
+		dataBinder.setDisallowedFields("id");
+	}
 
 	@InitBinder("peticionExcursion")
 	public void initInscripcionBinder(final WebDataBinder dataBinder) {
@@ -137,6 +142,7 @@ public class PeticionExcursionController {
 	public String processCreationForm(@PathVariable("excursionId") final int excursionId,
 			@Valid final PeticionExcursion peticionExcursion, final BindingResult result,
 			final ModelMap model, final Principal p) {
+		System.out.println("ya va");
 		Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
 		Date fecha = new Date(System.currentTimeMillis() - 1);
 		peticionExcursion.setFecha(fecha);
@@ -189,8 +195,9 @@ public class PeticionExcursionController {
 				.findPeticionExcursionById(peticionExcursionId);
 
 		peticionExcursion.setExcursion(peticionExcursionToUpdate.getExcursion());
+		
 		if (!peticionExcursion.getExcursion().getOrganizador().equals(organizador)
-				|| peticionExcursion.getExcursion().getFechaFin().before(peticionExcursion.getFecha())) {
+				|| peticionExcursion.getExcursion().getFechaFin().before(peticionExcursionToUpdate.getFecha())) {
 			return "exception";
 		}
 		if (peticionExcursion.getEstado().equals("aceptada")) {
