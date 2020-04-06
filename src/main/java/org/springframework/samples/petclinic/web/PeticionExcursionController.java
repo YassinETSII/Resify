@@ -135,8 +135,8 @@ public class PeticionExcursionController {
 
 	@PostMapping(value = "/excursiones/{excursionId}/peticiones-excursion/new")
 	public String processCreationForm(@PathVariable("excursionId") final int excursionId,
-			@Valid final PeticionExcursion peticionExcursion, final BindingResult result,
-			final ModelMap model, final Principal p) {
+			@Valid final PeticionExcursion peticionExcursion, final BindingResult result, final ModelMap model,
+			final Principal p) {
 		Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
 		Date fecha = new Date(System.currentTimeMillis() - 1);
 		peticionExcursion.setFecha(fecha);
@@ -146,7 +146,8 @@ public class PeticionExcursionController {
 		peticionExcursion.setEstado("pendiente");
 
 		if (!(peticionExcursion.getExcursion().isFinalMode())
-				|| peticionExcursion.getExcursion().getFechaInicio().before(peticionExcursion.getFecha())) {
+				|| peticionExcursion.getExcursion().getFechaInicio().before(peticionExcursion.getFecha())
+				|| peticionExcursion.getFecha().after(peticionExcursion.getExcursion().getFechaFin())) {
 			return "exception";
 
 		} else if (result.hasErrors()) {
@@ -189,8 +190,9 @@ public class PeticionExcursionController {
 				.findPeticionExcursionById(peticionExcursionId);
 
 		peticionExcursion.setExcursion(peticionExcursionToUpdate.getExcursion());
+
 		if (!peticionExcursion.getExcursion().getOrganizador().equals(organizador)
-				|| peticionExcursion.getExcursion().getFechaFin().before(peticionExcursion.getFecha())) {
+				|| peticionExcursion.getExcursion().getFechaFin().before(peticionExcursionToUpdate.getFecha())) {
 			return "exception";
 		}
 		if (peticionExcursion.getEstado().equals("aceptada")) {
