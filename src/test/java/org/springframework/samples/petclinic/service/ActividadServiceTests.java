@@ -101,7 +101,7 @@ class ActividadServiceTests {
 		Actividad act = new Actividad();
 		act.setTitulo("Prueba");
 		act.setDescripcion("Prueba desc");
-		act.setFechaInicio(LocalDate.now().plusDays(5));
+		act.setFechaInicio(java.sql.Date.valueOf(LocalDate.now().plusDays(5)));
 		act.setHoraInicio(LocalTime.of(9, 0));
 		act.setHoraFin(LocalTime.of(22, 0));
 		act.setResidencia(ress.get(0));

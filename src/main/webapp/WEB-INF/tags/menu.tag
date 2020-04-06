@@ -25,27 +25,82 @@
 				<petclinic:menuItem active="${name eq 'home'}" url="/"
 					title="home page">
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-					<span>Home</span>
+					<span>Inicio</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
-					title="find owners">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Find owners</span>
-				</petclinic:menuItem>
+				<sec:authorize access="hasAuthority('anciano')">
+					<petclinic:menuItem active="${name eq 'residencias'}"
+						url="/residencias" title="find residencias">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Residencias</span>
+					</petclinic:menuItem>
+				</sec:authorize>
+				
+				<!-- 				------------------------------------------------------------ -->
 
-				<petclinic:menuItem active="${name eq 'vets'}" url="/vets"
-					title="veterinarians">
-					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>Veterinarians</span>
-				</petclinic:menuItem>
+				<sec:authorize access="hasAuthority('organizador')">
+					<petclinic:menuItem active="${name eq 'excursiones'}"
+						url="/excursiones" title="find excursiones">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Excursiones</span>
+					</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
-					title="trigger a RuntimeException to see how it is handled">
-					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-					<span>Error</span>
-				</petclinic:menuItem>
+					<petclinic:menuItem active="${name eq 'peticionesExcursion'}"
+						url="/peticiones-excursion" title="find peticiones excursion">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Peticiones de excursion</span>
+					</petclinic:menuItem>
+				</sec:authorize>
 
+				<!-- 				------------------------------------------------------------ -->
+
+				<sec:authorize access="hasAuthority('manager')">
+					<petclinic:menuItem active="${name eq 'excursiones'}"
+						url="/excursiones" title="find excursiones">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Excursiones</span>
+					</petclinic:menuItem>
+
+					<petclinic:menuItem active="${name eq 'peticionesExcursion'}"
+						url="/peticiones-excursion" title="find peticiones excursion">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Peticiones excursion</span>
+					</petclinic:menuItem>
+
+					<petclinic:menuItem active="${name eq 'residencias'}"
+						url="/residencias" title="find residencias">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Residencias</span>
+					</petclinic:menuItem>
+
+					<petclinic:menuItem active="${name eq 'actividades'}"
+						url="/actividades" title="find actividades">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Actividades</span>
+					</petclinic:menuItem>
+				</sec:authorize>
+				
+				<!-- 				------------------------------------------------------------ -->
+
+				<sec:authorize access="hasAuthority('admin')">
+					<petclinic:menuItem active="${name eq 'ancianos'}"
+						url="/ancianos" title="find ancianos">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Ancianos</span>
+					</petclinic:menuItem>
+
+					<petclinic:menuItem active="${name eq 'managers'}"
+						url="/managers" title="find managers">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Managers</span>
+					</petclinic:menuItem>
+					
+					<petclinic:menuItem active="${name eq 'organizadores'}"
+						url="/organizadores" title="find organizadores">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Organizadores</span>
+					</petclinic:menuItem>
+				</sec:authorize>
 			</ul>
 
 
@@ -84,7 +139,7 @@
 								</div>
 							</li>
 							<li class="divider"></li>
-<!-- 							
+							<!-- 							
                             <li> 
 								<div class="navbar-login navbar-login-session">
 									<div class="row">

@@ -15,7 +15,7 @@
  */
 package org.springframework.samples.petclinic.model;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,7 +47,7 @@ public class Excursion extends ActivityEntity {
 	@NotNull
 	@Column(name = "fecha_fin")        
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private LocalDate fechaFin;
+	private Date fechaFin;
 	
 	@Column(name = "final_mode")
 	private boolean finalMode;
@@ -80,11 +80,11 @@ public class Excursion extends ActivityEntity {
 		this.organizador = organizador;
 	}
 	
-	public LocalDate getFechaFin() {
+	public Date getFechaFin() {
 		return fechaFin;
 	}
 
-	public void setFechaFin(LocalDate fechaFin) {
+	public void setFechaFin(Date fechaFin) {
 		this.fechaFin = fechaFin;
 	}
 

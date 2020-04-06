@@ -4,12 +4,10 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +26,7 @@ import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ExcursionService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.service.OrganizadorService;
+import org.springframework.samples.petclinic.service.PeticionExcursionService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -41,9 +40,9 @@ class ExcursionControllerTests {
 	private static final int		TEST_EXCURSION_ID		= 4;
 
 	private static final String		TEST_ORGANIZADOR_NOMBRE	= "organizador4";
-
-	@Autowired
-	private ExcursionController		excursionController;
+	
+	@MockBean
+	private PeticionExcursionService		peticionExcursionService;
 
 	@MockBean
 	private ExcursionService		excursionService;
@@ -78,8 +77,8 @@ class ExcursionControllerTests {
 		this.exc.setId(ExcursionControllerTests.TEST_EXCURSION_ID);
 		this.exc.setDescripcion("Prueba desc");
 		this.exc.setTitulo("Prueba");
-		this.exc.setFechaInicio(diaini);
-		this.exc.setFechaFin(diafin);
+		this.exc.setFechaInicio(java.sql.Date.valueOf(diaini));
+		this.exc.setFechaFin(java.sql.Date.valueOf(diafin));
 		this.exc.setFinalMode(true);
 		this.exc.setHoraInicio(horini);
 		this.exc.setHoraFin(horfin);
@@ -148,8 +147,8 @@ class ExcursionControllerTests {
 			.andExpect(MockMvcResultMatchers.model().attributeExists("excursion"))
 			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("descripcion", Matchers.is("Prueba desc"))))
 			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("titulo", Matchers.is("Prueba"))))
-			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("fechaInicio", Matchers.is(this.diaini))))
-			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("fechaFin", Matchers.is(this.diafin))))
+			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("fechaInicio", Matchers.is(java.sql.Date.valueOf(this.diaini)))))
+			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("fechaFin", Matchers.is(java.sql.Date.valueOf(this.diafin)))))
 			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("finalMode", Matchers.is(true))))
 			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("horaInicio", Matchers.is(this.horini))))
 			.andExpect(MockMvcResultMatchers.model().attribute("excursion", Matchers.hasProperty("horaFin", Matchers.is(this.horfin))))
@@ -166,8 +165,8 @@ class ExcursionControllerTests {
 				.andExpect(model().attributeExists("excursion"))
 				.andExpect(model().attribute("excursion", hasProperty("descripcion", is("Prueba desc"))))
 				.andExpect(model().attribute("excursion", hasProperty("titulo", is("Prueba"))))
-				.andExpect(model().attribute("excursion", hasProperty("fechaInicio", is(this.diaini))))
-				.andExpect(model().attribute("excursion", hasProperty("fechaFin", is(this.diafin))))
+				.andExpect(model().attribute("excursion", hasProperty("fechaInicio", is(java.sql.Date.valueOf(this.diaini)))))
+				.andExpect(model().attribute("excursion", hasProperty("fechaFin", is(java.sql.Date.valueOf(this.diafin)))))
 				.andExpect(model().attribute("excursion", hasProperty("finalMode", is(true))))
 				.andExpect(model().attribute("excursion", hasProperty("horaInicio", is(this.horini))))
 				.andExpect(model().attribute("excursion", hasProperty("horaFin", is(this.horfin))))
