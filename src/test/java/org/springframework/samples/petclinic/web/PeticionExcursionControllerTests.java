@@ -40,6 +40,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @WebMvcTest(value = PeticionExcursionController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class PeticionExcursionControllerTests {
 
+	private static final int TEST_MANAGER_ID = 10;
+
 	private static final int TEST_PETICION_EXCURSION_ID = 10;
 
 	private static final int TEST_RESIDENCIA_ID = 10;
@@ -50,20 +52,23 @@ class PeticionExcursionControllerTests {
 
 	private static final String TEST_ORGANIZADOR_NOMBRE = "organizador_test";
 
+	@Autowired
+	private PeticionExcursionController peticionExcursionController;
+
 	@MockBean
 	private PeticionExcursionService peticionExcursionService;
 
 	@MockBean
 	private ManagerService managerService;
-	
-	@MockBean
-	private ResidenciaService residenciaService;
 
 	@MockBean
 	private ExcursionService excursionService;
 
 	@MockBean
 	private OrganizadorService organizadorService;
+
+	@MockBean
+	private ResidenciaService residenciaService;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -73,6 +78,8 @@ class PeticionExcursionControllerTests {
 	private LocalDate diapost = LocalDate.now().plusDays(10);
 	private Residencia resi = new Residencia();
 	private Excursion exc = new Excursion();
+	private Double nAceptadas = 2.;
+	private Double ratio = 1.;
 	private Manager man = new Manager();
 	private Organizador org = new Organizador();
 	User userM = new User();
@@ -92,7 +99,6 @@ class PeticionExcursionControllerTests {
 		this.exc.setFechaInicio(java.sql.Date.valueOf(diapost.minusDays(2)));
 		this.exc.setNumeroResidencias(2);
 		this.pe = new PeticionExcursion();
-		this.pe.setDeclaracion("declaracion test");
 		this.pe.setId(PeticionExcursionControllerTests.TEST_PETICION_EXCURSION_ID);
 		this.pe.setEstado("pendiente");
 		this.pe.setFecha(this.hoy);
@@ -100,11 +106,16 @@ class PeticionExcursionControllerTests {
 		this.pe.setResidencia(this.resi);
 		this.pe.setExcursion(this.exc);
 		this.peticionExcursionService.save(this.pe);
-		BDDMockito.given(this.peticionExcursionService.findPeticionExcursionById(PeticionExcursionControllerTests.TEST_PETICION_EXCURSION_ID))
+		BDDMockito
+				.given(this.peticionExcursionService
+						.findPeticionExcursionById(PeticionExcursionControllerTests.TEST_PETICION_EXCURSION_ID))
 				.willReturn(this.pe);
-		BDDMockito.given(this.managerService.findManagerByUsername(PeticionExcursionControllerTests.TEST_MANAGER_NOMBRE))
+		BDDMockito
+				.given(this.managerService.findManagerByUsername(PeticionExcursionControllerTests.TEST_MANAGER_NOMBRE))
 				.willReturn(this.man);
-		BDDMockito.given(this.organizadorService.findOrganizadorByUsername(PeticionExcursionControllerTests.TEST_ORGANIZADOR_NOMBRE))
+		BDDMockito
+				.given(this.organizadorService
+						.findOrganizadorByUsername(PeticionExcursionControllerTests.TEST_ORGANIZADOR_NOMBRE))
 				.willReturn(this.org);
 		BDDMockito.given(this.excursionService.findExcursionById(PeticionExcursionControllerTests.TEST_EXCURSION_ID))
 				.willReturn(this.exc);
@@ -141,15 +152,17 @@ class PeticionExcursionControllerTests {
 				.andExpect(MockMvcResultMatchers.model().attributeExists("peticionExcursion"));
 	}
 
-	@WithMockUser(username = TEST_MANAGER_NOMBRE)
+	@WithMockUser(username = PeticionExcursionControllerTests.TEST_MANAGER_NOMBRE)
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/excursiones/{excursionId}/peticiones-excursion/new", PeticionExcursionControllerTests.TEST_EXCURSION_ID)
-						.with(csrf())
-						.param("declaracion", "Prueba declaracion")
-						.param("estado","pendiente"))
+		this.mockMvc
+				.perform(MockMvcRequestBuilders
+						.post("/excursiones/{excursionId}/peticiones-excursion/new",
+								PeticionExcursionControllerTests.TEST_EXCURSION_ID)
+						.with(csrf()).param("declaracion", "Prueba declaracion").param("estado", "pendiente"))
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 				.andExpect(view().name("redirect:/excursiones/{excursionId}"));
+
 	}
 
 	@WithMockUser(username = PeticionExcursionControllerTests.TEST_ORGANIZADOR_NOMBRE)
@@ -162,38 +175,91 @@ class PeticionExcursionControllerTests {
 
 	@WithMockUser(username = PeticionExcursionControllerTests.TEST_ORGANIZADOR_NOMBRE)
 	@Test
-	void testProcessUpdateFormSuccess() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post("/peticiones-excursion/{peticionExcursionId}/edit", TEST_PETICION_EXCURSION_ID)
-				.with(csrf())
+	void testProcessUpdateFormSuccessAccept() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders
+				.post("/peticiones-excursion/{peticionExcursionId}/edit", TEST_PETICION_EXCURSION_ID).with(csrf())
 				.param("id", String.valueOf(TEST_PETICION_EXCURSION_ID))
-				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", "2020/03/03")
-				.param("declaracion", "declaracion test")
-				.param("estado", "aceptada")
-				.param("justificacion", "pruebame"))
-		.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-		.andExpect(MockMvcResultMatchers.view().name("redirect:/peticiones-excursion/"));
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", String.valueOf(this.hoy))
+				.param("declaracion", "declaracion test").param("estado", "aceptada"))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/peticiones-excursion/"));
+	}
+
+	@WithMockUser(username = PeticionExcursionControllerTests.TEST_MANAGER_NOMBRE)
+	@Test
+	void testProcessCreationFormHasErrorsBlank() throws Exception {
+		this.mockMvc
+				.perform(MockMvcRequestBuilders
+						.post("/excursiones/{excursionId}/peticiones-excursion/new",
+								PeticionExcursionControllerTests.TEST_EXCURSION_ID)
+						.with(csrf()).param("declaracion", "").param("estado", "pendiente"))
+				.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("peticionExcursion", "declaracion"))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(
+						MockMvcResultMatchers.view().name("peticionesExcursion/createOrUpdatePeticionExcursionForm"));
+	}
+
+	@WithMockUser(username = PeticionExcursionControllerTests.TEST_MANAGER_NOMBRE)
+	@Test
+	void testProcessCreationFormHasErrorsPastExcursion() throws Exception {
+		this.exc.setFechaFin(java.sql.Date.valueOf(diapost.minusDays(11)));
+		this.exc.setFechaInicio(java.sql.Date.valueOf(diapost.minusDays(12)));
+		this.mockMvc
+				.perform(MockMvcRequestBuilders
+						.post("/excursiones/{excursionId}/peticiones-excursion/new",
+								PeticionExcursionControllerTests.TEST_EXCURSION_ID)
+						.with(csrf()).param("declaracion", "Declaracion").param("estado", "pendiente"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
 	@WithMockUser(username = PeticionExcursionControllerTests.TEST_ORGANIZADOR_NOMBRE)
 	@Test
-	void testProcessCreationFormHasErrors() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/peticiones-excursion/{peticionExcursionId}/edit", TEST_PETICION_EXCURSION_ID)
-				.with(csrf())
-				.param("declaracion", "")
-				.param("estado","pendiente"))
-		.andExpect(MockMvcResultMatchers.model().attributeHasErrors("peticionExcursion"))
-		.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("peticionExcursion", "declaracion"))
-		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.view().name("peticionesExcursion/createOrUpdatePeticionExcursionForm"));
+	void testProcessUpdateFormErrorRejectWithoutJustification() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders
+				.post("/peticiones-excursion/{peticionExcursionId}/edit", TEST_PETICION_EXCURSION_ID).with(csrf())
+				.param("id", String.valueOf(TEST_PETICION_EXCURSION_ID))
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", String.valueOf(this.hoy))
+				.param("declaracion", "declaracion test").param("estado", "rechazada").param("justificacion", ""))
+				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("peticionExcursion"))
+				.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("peticionExcursion", "justificacion"))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(
+						MockMvcResultMatchers.view().name("peticionesExcursion/createOrUpdatePeticionExcursionForm"));
 	}
 
-//	@WithMockUser(username = PeticionExcursionControllerTests.TEST_ORGANIZADOR_NOMBRE)
-//	@Test
-//	void testShowBuenaAccion() throws Exception {
-//		this.mockMvc.perform(MockMvcRequestBuilders.get("/peticiones-excursion/{buenaId}", PeticionExcursionControllerTests.TEST_BUENA_ACCION_ID)).andExpect(MockMvcResultMatchers.status().isOk())
-//			.andExpect(MockMvcResultMatchers.model().attributeExists("buenaAccion")).andExpect(MockMvcResultMatchers.model().attribute("buenaAccion", Matchers.hasProperty("descripcion", Matchers.is("Prueba desc"))))
-//			.andExpect(MockMvcResultMatchers.model().attribute("buenaAccion", Matchers.hasProperty("titulo", Matchers.is("Prueba")))).andExpect(MockMvcResultMatchers.model().attribute("buenaAccion", Matchers.hasProperty("fecha", Matchers.is(this.hoy))))
-//			.andExpect(MockMvcResultMatchers.view().name("buenasAcciones/buenasAccionesDetails"));
-//	}
+	@WithMockUser(username = PeticionExcursionControllerTests.TEST_ORGANIZADOR_NOMBRE)
+	@Test
+	void testProcessUpdateFormErrorAcceptMoreCapacity() throws Exception {
+		BDDMockito
+				.given(this.peticionExcursionService.countPeticionExcursionAceptadaByExcursion(this.pe.getExcursion()))
+				.willReturn(this.nAceptadas);
+
+		mockMvc.perform(MockMvcRequestBuilders
+				.post("/peticiones-excursion/{peticionExcursionId}/edit", TEST_PETICION_EXCURSION_ID).with(csrf())
+				.param("id", String.valueOf(TEST_PETICION_EXCURSION_ID))
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", String.valueOf(this.hoy))
+				.param("declaracion", "declaracion test").param("estado", "aceptada"))
+				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("peticionExcursion"))
+				.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("peticionExcursion", "estado"))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(
+						MockMvcResultMatchers.view().name("peticionesExcursion/createOrUpdatePeticionExcursionForm"));
+	}
+
+	@WithMockUser(username = PeticionExcursionControllerTests.TEST_ORGANIZADOR_NOMBRE)
+	@Test
+	void testProcessUpdateFormErrorNoMinimumRatio() throws Exception {
+		this.exc.setRatioAceptacion(2.);
+		this.exc.setNumeroResidencias(5);
+		BDDMockito.given(this.residenciaService.getRatio(this.resi)).willReturn(this.ratio);
+
+		mockMvc.perform(MockMvcRequestBuilders
+				.post("/peticiones-excursion/{peticionExcursionId}/edit", TEST_PETICION_EXCURSION_ID).with(csrf())
+				.param("id", String.valueOf(TEST_PETICION_EXCURSION_ID))
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", String.valueOf(this.hoy))
+				.param("declaracion", "declaracion test").param("estado", "aceptada"))
+				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("peticionExcursion"))
+				.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("peticionExcursion", "estado"))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(
+						MockMvcResultMatchers.view().name("peticionesExcursion/createOrUpdatePeticionExcursionForm"));
+	}
 
 }
