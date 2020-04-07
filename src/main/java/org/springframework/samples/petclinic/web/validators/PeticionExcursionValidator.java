@@ -17,15 +17,10 @@
 package org.springframework.samples.petclinic.web.validators;
 
 import org.springframework.samples.petclinic.model.PeticionExcursion;
-import org.springframework.samples.petclinic.service.PeticionExcursionService;
-import org.springframework.samples.petclinic.service.ResidenciaService;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 public class PeticionExcursionValidator implements Validator {
-
-	public PeticionExcursionService peticionExcursionService;
-	public ResidenciaService residenciaService;
 
 
 	@Override

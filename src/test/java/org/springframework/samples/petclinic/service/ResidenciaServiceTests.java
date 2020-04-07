@@ -16,12 +16,8 @@
 
 package org.springframework.samples.petclinic.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.validation.ConstraintViolationException;
 
@@ -30,9 +26,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.petclinic.model.Residencia;
-import org.springframework.samples.petclinic.model.Incidencia;
 import org.springframework.samples.petclinic.model.Manager;
+import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,14 +38,15 @@ class ResidenciaServiceTests {
 	protected ResidenciaService	residenciaService;
 
 	@Autowired
-	protected ManagerService		managerService;
+	protected ManagerService	managerService;
+
 
 	@Test
 	void debeEncontrarResidenciaConIdCorrecto() {
 		LocalTime horaApertura = LocalTime.of(07, 00);
 		LocalTime horaCierre = LocalTime.of(21, 00);
 		Residencia re = this.residenciaService.findResidenciaById(1);
-		Assertions.assertTrue(re.getAceptaDependenciaGrave()==false);
+		Assertions.assertTrue(re.getAceptaDependenciaGrave() == false);
 		Assertions.assertTrue(re.getAforo().equals(100));
 		Assertions.assertTrue(re.getCorreo().equals("residencia1@mail.es"));
 		Assertions.assertTrue(re.getDescripcion().equals("Descripcion de prueba"));
@@ -85,11 +81,11 @@ class ResidenciaServiceTests {
 		Residencia re3 = resi.get(0);
 		Assertions.assertTrue(re3.getCorreo().equals("residencia1@mail.es"));
 	}
-	
+
 	@Test
 	@Transactional
 	public void debeCrearResidencia() {
-		Manager m = this.managerService.findManagerById(4);
+		Manager m = this.managerService.findManagerById(7);
 
 		int total = 0;
 
@@ -107,7 +103,8 @@ class ResidenciaServiceTests {
 		ra.setMasInfo("http://www.resi1.com");
 		ra.setNombre("Reidencia 1");
 		ra.setTelefono("987654321");
-		
+		ra.setManager(m);
+
 		this.residenciaService.saveResidencia(ra);
 
 		Iterable<Residencia> rres2 = this.residenciaService.findAllMine(m);
@@ -117,11 +114,10 @@ class ResidenciaServiceTests {
 		}
 		//Comprueba que se ha añadido a las residencias del manager (revisar esto, no debería dejar crear más de una)
 		Assertions.assertTrue(resi2.size() == total + 1);
-		System.out.println(resi2.size());
 		//Comprueba que su id ya no es nulo
 		Assertions.assertTrue(ra.getId() != null);
 	}
-	
+
 	@Test
 	@Transactional
 	public void debeLanzarExcepcionCreandoResidenciaEnBlanco() {
@@ -132,36 +128,39 @@ class ResidenciaServiceTests {
 			this.residenciaService.saveResidencia(ra);
 		});
 	}
-	
-	/*@Test
-	@Transactional
-	public void debeCalcularRatio() {
 
-		Residencia ra = new Residencia();
-		LocalTime horaApertura = LocalTime.of(07, 00);
-		LocalTime horaCierre = LocalTime.of(21, 00);
-		ra.setAceptaDependenciaGrave(false);
-		ra.setAforo(100);
-		ra.setCorreo("residencia1@mail.es");
-		ra.setDescripcion("Descripcion de prueba");
-		ra.setDireccion("Direccion");
-		ra.setEdadMaxima(70);
-		ra.setHoraApertura(horaApertura);
-		ra.setHoraCierre(horaCierre);
-		ra.setMasInfo("http://www.resi1.com");
-		ra.setNombre("Reidencia 1");
-		ra.setTelefono("987654321");
-		
-		Incidencia inci = new Incidencia();
-		Date fecha = new Date("2003-12-12");
-		inci.setDescripcion("descripcion inci");
-		inci.setFecha(fecha);
-		//INSERT INTO incidencias VALUES (1, 'Descripcion de incidencia1', '2010-09-07', 'titulo1', 1);
-
-		Double m = this.residenciaService.getRatio(ra);
-
-			this.residenciaService.saveResidencia(ra);
-		
-	}*/
+	/*
+	 * @Test
+	 *
+	 * @Transactional
+	 * public void debeCalcularRatio() {
+	 *
+	 * Residencia ra = new Residencia();
+	 * LocalTime horaApertura = LocalTime.of(07, 00);
+	 * LocalTime horaCierre = LocalTime.of(21, 00);
+	 * ra.setAceptaDependenciaGrave(false);
+	 * ra.setAforo(100);
+	 * ra.setCorreo("residencia1@mail.es");
+	 * ra.setDescripcion("Descripcion de prueba");
+	 * ra.setDireccion("Direccion");
+	 * ra.setEdadMaxima(70);
+	 * ra.setHoraApertura(horaApertura);
+	 * ra.setHoraCierre(horaCierre);
+	 * ra.setMasInfo("http://www.resi1.com");
+	 * ra.setNombre("Reidencia 1");
+	 * ra.setTelefono("987654321");
+	 *
+	 * Incidencia inci = new Incidencia();
+	 * Date fecha = new Date("2003-12-12");
+	 * inci.setDescripcion("descripcion inci");
+	 * inci.setFecha(fecha);
+	 * //INSERT INTO incidencias VALUES (1, 'Descripcion de incidencia1', '2010-09-07', 'titulo1', 1);
+	 *
+	 * Double m = this.residenciaService.getRatio(ra);
+	 *
+	 * this.residenciaService.saveResidencia(ra);
+	 *
+	 * }
+	 */
 
 }

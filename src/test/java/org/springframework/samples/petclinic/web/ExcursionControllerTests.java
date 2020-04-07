@@ -4,12 +4,10 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +26,7 @@ import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ExcursionService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.service.OrganizadorService;
+import org.springframework.samples.petclinic.service.PeticionExcursionService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -41,9 +40,9 @@ class ExcursionControllerTests {
 	private static final int		TEST_EXCURSION_ID		= 4;
 
 	private static final String		TEST_ORGANIZADOR_NOMBRE	= "organizador4";
-
-	@Autowired
-	private ExcursionController		excursionController;
+	
+	@MockBean
+	private PeticionExcursionService		peticionExcursionService;
 
 	@MockBean
 	private ExcursionService		excursionService;
