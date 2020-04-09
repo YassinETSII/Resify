@@ -2,9 +2,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.temporal.TemporalUnit;
 import java.util.Date;
 
 import org.hamcrest.Matchers;
@@ -36,9 +34,6 @@ class ActividadControllerTests {
 	private static final int		TEST_ACTIVIDAD_ID	= 1;
 
 	private static final String		TEST_MANAGER_NOMBRE		= "manager";
-
-	@Autowired
-	private ActividadController	actividadController;
 
 	@MockBean
 	private ActividadService actividadService;

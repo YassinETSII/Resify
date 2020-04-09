@@ -18,6 +18,7 @@ package org.springframework.samples.petclinic.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 
 import javax.validation.ConstraintViolationException;
@@ -46,7 +47,8 @@ class ExcursionServiceTests {
 		Excursion exc = this.excursionService.findExcursionById(1);
 		Assertions.assertTrue(exc.getRatioAceptacion().equals(2.0));
 		Assertions.assertTrue(exc.getNumeroResidencias() == 4);
-		Assertions.assertTrue(exc.getFechaFin().equals(LocalDate.of(2020, 9, 7)));
+		Assertions.assertTrue(exc.getFechaFin().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+				.equals(LocalDate.of(2020, 9, 7)));
 		Assertions.assertTrue(exc.isFinalMode());
 		Assertions.assertTrue(exc.getOrganizador().equals(this.organizadorService.findOrganizadorById(1)));
 
