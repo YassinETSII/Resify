@@ -33,33 +33,32 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @WebMvcTest(value = ActividadController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class ActividadControllerTests {
 
-	private static final int		TEST_ACTIVIDAD_ID	= 1;
+	private static final int TEST_ACTIVIDAD_ID = 1;
 
-	private static final String		TEST_MANAGER_NOMBRE		= "manager";
+	private static final String TEST_MANAGER_NOMBRE = "manager";
 
 	@MockBean
 	private ActividadService actividadService;
 
 	@MockBean
 	private ManagerService managerService;
-	
+
 	@MockBean
 	private AncianoService ancianoService;
-	
+
 	@MockBean
 	private AuthoritiesService authoritiesService;
 
 	@Autowired
-	private MockMvc					mockMvc;
+	private MockMvc mockMvc;
 
-	private Actividad				act;
-	private Date					diaini					= Date.from(Instant.now().plusSeconds(1000));
-	private LocalTime				horini   				= LocalTime.of(9, 0);
-	private LocalTime				horfin   				= LocalTime.of(20, 0);
-	private Residencia				resi					= new Residencia();
-	Manager							man						= new Manager();
-	User							user					= new User();
-
+	private Actividad act;
+	private Date diaini = Date.from(Instant.now().plusSeconds(1000));
+	private LocalTime horini = LocalTime.of(9, 0);
+	private LocalTime horfin = LocalTime.of(20, 0);
+	private Residencia resi = new Residencia();
+	Manager man = new Manager();
+	User user = new User();
 
 	@BeforeEach
 	void setup() {
@@ -75,61 +74,73 @@ class ActividadControllerTests {
 		this.act.setHoraFin(horfin);
 		this.act.setResidencia(this.resi);
 		this.actividadService.saveActividad(this.act);
-		BDDMockito.given(this.actividadService.findActividadById(ActividadControllerTests.TEST_ACTIVIDAD_ID)).willReturn(this.act);
-		BDDMockito.given(this.managerService.findManagerByUsername(ActividadControllerTests.TEST_MANAGER_NOMBRE)).willReturn(this.man);
+		BDDMockito.given(this.actividadService.findActividadById(ActividadControllerTests.TEST_ACTIVIDAD_ID))
+				.willReturn(this.act);
+		BDDMockito.given(this.managerService.findManagerByUsername(ActividadControllerTests.TEST_MANAGER_NOMBRE))
+				.willReturn(this.man);
+		BDDMockito.given(this.authoritiesService.findAuthority(ActividadControllerTests.TEST_MANAGER_NOMBRE))
+				.willReturn("manager");
 	}
 
-	@WithMockUser(username = "manager1")
+	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
 	@Test
 	void testProcessFindFormSuccess() throws Exception {
 
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("actividades/actividadesList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("actividades/actividadesList"));
 	}
 
 	@WithMockUser(authorities = "manager")
 	@Test
 	void testInitCreationForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades/new")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("actividades/createOrUpdateActividadForm"))
-			.andExpect(MockMvcResultMatchers.model().attributeExists("actividad"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades/new"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("actividades/createOrUpdateActividadForm"))
+				.andExpect(MockMvcResultMatchers.model().attributeExists("actividad"));
 	}
 
 	@WithMockUser(authorities = "manager")
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/actividades/new")
-				.param("titulo", "Prueba")
-				.param("descripcion", "Prueba descrip")
-				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaInicio", "2030/01/01")
-				.param("horaInicio", "10:00")
-				.param("horaFin", "20:00"))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/actividades/new").param("titulo", "Prueba")
+						.param("descripcion", "Prueba descrip").with(SecurityMockMvcRequestPostProcessors.csrf())
+						.param("fechaInicio", "2030/01/01").param("horaInicio", "10:00").param("horaFin", "20:00"))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 	@WithMockUser(authorities = "manager")
 	@Test
 	void testProcessCreationFormHasErrors() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/actividades/new")
-				.param("titulo", "")
-				.param("descripcion", "Prueba descrip")
-				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaInicio", "2030/01/01")
-				.param("horaInicio", "10:00")
-				.param("horaFin", "20:00"))
-			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("actividad"))
-			.andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.view().name("actividades/createOrUpdateActividadForm"));
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/actividades/new").param("titulo", "")
+						.param("descripcion", "Prueba descrip").with(SecurityMockMvcRequestPostProcessors.csrf())
+						.param("fechaInicio", "2030/01/01").param("horaInicio", "10:00").param("horaFin", "20:00"))
+				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("actividad"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("actividades/createOrUpdateActividadForm"));
 	}
 
 	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
 	@Test
 	void testShowBuenaAccion() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades/{actividadId}", ActividadControllerTests.TEST_ACTIVIDAD_ID)).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeExists("actividad"))
-			.andExpect(MockMvcResultMatchers.model().attribute("actividad", Matchers.hasProperty("descripcion", Matchers.is("Prueba desc"))))
-			.andExpect(MockMvcResultMatchers.model().attribute("actividad", Matchers.hasProperty("titulo", Matchers.is("Prueba"))))
-			.andExpect(MockMvcResultMatchers.model().attribute("actividad", Matchers.hasProperty("fechaInicio", Matchers.is(this.diaini))))
-			.andExpect(MockMvcResultMatchers.model().attribute("actividad", Matchers.hasProperty("horaInicio", Matchers.is(this.horini))))
-			.andExpect(MockMvcResultMatchers.model().attribute("actividad", Matchers.hasProperty("horaFin", Matchers.is(this.horfin))))
-			.andExpect(MockMvcResultMatchers.view().name("actividades/actividadesDetails"));
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.get("/actividades/{actividadId}",
+						ActividadControllerTests.TEST_ACTIVIDAD_ID))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("actividad"))
+				.andExpect(MockMvcResultMatchers.model().attribute("actividad",
+						Matchers.hasProperty("descripcion", Matchers.is("Prueba desc"))))
+				.andExpect(MockMvcResultMatchers.model().attribute("actividad",
+						Matchers.hasProperty("titulo", Matchers.is("Prueba"))))
+				.andExpect(MockMvcResultMatchers.model().attribute("actividad",
+						Matchers.hasProperty("fechaInicio", Matchers.is(this.diaini))))
+				.andExpect(MockMvcResultMatchers.model().attribute("actividad",
+						Matchers.hasProperty("horaInicio", Matchers.is(this.horini))))
+				.andExpect(MockMvcResultMatchers.model().attribute("actividad",
+						Matchers.hasProperty("horaFin", Matchers.is(this.horfin))))
+				.andExpect(MockMvcResultMatchers.view().name("actividades/actividadesDetails"));
 	}
 
 }

@@ -28,34 +28,31 @@
 					<span>Inicio</span>
 				</petclinic:menuItem>
 
-				<sec:authorize access="hasAuthority('anciano')">
+				<sec:authorize access="hasAnyAuthority('organizador', 'anciano', 'manager')">
+
 					<petclinic:menuItem active="${name eq 'residencias'}"
 						url="/residencias" title="find residencias">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Residencias</span>
 					</petclinic:menuItem>
-					
+
 					<petclinic:menuItem active="${name eq 'excursiones'}"
 						url="/excursiones" title="find excursiones">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Excursiones</span>
 					</petclinic:menuItem>
-				</sec:authorize>
-				
-				<petclinic:menuItem active="${name eq 'actividades'}"
+
+					<petclinic:menuItem active="${name eq 'actividades'}"
 						url="/actividades" title="find actividades">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Actividades</span>
 					</petclinic:menuItem>
-				
+
+				</sec:authorize>
+
 				<!-- 				------------------------------------------------------------ -->
 
 				<sec:authorize access="hasAuthority('organizador')">
-					<petclinic:menuItem active="${name eq 'excursiones'}"
-						url="/excursiones" title="find excursiones">
-						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-						<span>Excursiones</span>
-					</petclinic:menuItem>
 
 					<petclinic:menuItem active="${name eq 'peticionesExcursion'}"
 						url="/peticiones-excursion" title="find peticiones excursion">
@@ -67,46 +64,28 @@
 				<!-- 				------------------------------------------------------------ -->
 
 				<sec:authorize access="hasAuthority('manager')">
-					<petclinic:menuItem active="${name eq 'excursiones'}"
-						url="/excursiones" title="find excursiones">
-						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-						<span>Excursiones</span>
-					</petclinic:menuItem>
-
 					<petclinic:menuItem active="${name eq 'peticionesExcursion'}"
 						url="/peticiones-excursion" title="find peticiones excursion">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Peticiones excursion</span>
 					</petclinic:menuItem>
-
-					<petclinic:menuItem active="${name eq 'residencias'}"
-						url="/residencias" title="find residencias">
-						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-						<span>Residencias</span>
-					</petclinic:menuItem>
-
-					<petclinic:menuItem active="${name eq 'actividades'}"
-						url="/actividades" title="find actividades">
-						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-						<span>Actividades</span>
-					</petclinic:menuItem>
 				</sec:authorize>
-				
+
 				<!-- 				------------------------------------------------------------ -->
 
 				<sec:authorize access="hasAuthority('admin')">
-					<petclinic:menuItem active="${name eq 'ancianos'}"
-						url="/ancianos" title="find ancianos">
+					<petclinic:menuItem active="${name eq 'ancianos'}" url="/ancianos"
+						title="find ancianos">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Ancianos</span>
 					</petclinic:menuItem>
 
-					<petclinic:menuItem active="${name eq 'managers'}"
-						url="/managers" title="find managers">
+					<petclinic:menuItem active="${name eq 'managers'}" url="/managers"
+						title="find managers">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Managers</span>
 					</petclinic:menuItem>
-					
+
 					<petclinic:menuItem active="${name eq 'organizadores'}"
 						url="/organizadores" title="find organizadores">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -125,7 +104,7 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
