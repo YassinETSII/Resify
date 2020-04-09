@@ -4,6 +4,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="resify" tagdir="/WEB-INF/tags" %>
+<%@ taglib uri="http://www.springframework.org/security/tags"
+	prefix="security"%>
 
 <resify:layout pageName="actividades">
     <h2>Actividades</h2>
@@ -40,8 +42,11 @@
         </tbody>
     </table>
     
-    <spring:url value="/actividades/new" var="addUrl">
-    </spring:url>
-    <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Añadir nueva actividad</a>
+    <security:authorize access="hasAuthority('manager')">
+		<spring:url value="/actividades/new" var="addUrl">
+	    </spring:url>
+	    <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Añadir nueva actividad</a>
+	</security:authorize>
+    
     
 </resify:layout>

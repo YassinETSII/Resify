@@ -19,6 +19,7 @@ import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Anciano;
 import org.springframework.samples.petclinic.model.Excursion;
 import org.springframework.samples.petclinic.model.Organizador;
 import org.springframework.samples.petclinic.repository.springdatajpa.ExcursionRepository;
@@ -76,6 +77,10 @@ public class ExcursionService {
 	@Transactional
 	public Iterable<Excursion> findAll() {
 		return excursionRepository.findAll();
+	}
+
+	public Iterable<Excursion> findAllMineAnciano(Anciano anciano) {
+		return excursionRepository.findAllMineAnciano(anciano.getId(), java.sql.Date.valueOf(LocalDate.now()));
 	}		
 	
 	

@@ -27,13 +27,27 @@
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
 					<span>Inicio</span>
 				</petclinic:menuItem>
-				
-				<petclinic:menuItem active="${name eq 'residencias'}"
+
+				<sec:authorize access="hasAuthority('anciano')">
+					<petclinic:menuItem active="${name eq 'residencias'}"
 						url="/residencias" title="find residencias">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Residencias</span>
 					</petclinic:menuItem>
-
+					
+					<petclinic:menuItem active="${name eq 'excursiones'}"
+						url="/excursiones" title="find excursiones">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Excursiones</span>
+					</petclinic:menuItem>
+				</sec:authorize>
+				
+				<petclinic:menuItem active="${name eq 'actividades'}"
+						url="/actividades" title="find actividades">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Actividades</span>
+					</petclinic:menuItem>
+				
 				<!-- 				------------------------------------------------------------ -->
 
 				<sec:authorize access="hasAuthority('organizador')">
@@ -63,6 +77,12 @@
 						url="/peticiones-excursion" title="find peticiones excursion">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Peticiones excursion</span>
+					</petclinic:menuItem>
+
+					<petclinic:menuItem active="${name eq 'residencias'}"
+						url="/residencias" title="find residencias">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Residencias</span>
 					</petclinic:menuItem>
 
 					<petclinic:menuItem active="${name eq 'actividades'}"
@@ -105,7 +125,7 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
