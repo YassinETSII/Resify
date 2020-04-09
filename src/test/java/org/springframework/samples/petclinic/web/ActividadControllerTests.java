@@ -1,8 +1,11 @@
 
 package org.springframework.samples.petclinic.web;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.TemporalUnit;
+import java.util.Date;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +50,7 @@ class ActividadControllerTests {
 	private MockMvc					mockMvc;
 
 	private Actividad				act;
-	private LocalDate				diaini					= LocalDate.now().plusDays(9);
+	private Date					diaini					= Date.from(Instant.now().plusSeconds(1000));
 	private LocalTime				horini   				= LocalTime.of(9, 0);
 	private LocalTime				horfin   				= LocalTime.of(20, 0);
 	private Residencia				resi					= new Residencia();
@@ -64,7 +67,7 @@ class ActividadControllerTests {
 		this.act.setId(ActividadControllerTests.TEST_ACTIVIDAD_ID);
 		this.act.setTitulo("Prueba");
 		this.act.setDescripcion("Prueba desc");
-		this.act.setFechaInicio(java.sql.Date.valueOf(diaini));
+		this.act.setFechaInicio(diaini);
 		this.act.setHoraInicio(horini);
 		this.act.setHoraFin(horfin);
 		this.act.setResidencia(this.resi);
