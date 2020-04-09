@@ -71,24 +71,15 @@ class ResidenciaServiceTests {
 	@Test
 	void debeEncontrarLaResidenciaPorManager() {
 		Manager m = this.managerService.findManagerById(3);
-		Iterable<Residencia> res = this.residenciaService.findAllMine(m);
-
-		ArrayList<Residencia> resi = new ArrayList<Residencia>();
-		for (Residencia r : res) {
-			resi.add(r);
-		}
-
-		Residencia re3 = resi.get(0);
-		Assertions.assertTrue(re3.getCorreo().equals("residencia1@mail.es"));
+		Residencia res = this.residenciaService.findMine(m);
+		Assertions.assertTrue(res.getCorreo().equals("residencia1@mail.es"));
 	}
 
 	@Test
 	@Transactional
 	public void debeCrearResidencia() {
 		Manager m = this.managerService.findManagerById(7);
-
-		int total = 0;
-
+		
 		Residencia ra = new Residencia();
 		LocalTime horaApertura = LocalTime.of(07, 00);
 		LocalTime horaCierre = LocalTime.of(21, 00);
@@ -107,13 +98,9 @@ class ResidenciaServiceTests {
 
 		this.residenciaService.saveResidencia(ra);
 
-		Iterable<Residencia> rres2 = this.residenciaService.findAllMine(m);
-		ArrayList<Residencia> resi2 = new ArrayList<Residencia>();
-		for (Residencia r2 : rres2) {
-			resi2.add(r2);
-		}
+		Residencia rres2 = this.residenciaService.findMine(m);
 		//Comprueba que se ha añadido a las residencias del manager (revisar esto, no debería dejar crear más de una)
-		Assertions.assertTrue(resi2.size() == total + 1);
+		Assertions.assertTrue(rres2 != null);
 		//Comprueba que su id ya no es nulo
 		Assertions.assertTrue(ra.getId() != null);
 	}

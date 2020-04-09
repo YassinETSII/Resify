@@ -27,15 +27,13 @@
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
 					<span>Inicio</span>
 				</petclinic:menuItem>
-
-				<sec:authorize access="hasAuthority('anciano')">
-					<petclinic:menuItem active="${name eq 'residencias'}"
+				
+				<petclinic:menuItem active="${name eq 'residencias'}"
 						url="/residencias" title="find residencias">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Residencias</span>
 					</petclinic:menuItem>
-				</sec:authorize>
-				
+
 				<!-- 				------------------------------------------------------------ -->
 
 				<sec:authorize access="hasAuthority('organizador')">
@@ -65,12 +63,6 @@
 						url="/peticiones-excursion" title="find peticiones excursion">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Peticiones excursion</span>
-					</petclinic:menuItem>
-
-					<petclinic:menuItem active="${name eq 'residencias'}"
-						url="/residencias" title="find residencias">
-						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-						<span>Residencias</span>
 					</petclinic:menuItem>
 
 					<petclinic:menuItem active="${name eq 'actividades'}"
