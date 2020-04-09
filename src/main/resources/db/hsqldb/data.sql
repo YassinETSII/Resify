@@ -51,6 +51,9 @@ INSERT INTO actividades VALUES (3, 'Descripcion de prueba3', '2010-09-07',  '22:
 	'Prueba3', 1);
 INSERT INTO actividades VALUES (4, 'Descripcion de prueba4', '2010-09-07',  '22:30', '17:00', 
 	'Prueba4', 2);	
+INSERT INTO actividades VALUES (5, 'Descripcion de prueba5', '2020-09-07',  '22:30', '17:00', 
+	'Prueba5', 1);
+	
 -- Ancianos
 
 INSERT INTO users(username,password,enabled) VALUES ('anciano1','anciano1',TRUE);
@@ -61,6 +64,11 @@ INSERT INTO authorities VALUES ('anciano2','anciano');
 
 INSERT INTO ancianos VALUES (5, 'García', 'Anacleto', 'Presentacion1', 70, false, 'anciano1');
 INSERT INTO ancianos VALUES (6, 'Prieto', 'Dolores', 'Presentacion2', 80, true, 'anciano2');
+
+INSERT INTO users(username,password,enabled) VALUES ('anciano3','anciano3',TRUE);
+INSERT INTO authorities VALUES ('anciano3','anciano');
+
+INSERT INTO ancianos VALUES (7, 'González', 'Rosa', 'Presentacion3', 66, false, 'anciano3');
 
 -- Incidencias
 
@@ -81,6 +89,7 @@ INSERT INTO buenas_acciones VALUES (4, 'Descripcion de buena acción4', '2010-09
 INSERT INTO inscripciones VALUES (1, 'Declaración1', 'pendiente', '2020-02-01', null , 5, 1);
 INSERT INTO inscripciones VALUES (2, 'Declaración2', 'pendiente', '2020-02-01', null , 6, 1);
 INSERT INTO inscripciones VALUES (3, 'Declaración4', 'rechazada', '2020-02-01', 'justificacion de prueba', 6, 2);
+INSERT INTO inscripciones VALUES (4, 'Declaración5', 'aceptada', '2020-02-01', null , 7, 1);
 
 -- Excursiones
 
@@ -97,6 +106,9 @@ INSERT INTO peticiones_excursion VALUES (1, 'Declaración1', 'aceptada', '2020-0
 INSERT INTO peticiones_excursion VALUES (2, 'Declaración2', 'aceptada', '2020-02-01', null , 3, 2);
 INSERT INTO peticiones_excursion VALUES (3, 'Declaración3', 'pendiente', '2020-02-01', null , 1, 1);
 
+-- Participaciones
+
+INSERT INTO participaciones VALUES (1, 'Declaración', 'aceptada', '2020-03-02', null, 7, 3);
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');

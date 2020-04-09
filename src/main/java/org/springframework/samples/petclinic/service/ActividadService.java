@@ -15,9 +15,12 @@
  */
 package org.springframework.samples.petclinic.service;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Actividad;
+import org.springframework.samples.petclinic.model.Anciano;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.repository.springdatajpa.ActividadRepository;
 import org.springframework.stereotype.Service;
@@ -69,6 +72,10 @@ public class ActividadService {
 	@Transactional
 	public Iterable<Actividad> findAll() {
 		return actividadRepository.findAll();
+	}
+
+	public Iterable<Actividad> findAllMineAnciano(Anciano anciano) {
+		return actividadRepository.findAllMineAnciano(anciano.getId(), java.sql.Date.valueOf(LocalDate.now()));
 	}		
 	
 	

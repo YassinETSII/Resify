@@ -23,10 +23,13 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Anciano;
+import org.springframework.samples.petclinic.model.BuenaAccion;
 import org.springframework.samples.petclinic.model.Excursion;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Organizador;
 import org.springframework.samples.petclinic.model.Residencia;
+import org.springframework.samples.petclinic.service.AncianoService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ExcursionService;
 import org.springframework.samples.petclinic.service.ManagerService;
@@ -65,6 +68,9 @@ public class ExcursionController {
 
 	@Autowired
 	private ManagerService managerService;
+	
+	@Autowired
+	private AncianoService ancianoService;
 
 	@Autowired
 	private AuthoritiesService authoritiesService;
@@ -97,6 +103,9 @@ public class ExcursionController {
 			excursiones = excursionService.findAllMine(organizador);
 		} else if (authority.equals("manager")) {
 			excursiones = excursionService.findAllPublished();
+		} else if (authority.equals("anciano")) {
+			Anciano anciano = ancianoService.findAncianoByUsername(p.getName());
+			excursiones = excursionService.findAllMineAnciano(anciano);
 		}
 		model.put("excursiones", excursiones);
 		return "excursiones/excursionesList";
@@ -174,6 +183,21 @@ public class ExcursionController {
 			}
 			mav.addObject("hasPeticion", peticiones != 0);
 			mav.addObject("hasResidencia", residencia != null);
+		}
+		
+		else if (authority.equals("anciano")) {
+			Anciano anciano = ancianoService.findAncianoByUsername(p.getName());
+			Iterable<Excursion> excursiones = excursionService.findAllMineAnciano(anciano);
+			boolean suya = false;
+			for (Excursion e : excursiones) {
+				if(excursion.getId() == e.getId()) {
+					suya = true;
+					break;
+				}
+			}
+			if (suya == false) {
+				mav = new ModelAndView("exception");
+			}
 		}
 
 		return mav;

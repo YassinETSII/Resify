@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -23,9 +24,13 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Actividad;
+import org.springframework.samples.petclinic.model.Anciano;
+import org.springframework.samples.petclinic.model.Excursion;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.service.ActividadService;
+import org.springframework.samples.petclinic.service.AncianoService;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.web.validators.ActividadValidator;
 import org.springframework.stereotype.Controller;
@@ -54,9 +59,15 @@ public class ActividadController {
 
 	@Autowired
 	private ActividadService actividadService;
+	
+	@Autowired
+	private AuthoritiesService authoritiesService;
 
 	@Autowired
 	private ManagerService managerService;
+	
+	@Autowired
+	private AncianoService ancianoService;
 
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
@@ -75,8 +86,15 @@ public class ActividadController {
 
 	@GetMapping()
 	public String listActividades(Map<String, Object> model, Principal p) {
-		Manager manager = managerService.findManagerByUsername(p.getName());
-		Iterable<Actividad> actividades = actividadService.findAllMine(manager);
+		String authority = authoritiesService.findAuthority(p.getName());
+		Iterable<Actividad> actividades = new ArrayList<>();
+		if (authority.equals("manager")) {
+			Manager manager = managerService.findManagerByUsername(p.getName());
+			actividades = actividadService.findAllMine(manager);
+		} else if (authority.equals("anciano")) {
+			Anciano anciano = ancianoService.findAncianoByUsername(p.getName());
+			actividades = actividadService.findAllMineAnciano(anciano);
+		}
 		model.put("actividades", actividades);
 		return "actividades/actividadesList";
 	}
@@ -130,13 +148,31 @@ public class ActividadController {
 
 	@GetMapping("/{actividadId}")
 	public ModelAndView showActividad(@PathVariable("actividadId") int actividadId, Principal p) {
+		String authority = authoritiesService.findAuthority(p.getName());
 		Actividad actividad = this.actividadService.findActividadById(actividadId);
-		Manager manager = managerService.findManagerByUsername(p.getName());
 		ModelAndView mav = new ModelAndView("actividades/actividadesDetails");
 		mav.addObject(actividad);
-		if (!actividad.getResidencia().getManager().equals(manager)) {
-			mav = new ModelAndView("exception");
+		
+		if (authority.equals("manager")) {
+			Manager manager = managerService.findManagerByUsername(p.getName());
+			if (!actividad.getResidencia().getManager().equals(manager)) {
+				mav = new ModelAndView("exception");
+			}
+		}else if(authority.equals("anciano")) {
+			Anciano anciano = ancianoService.findAncianoByUsername(p.getName());
+			Iterable<Actividad> actividades = actividadService.findAllMineAnciano(anciano);
+			boolean suya = false;
+			for (Actividad a : actividades) {
+				if(actividad.getId() == a.getId()) {
+					suya = true;
+					break;
+				}
+			}
+			if (suya == false) {
+				mav = new ModelAndView("exception");
+			}
 		}
+		
 		return mav;
 	}
 

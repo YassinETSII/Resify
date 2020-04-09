@@ -34,7 +34,19 @@
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Residencias</span>
 					</petclinic:menuItem>
+					
+					<petclinic:menuItem active="${name eq 'excursiones'}"
+						url="/excursiones" title="find excursiones">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Excursiones</span>
+					</petclinic:menuItem>
 				</sec:authorize>
+				
+				<petclinic:menuItem active="${name eq 'actividades'}"
+						url="/actividades" title="find actividades">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Actividades</span>
+					</petclinic:menuItem>
 				
 				<!-- 				------------------------------------------------------------ -->
 
