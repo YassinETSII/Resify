@@ -28,6 +28,7 @@ import org.springframework.samples.petclinic.model.Inscripcion;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.service.AncianoService;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.InscripcionService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.service.ResidenciaService;
@@ -55,6 +56,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class ResidenciaController {
 
 	private static final String	VIEWS_RESIDENCIA_CREATE_OR_UPDATE_FORM	= "residencias/createOrUpdateResidenciaForm";
+
+	@Autowired
+	private AuthoritiesService	authoritiesService;
 
 	@Autowired
 	private ResidenciaService	residenciaService;
@@ -86,6 +90,16 @@ public class ResidenciaController {
 
 	@GetMapping()
 	public String listResidencias(final Map<String, Object> model, final Principal p) {
+		String auth = this.authoritiesService.findAuthority(p.getName());
+		if (auth.equals("anciano")) {
+			Anciano anciano = this.ancianoService.findAncianoByUsername(p.getName());
+			Iterable<Inscripcion> inscripciones = this.inscripcionService.findAllMineAnciano(anciano);
+			for (Inscripcion i : inscripciones) {
+				if (i.getEstado().equals("aceptada")) {
+					return "redirect:residencias/" + i.getResidencia().getId();
+				}
+			}
+		}
 		Iterable<Residencia> residencias = this.residenciaService.findAll();
 		model.put("puedeVerTop", true);
 		model.put("residencias", residencias);
