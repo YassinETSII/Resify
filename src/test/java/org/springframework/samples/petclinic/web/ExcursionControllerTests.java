@@ -22,6 +22,7 @@ import org.springframework.samples.petclinic.configuration.SecurityConfiguration
 import org.springframework.samples.petclinic.model.Excursion;
 import org.springframework.samples.petclinic.model.Organizador;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.AncianoService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ExcursionService;
 import org.springframework.samples.petclinic.service.ManagerService;
@@ -55,6 +56,9 @@ class ExcursionControllerTests {
 
 	@MockBean
 	private AuthoritiesService 		authoritiesService;
+	
+	@MockBean
+	private AncianoService 		ancianoService;
 
 
 	@Autowired
@@ -99,7 +103,7 @@ class ExcursionControllerTests {
 		.andExpect(MockMvcResultMatchers.view().name("excursiones/excursionesList"));
 	}
 
-	@WithMockUser(roles = "organizador")
+	@WithMockUser(authorities = "organizador")
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/excursiones/new"))
@@ -108,7 +112,7 @@ class ExcursionControllerTests {
 		.andExpect(MockMvcResultMatchers.model().attributeExists("excursion"));
 	}
 
-	@WithMockUser(roles = "organizador")
+	@WithMockUser(authorities = "organizador")
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/excursiones/new")

@@ -20,6 +20,8 @@ import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.ActividadService;
+import org.springframework.samples.petclinic.service.AncianoService;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -40,6 +42,12 @@ class ActividadControllerTests {
 
 	@MockBean
 	private ManagerService managerService;
+	
+	@MockBean
+	private AncianoService ancianoService;
+	
+	@MockBean
+	private AuthoritiesService authoritiesService;
 
 	@Autowired
 	private MockMvc					mockMvc;
@@ -78,14 +86,14 @@ class ActividadControllerTests {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("actividades/actividadesList"));
 	}
 
-	@WithMockUser(roles = "manager")
+	@WithMockUser(authorities = "manager")
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades/new")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("actividades/createOrUpdateActividadForm"))
 			.andExpect(MockMvcResultMatchers.model().attributeExists("actividad"));
 	}
 
-	@WithMockUser(roles = "manager")
+	@WithMockUser(authorities = "manager")
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/actividades/new")
