@@ -91,17 +91,13 @@ class IncidenciaServiceTests {
 
 		int total = basc.size();
 
-		Iterable<Residencia> res = this.residenciaService.findAllMine(m);
-		ArrayList<Residencia> ress = new ArrayList<Residencia>();
-		for (Residencia r : res) {
-			ress.add(r);
-		}
+		Residencia res = this.residenciaService.findMine(m);
 
 		Incidencia ba = new Incidencia();
 		ba.setTitulo("Prueba");
 		ba.setFecha(new Date(System.currentTimeMillis() - 1));
 		ba.setDescripcion("Prueba descripcion");
-		ba.setResidencia(ress.get(0));
+		ba.setResidencia(res);
 
 		this.incidenciaService.saveIncidencia(ba);
 

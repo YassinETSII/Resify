@@ -46,7 +46,7 @@ class ExcursionServiceTests {
 		Excursion exc = this.excursionService.findExcursionById(1);
 		Assertions.assertTrue(exc.getRatioAceptacion().equals(2.0));
 		Assertions.assertTrue(exc.getNumeroResidencias() == 4);
-		Assertions.assertTrue(exc.getFechaFin().equals(LocalDate.of(2020, 9, 7)));
+		Assertions.assertTrue(exc.getFechaFin().compareTo(java.sql.Date.valueOf(LocalDate.of(2020, 9, 7))) == 0);
 		Assertions.assertTrue(exc.isFinalMode());
 		Assertions.assertTrue(exc.getOrganizador().equals(this.organizadorService.findOrganizadorById(1)));
 

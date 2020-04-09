@@ -86,7 +86,7 @@ class PeticionExcursionServiceTests {
 	@Transactional
 	public void debeCrearPeticionExcursionYGenerarId() {
 		Manager manager = this.managerService.findManagerById(4);
-		Residencia residencia = this.residenciaService.findAllMine(manager).iterator().next();
+		Residencia residencia = this.residenciaService.findMine(manager);
 		Excursion excursion = this.excursionService.findExcursionById(1);
 		Integer pe = this.peticionExcursionService.countPeticionesByExcursion(excursion, manager);
 		

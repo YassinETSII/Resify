@@ -92,11 +92,7 @@ class ActividadServiceTests {
 
 		int total = actividades1.size();
 
-		Iterable<Residencia> res = this.residenciaService.findAllMine(manager);
-		ArrayList<Residencia> ress = new ArrayList<Residencia>();
-		for (Residencia r : res) {
-			ress.add(r);
-		}
+		Residencia res = this.residenciaService.findMine(manager);
 
 		Actividad act = new Actividad();
 		act.setTitulo("Prueba");
@@ -104,7 +100,7 @@ class ActividadServiceTests {
 		act.setFechaInicio(java.sql.Date.valueOf(LocalDate.now().plusDays(5)));
 		act.setHoraInicio(LocalTime.of(9, 0));
 		act.setHoraFin(LocalTime.of(22, 0));
-		act.setResidencia(ress.get(0));
+		act.setResidencia(res);
 
 		this.actividadService.saveActividad(act);
 
