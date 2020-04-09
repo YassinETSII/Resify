@@ -30,40 +30,42 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	DataSource dataSource;
 
-
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-			.antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
-			.antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
-			.antMatchers("/users/new").permitAll()
-			.antMatchers("/actividades/**").hasAnyAuthority("manager")
-			.antMatchers("/incidencias/**").hasAnyAuthority("manager")
-			.antMatchers("/buenas-acciones/**").hasAnyAuthority("manager")
-			.antMatchers("/organizador/**").hasAnyAuthority("organizador")
-			.antMatchers("/excursiones/**").hasAnyAuthority("organizador", "manager")
-			.antMatchers("/excursiones/{excursionId}/edit").hasAnyAuthority("organizador")
-			.antMatchers("/excursiones/{excursionId}/new").hasAnyAuthority("organizador")
-			.antMatchers("/peticiones-excursion").hasAnyAuthority("manager", "organizador")
-			.antMatchers("/peticiones-excursion/**").hasAnyAuthority("organizador")
-			.antMatchers("/residencias/new").hasAnyAuthority("manager")
-			.antMatchers("/residencias").hasAnyAuthority("anciano")
-			.antMatchers("/residencias/").hasAnyAuthority("anciano")
-			.antMatchers("/residencias/top").hasAnyAuthority("anciano")
-			.antMatchers("/residencias/top/").hasAnyAuthority("anciano")
-			.antMatchers("/residencias/**").hasAnyAuthority("anciano", "manager")
-			.antMatchers("/inscripciones/new/**").hasAnyAuthority("anciano")
-			.antMatchers("/inscripciones").hasAnyAuthority("anciano", "manager")
-			.antMatchers("/inscripciones/**").hasAnyAuthority("anciano", "manager")
-			.antMatchers("/admin/**").hasAnyAuthority("admin")
-			.antMatchers("/owners/**").hasAnyAuthority("owner", "admin")
-			.antMatchers("/ancianos/**").hasAnyAuthority("admin")
-			.antMatchers("/organizadores/**").hasAnyAuthority("admin")
-			.antMatchers("/managers/**").hasAnyAuthority("admin")
-			.antMatchers("/vets/**").authenticated().anyRequest().denyAll().and().formLogin()
-			/* .loginPage("/login") */
-			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
-		// Configuración para que funcione la consola de administración 
+		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
+				.antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
+				.antMatchers("/users/new").permitAll()
+				.antMatchers("/actividades/{actividadId}").hasAnyAuthority("manager", "anciano")
+				.antMatchers("/actividades").hasAnyAuthority("manager", "anciano")
+				.antMatchers("/actividades/").hasAnyAuthority("manager", "anciano")
+				.antMatchers("/actividades/**").hasAnyAuthority("manager")
+				.antMatchers("/incidencias/**").hasAnyAuthority("manager")
+				.antMatchers("/buenas-acciones/**").hasAnyAuthority("manager")
+				.antMatchers("/organizador/**").hasAnyAuthority("organizador")
+				.antMatchers("/excursiones/{excursionId}/edit").hasAnyAuthority("organizador")
+				.antMatchers("/excursiones/{excursionId}/new").hasAnyAuthority("organizador")
+				.antMatchers("/excursiones").hasAnyAuthority("organizador", "manager", "anciano")
+				.antMatchers("/excursiones/**").hasAnyAuthority("organizador", "manager", "anciano")
+				.antMatchers("/peticiones-excursion").hasAnyAuthority("manager", "organizador")
+				.antMatchers("/peticiones-excursion/**").hasAnyAuthority("organizador")
+				.antMatchers("/residencias").authenticated()
+				.antMatchers("/residencias/top").hasAnyAuthority("anciano")
+				.antMatchers("/residencias/no-participantes").hasAnyAuthority("organizador")
+				.antMatchers("/residencias/{residenciaId}").hasAnyAuthority("organizador", "anciano")
+				.antMatchers("/residencias/**").hasAnyAuthority("manager")
+				.antMatchers("/inscripciones/new/**").hasAnyAuthority("anciano")
+				.antMatchers("/inscripciones").hasAnyAuthority("anciano", "manager")
+				.antMatchers("/inscripciones/**").hasAnyAuthority("anciano", "manager")
+				.antMatchers("/admin/**").hasAnyAuthority("admin")
+				.antMatchers("/owners/**").hasAnyAuthority("owner", "admin")
+				.antMatchers("/ancianos/**").hasAnyAuthority("admin")
+				.antMatchers("/organizadores/**").hasAnyAuthority("admin")
+				.antMatchers("/managers/**").hasAnyAuthority("admin")
+				.antMatchers("/vets/**").authenticated()
+				.anyRequest().denyAll().and().formLogin()
+				/* .loginPage("/login") */
+				.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
+		// Configuración para que funcione la consola de administración
 		// de la BD H2 (deshabilitar las cabeceras de protección contra
 		// ataques de tipo csrf y habilitar los framesets si su contenido
 		// se sirve desde esta misma página.
@@ -73,8 +75,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(final AuthenticationManagerBuilder auth) throws Exception {
-		auth.jdbcAuthentication().dataSource(this.dataSource).usersByUsernameQuery("select username,password,enabled " + "from users " + "where username = ?")
-			.authoritiesByUsernameQuery("select username, authority " + "from authorities " + "where username = ?").passwordEncoder(this.passwordEncoder());
+		auth.jdbcAuthentication().dataSource(this.dataSource)
+				.usersByUsernameQuery("select username,password,enabled " + "from users " + "where username = ?")
+				.authoritiesByUsernameQuery("select username, authority " + "from authorities " + "where username = ?")
+				.passwordEncoder(this.passwordEncoder());
 	}
 
 	@Bean

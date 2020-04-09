@@ -53,7 +53,7 @@
     </table>
     
     <c:if test="${pageContext['request'].userPrincipal.name == residencia.manager.user.username}"> 
-    	<spring:url value="{residenciaId}/edit" var="editUrl">
+    	<spring:url value="/residencias/{residenciaId}/edit" var="editUrl">
        		<spring:param name="residenciaId" value="${residencia.id}"/>
     	</spring:url>
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar residencia</a>

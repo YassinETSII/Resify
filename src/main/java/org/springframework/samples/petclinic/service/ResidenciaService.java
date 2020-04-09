@@ -23,6 +23,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Manager;
+import org.springframework.samples.petclinic.model.Organizador;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.repository.springdatajpa.ResidenciaRepository;
 import org.springframework.stereotype.Service;
@@ -51,8 +52,8 @@ public class ResidenciaService {
 	}
 
 	@Transactional
-	public Iterable<Residencia> findAllMine(final Manager manager) {
-		return this.residenciaRepository.findAllMine(manager.getId());
+	public Residencia findMine(final Manager manager) {
+		return this.residenciaRepository.findMine(manager.getId());
 	}
 
 	@Transactional
@@ -86,6 +87,11 @@ public class ResidenciaService {
 			i++;
 		}
 		return list;
+	}
+	
+	@Transactional
+	public Iterable<Residencia> findResidenciasNoParticipantes(final Organizador organizador){
+		return this.residenciaRepository.findResidenciasSinParticipar(organizador.getId());
 	}
 
 }
