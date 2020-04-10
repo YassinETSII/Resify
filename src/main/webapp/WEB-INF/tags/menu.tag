@@ -57,7 +57,7 @@
 					<petclinic:menuItem active="${name eq 'peticionesExcursion'}"
 						url="/peticiones-excursion" title="find peticiones excursion">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-						<span>Peticiones de excursion</span>
+						<span>Peticiones excursion</span>
 					</petclinic:menuItem>
 				</sec:authorize>
 
