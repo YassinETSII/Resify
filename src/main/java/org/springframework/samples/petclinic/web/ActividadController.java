@@ -25,7 +25,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Actividad;
 import org.springframework.samples.petclinic.model.Anciano;
-import org.springframework.samples.petclinic.model.Excursion;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.service.ActividadService;
@@ -152,11 +151,13 @@ public class ActividadController {
 		Actividad actividad = this.actividadService.findActividadById(actividadId);
 		ModelAndView mav = new ModelAndView("actividades/actividadesDetails");
 		mav.addObject(actividad);
-		
+		System.out.println("hola");
+		System.out.println(authority);
 		if (authority.equals("manager")) {
 			Manager manager = managerService.findManagerByUsername(p.getName());
 			if (!actividad.getResidencia().getManager().equals(manager)) {
 				mav = new ModelAndView("exception");
+				System.out.println("excepcion");
 			}
 		}else if(authority.equals("anciano")) {
 			Anciano anciano = ancianoService.findAncianoByUsername(p.getName());
@@ -168,10 +169,12 @@ public class ActividadController {
 					break;
 				}
 			}
+			System.out.println("por anciano");
 			if (suya == false) {
 				mav = new ModelAndView("exception");
 			}
 		}
+		System.out.println("AGHHHHHHHHHHHH");
 		
 		return mav;
 	}
