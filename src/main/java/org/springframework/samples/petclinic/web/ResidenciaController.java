@@ -117,8 +117,8 @@ public class ResidenciaController {
 	public String initCreationForm(final Map<String, Object> model, final Principal p) {
 		Manager manager = this.managerService.findManagerByUsername(p.getName());
 		boolean tieneResidencia = true;
-		Iterable<Residencia> res = this.residenciaService.findAllMine(manager);
-		if (res.toString() == "[]") {
+		Residencia res = this.residenciaService.findMine(manager);
+		if (res == null) {
 			tieneResidencia = false;
 		}
 
