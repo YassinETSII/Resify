@@ -40,17 +40,23 @@ public class HU17NegativoUITest {
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
+	//El usuario anciano accede a las listas de excursiones y actividades
+	//pendientes de su residencia pero encuentra listas vacías,
+	//debido a que el anciano no pertenece a ninguna residencia aún
 	@Test
 	public void testHU17NegativoUI() throws Exception {
-		this.driver.get("http://localhost:8080/");
-		this.driver.findElement(By.linkText("Login")).click();
+		this.driver.get("http://localhost:" + this.port);
+		//De esta forma no funciona en JUnit:
+		//this.driver.findElement(By.linkText("Login")).click();
+		//no funciona en el nav
+		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys("anciano1");
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys("anciano1");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.linkText("Excursiones")).click();
-		this.driver.findElement(By.linkText("Actividades")).click();
+		this.driver.findElement(By.xpath("//a[contains(@href, '/excursiones')]")).click();
+		this.driver.findElement(By.xpath("//a[contains(@href, '/actividades')]")).click();
 	}
 
 	@AfterEach

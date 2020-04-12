@@ -40,18 +40,24 @@ public class HU17PositivoUITest {
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
+	//El usuario anciano accede a las listas de excursiones y actividades
+	//pendientes de su residencia y puede ver correctamente los datos
+	//y en entrar en el show de las mismas
 	@Test
 	public void testHU17PositivoUI() throws Exception {
 		this.driver.get("http://localhost:" + this.port);
-		this.driver.findElement(By.linkText("Login")).click();
+		//De esta forma no funciona en JUnit:
+		//this.driver.findElement(By.linkText("Login")).click();
+		//no funciona en el nav
+		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys("anciano3");
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys("anciano3");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.linkText("Excursiones")).click();
+		this.driver.findElement(By.xpath("//a[contains(@href, '/excursiones')]")).click();
 		this.driver.findElement(By.linkText("Prueba3")).click();
-		this.driver.findElement(By.linkText("Actividades")).click();
+		this.driver.findElement(By.xpath("//a[contains(@href, '/actividades')]")).click();
 		this.driver.findElement(By.linkText("Prueba5")).click();
 	}
 
