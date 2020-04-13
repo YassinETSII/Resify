@@ -27,6 +27,7 @@ import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.service.BuenaAccionService;
 import org.springframework.samples.petclinic.service.ManagerService;
+import org.springframework.samples.petclinic.service.ResidenciaService;
 import org.springframework.samples.petclinic.web.validators.BuenaAccionValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -49,6 +50,9 @@ public class BuenaAccionController {
 
 	@Autowired
 	private ManagerService		managerService;
+	
+	@Autowired
+	private ResidenciaService residenciaService;
 
 
 	@InitBinder
@@ -70,6 +74,11 @@ public class BuenaAccionController {
 	public String listBuenasAcciones(final Map<String, Object> model, final Principal p) {
 		Manager manager = this.managerService.findManagerByUsername(p.getName());
 		Iterable<BuenaAccion> buenasAcciones = this.buenaAccionService.findAllMine(manager);
+		if(this.residenciaService.findMine(manager)==null) {
+			model.put("noTieneResi", true);
+		}else {
+			model.put("noTieneResi", false);
+		}
 		model.put("buenasAcciones", buenasAcciones);
 		return "buenasAcciones/buenasAccionesList";
 	}

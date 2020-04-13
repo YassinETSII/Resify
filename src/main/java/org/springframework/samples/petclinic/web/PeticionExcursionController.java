@@ -96,6 +96,9 @@ public class PeticionExcursionController {
 		Iterable<PeticionExcursion> peticionesExcursion;
 		if (manager != null) {
 			Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
+			if (residencia == null) {
+				return "redirect:excursiones";
+			}
 			peticionesExcursion = this.peticionExcursionService.findAllMineResidencia(residencia);
 		} else if (organizador != null) {
 			peticionesExcursion = this.peticionExcursionService.findAllMineOrganizador(organizador);

@@ -26,6 +26,7 @@ import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.service.IncidenciaService;
 import org.springframework.samples.petclinic.service.ManagerService;
+import org.springframework.samples.petclinic.service.ResidenciaService;
 import org.springframework.samples.petclinic.web.validators.IncidenciaValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -48,6 +49,9 @@ public class IncidenciaController {
 
 	@Autowired
 	private ManagerService managerService;
+	
+	@Autowired
+	private ResidenciaService residenciaService;
 
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
@@ -68,6 +72,11 @@ public class IncidenciaController {
 	public String listIncidencias(Map<String, Object> model, Principal p) {
 		Manager manager = managerService.findManagerByUsername(p.getName());
 		Iterable<Incidencia> incidencias = incidenciaService.findAllMine(manager);
+		if(this.residenciaService.findMine(manager)==null) {
+			model.put("noTieneResi", true);
+		}else {
+			model.put("noTieneResi", false);
+		}
 		model.put("incidencias", incidencias);
 		return "incidencias/incidenciasList";
 	}

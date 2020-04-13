@@ -43,9 +43,11 @@
     </table>
     
     <security:authorize access="hasAuthority('manager')">
-		<spring:url value="/actividades/new" var="addUrl">
-	    </spring:url>
-	    <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Añadir nueva actividad</a>
+    	<c:if test="${noTieneResi == false}">
+	    	<spring:url value="/actividades/new" var="addUrl">
+		    </spring:url>
+		    <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Añadir nueva actividad</a>
+		</c:if>
 	</security:authorize>
     
     

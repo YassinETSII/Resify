@@ -31,6 +31,7 @@ import org.springframework.samples.petclinic.service.ActividadService;
 import org.springframework.samples.petclinic.service.AncianoService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ManagerService;
+import org.springframework.samples.petclinic.service.ResidenciaService;
 import org.springframework.samples.petclinic.web.validators.ActividadValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -67,6 +68,9 @@ public class ActividadController {
 	
 	@Autowired
 	private AncianoService ancianoService;
+	
+	@Autowired
+	private ResidenciaService residenciaService;
 
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
@@ -90,6 +94,11 @@ public class ActividadController {
 		if (authority.equals("manager")) {
 			Manager manager = managerService.findManagerByUsername(p.getName());
 			actividades = actividadService.findAllMine(manager);
+			if(this.residenciaService.findMine(manager)==null) {
+				model.put("noTieneResi", true);
+			}else {
+				model.put("noTieneResi", false);
+			}
 		} else if (authority.equals("anciano")) {
 			Anciano anciano = ancianoService.findAncianoByUsername(p.getName());
 			actividades = actividadService.findAllMineAnciano(anciano);

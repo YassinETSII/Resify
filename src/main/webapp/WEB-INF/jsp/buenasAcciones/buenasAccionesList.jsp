@@ -32,8 +32,10 @@
         </tbody>
     </table>
     
-    <spring:url value="/buenas-acciones/new" var="addUrl">
-    </spring:url>
-    <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Añadir nueva buena accion</a>
+    <c:if test="${noTieneResi == false}">
+    	<spring:url value="/buenas-acciones/new" var="addUrl">
+	    </spring:url>
+	    <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Añadir nueva buena accion</a>
+    </c:if>
     
 </resify:layout>
