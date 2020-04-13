@@ -144,7 +144,7 @@ public class ResidenciaController {
 		Manager manager = this.managerService.findManagerByUsername(p.getName());
 		boolean tieneResidencia = true;
 		Residencia res = this.residenciaService.findMine(manager);
-		if (res.toString() == "[]") {
+		if (res == null) {
 			tieneResidencia = false;
 		}
 
