@@ -149,7 +149,7 @@ public class ResidenciaController {
 		}
 
 		if (tieneResidencia == true) {
-			return "exception";
+			return "redirect:../residencias/" + res.getId();
 		}
 
 		Residencia residencia = new Residencia();

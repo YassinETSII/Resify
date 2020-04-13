@@ -32,8 +32,10 @@
         </tbody>
     </table>
     
-    <spring:url value="/incidencias/new" var="addUrl">
+    <c:if test="${noTieneResi == false}">
+    	<spring:url value="/incidencias/new" var="addUrl">
     </spring:url>
     <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Añadir nueva incidencia</a>
+    </c:if>
     
 </resify:layout>
