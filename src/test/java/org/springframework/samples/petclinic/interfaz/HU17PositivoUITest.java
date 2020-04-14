@@ -35,6 +35,8 @@ public class HU17PositivoUITest {
 	public void setUp() throws Exception {
 		//		String pathToGeckoDriver = "C:\\Users\\2aalf\\Documents\\Uni\\19-20\\DP2";
 		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		//
+		//Añadir en PATH en variables de entorno la ruta de la carpeta contenedora del geckodriver
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);

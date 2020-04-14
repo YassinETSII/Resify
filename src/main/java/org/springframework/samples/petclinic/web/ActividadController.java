@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
@@ -55,95 +56,94 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/actividades")
 public class ActividadController {
 
-	private static final String VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM = "actividades/createOrUpdateActividadForm";
+	private static final String	VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM	= "actividades/createOrUpdateActividadForm";
 
 	@Autowired
-	private ActividadService actividadService;
-	
-	@Autowired
-	private AuthoritiesService authoritiesService;
+	private ActividadService	actividadService;
 
 	@Autowired
-	private ManagerService managerService;
-	
+	private AuthoritiesService	authoritiesService;
+
 	@Autowired
-	private AncianoService ancianoService;
-	
+	private ManagerService		managerService;
+
 	@Autowired
-	private ResidenciaService residenciaService;
+	private AncianoService		ancianoService;
+
+	@Autowired
+	private ResidenciaService	residenciaService;
+
 
 	@InitBinder
-	public void setAllowedFields(WebDataBinder dataBinder) {
+	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
 
 	@InitBinder("manager")
-	public void initManagerBinder(WebDataBinder dataBinder) {
+	public void initManagerBinder(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
 
 	@InitBinder("actividad")
-	public void initActividadBinder(WebDataBinder dataBinder) {
+	public void initActividadBinder(final WebDataBinder dataBinder) {
 		dataBinder.setValidator(new ActividadValidator());
 	}
 
 	@GetMapping()
-	public String listActividades(Map<String, Object> model, Principal p) {
-		String authority = authoritiesService.findAuthority(p.getName());
+	public String listActividades(final Map<String, Object> model, final Principal p) {
+		String authority = this.authoritiesService.findAuthority(p.getName());
 		Iterable<Actividad> actividades = new ArrayList<>();
 		if (authority.equals("manager")) {
-			Manager manager = managerService.findManagerByUsername(p.getName());
-			actividades = actividadService.findAllMine(manager);
-			if(this.residenciaService.findMine(manager)==null) {
+			Manager manager = this.managerService.findManagerByUsername(p.getName());
+			actividades = this.actividadService.findAllMine(manager);
+			if (this.residenciaService.findMine(manager) == null) {
 				model.put("noTieneResi", true);
-			}else {
+			} else {
 				model.put("noTieneResi", false);
 			}
 		} else if (authority.equals("anciano")) {
-			Anciano anciano = ancianoService.findAncianoByUsername(p.getName());
-			actividades = actividadService.findAllMineAnciano(anciano);
+			Anciano anciano = this.ancianoService.findAncianoByUsername(p.getName());
+			actividades = this.actividadService.findAllMineAnciano(anciano);
 		}
 		model.put("actividades", actividades);
 		return "actividades/actividadesList";
 	}
 
 	@GetMapping(value = "/new")
-	public String initCreationForm(Map<String, Object> model, Principal p) {
+	public String initCreationForm(final Map<String, Object> model, final Principal p) {
 		Actividad actividad = new Actividad();
 		model.put("actividad", actividad);
-		return VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM;
+		return ActividadController.VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/new")
-	public String processCreationForm(@Valid Actividad actividad, BindingResult result, Map<String, Object> model,
-			Principal p) {
+	public String processCreationForm(@Valid final Actividad actividad, final BindingResult result, final Map<String, Object> model, final Principal p) {
 		if (result.hasErrors()) {
 			model.put("actividad", actividad);
-			return VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM;
+			return ActividadController.VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM;
 		} else {
 			Residencia residencia = this.managerService.findResidenciaByManagerUsername(p.getName());
 			actividad.setResidencia(residencia);
-			actividadService.saveActividad(actividad);
+			this.actividadService.saveActividad(actividad);
 			model.put("message", "Se ha registrado la actividad correctamente");
 			return "redirect:/actividades";
 		}
 	}
 
 	@GetMapping(value = "/{actividadId}/edit")
-	public String initUpdateActividadForm(@PathVariable("actividadId") int actividadId, Model model) {
+	public String initUpdateActividadForm(@PathVariable("actividadId") final int actividadId, final Model model) {
 		Actividad actividad = this.actividadService.findActividadById(actividadId);
 		model.addAttribute(actividad);
-		return VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM;
+		return ActividadController.VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/{actividadId}/edit")
-	public String processUpdateActividadForm(@Valid Actividad actividad, BindingResult result,
-			@PathVariable("actividadId") int actividadId, final ModelMap model, Principal p) {
+	public String processUpdateActividadForm(@Valid final Actividad actividad, final BindingResult result, @PathVariable("actividadId") final int actividadId, final ModelMap model, final Principal p) {
 		if (result.hasErrors()) {
 			model.put("actividad", actividad);
-			return VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM;
+			return ActividadController.VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM;
 		} else {
-			Manager manager = managerService.findManagerByUsername(p.getName());
+			Manager manager = this.managerService.findManagerByUsername(p.getName());
 			Actividad actividadToUpdate = this.actividadService.findActividadById(actividadId);
 			if (!actividadToUpdate.getResidencia().getManager().equals(manager)) {
 				return "exception";
@@ -155,43 +155,38 @@ public class ActividadController {
 	}
 
 	@GetMapping("/{actividadId}")
-	public ModelAndView showActividad(@PathVariable("actividadId") int actividadId, Principal p) {
-		String authority = authoritiesService.findAuthority(p.getName());
+	public ModelAndView showActividad(@PathVariable("actividadId") final int actividadId, final Principal p) {
+		String authority = this.authoritiesService.findAuthority(p.getName());
 		Actividad actividad = this.actividadService.findActividadById(actividadId);
 		ModelAndView mav = new ModelAndView("actividades/actividadesDetails");
 		mav.addObject(actividad);
-		System.out.println("hola");
-		System.out.println(authority);
 		if (authority.equals("manager")) {
-			Manager manager = managerService.findManagerByUsername(p.getName());
+			Manager manager = this.managerService.findManagerByUsername(p.getName());
 			if (!actividad.getResidencia().getManager().equals(manager)) {
 				mav = new ModelAndView("exception");
-				System.out.println("excepcion");
 			}
-		}else if(authority.equals("anciano")) {
-			Anciano anciano = ancianoService.findAncianoByUsername(p.getName());
-			Iterable<Actividad> actividades = actividadService.findAllMineAnciano(anciano);
+		} else if (authority.equals("anciano")) {
+			Anciano anciano = this.ancianoService.findAncianoByUsername(p.getName());
+			Iterable<Actividad> actividades = this.actividadService.findAllMineAnciano(anciano);
 			boolean suya = false;
 			for (Actividad a : actividades) {
-				if(actividad.getId() == a.getId()) {
+				if (actividad.getId() == a.getId()) {
 					suya = true;
 					break;
 				}
 			}
-			System.out.println("por anciano");
 			if (suya == false) {
 				mav = new ModelAndView("exception");
 			}
 		}
-		System.out.println("AGHHHHHHHHHHHH");
-		
+
 		return mav;
 	}
 
 	@GetMapping("/{actividadId}/delete")
-	public String deleteExcursion(@PathVariable("actividadId") int actividadId, Principal p) {
+	public String deleteExcursion(@PathVariable("actividadId") final int actividadId, final Principal p) {
 		Actividad actividad = this.actividadService.findActividadById(actividadId);
-		Manager manager = managerService.findManagerByUsername(p.getName());
+		Manager manager = this.managerService.findManagerByUsername(p.getName());
 		if (!actividad.getResidencia().getManager().equals(manager)) {
 			return "exception";
 		}
