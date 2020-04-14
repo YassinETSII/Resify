@@ -19,6 +19,7 @@ import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.BuenaAccionService;
 import org.springframework.samples.petclinic.service.ManagerService;
+import org.springframework.samples.petclinic.service.ResidenciaService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -43,6 +44,9 @@ class BuenaAccionControllerTests {
 
 	@MockBean
 	private ManagerService			managerService;
+	
+	@MockBean
+	private ResidenciaService			residenciaService;
 
 	@Autowired
 	private MockMvc					mockMvc;
@@ -77,14 +81,14 @@ class BuenaAccionControllerTests {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/buenas-acciones")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("buenasAcciones/buenasAccionesList"));
 	}
 
-	@WithMockUser(roles = "manager")
+	@WithMockUser(authorities = "manager")
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/buenas-acciones/new")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("buenasAcciones/createOrUpdateBuenaAccionForm"))
 			.andExpect(MockMvcResultMatchers.model().attributeExists("buenaAccion"));
 	}
 
-	@WithMockUser(roles = "manager")
+	@WithMockUser(authorities = "manager")
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/buenas-acciones/new").param("titulo", "Prueba").param("descripcion", "Prueba descrip").with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", "2020/01/01"))
