@@ -6,7 +6,15 @@
 
 <resify:layout pageName="inscripciones">
     <jsp:body>
-        <h2>
+    	<c:choose>
+    		<c:when test="${aforoMaximo == true}">
+    			<p>Lo sentimos, la residencia se encuentra sin plazas disponibles</p>
+    		</c:when>
+    		
+    		<c:otherwise>
+    		
+    		
+    		<h2>
             <c:if test="${inscripcion['new']}">Nueva </c:if> Inscripcion
         </h2>
         <form:form modelAttribute="inscripcion"
@@ -57,5 +65,11 @@
         </form:form>
         <c:if test="${!residencia['new']}">
         </c:if>
+        
+        
+    		</c:otherwise>
+    	</c:choose>
+
+        
     </jsp:body>
 </resify:layout>

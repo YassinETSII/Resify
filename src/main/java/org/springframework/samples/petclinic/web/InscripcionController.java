@@ -134,9 +134,13 @@ public class InscripcionController {
 	@GetMapping(value = "/new/{residenciaId}")
 	public String initCreationForm(final ModelMap model, final Principal p, @PathVariable("residenciaId") final int residenciaId) {
 		Inscripcion inscripcion = new Inscripcion();
-		inscripcion.setEstado("pendiente");
 		Residencia residencia = this.residenciaService.findResidenciaById(residenciaId);
-		inscripcion.setResidencia(residencia);
+		if (this.inscripcionService.cuentaAceptadasEnResidencia(residencia) == residencia.getAforo()) {
+			model.put("aforoMaximo", true);
+		} else {
+			inscripcion.setEstado("pendiente");
+			inscripcion.setResidencia(residencia);
+		}
 		model.put("inscripcion", inscripcion);
 		return InscripcionController.VIEWS_INSCRIPCION_CREATE_OR_UPDATE_FORM;
 	}
