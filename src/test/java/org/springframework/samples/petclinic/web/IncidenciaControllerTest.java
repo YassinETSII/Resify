@@ -19,6 +19,7 @@ import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.IncidenciaService;
 import org.springframework.samples.petclinic.service.ManagerService;
+import org.springframework.samples.petclinic.service.ResidenciaService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -44,6 +45,9 @@ class IncidenciaControllerTest {
 	@MockBean
 	private ManagerService			managerService;
 
+	@MockBean
+	private ResidenciaService			residenciaService;
+	
 	@Autowired
 	private MockMvc					mockMvc;
 
@@ -77,14 +81,14 @@ class IncidenciaControllerTest {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/incidencias")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("incidencias/incidenciasList"));
 	}
 
-	@WithMockUser(roles = "manager")
+	@WithMockUser(authorities = "manager")
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/incidencias/new")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("incidencias/createOrUpdateIncidenciaForm"))
 			.andExpect(MockMvcResultMatchers.model().attributeExists("incidencia"));
 	}
 
-	@WithMockUser(roles = "manager")
+	@WithMockUser(authorities = "manager")
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/incidencias/new").param("titulo", "Prueba").param("descripcion", "Prueba descrip").with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", "2020/01/01"))

@@ -121,6 +121,8 @@ class PeticionExcursionControllerTests {
 				.willReturn(this.exc);
 		BDDMockito.given(this.residenciaService.findResidenciaById(PeticionExcursionControllerTests.TEST_RESIDENCIA_ID))
 				.willReturn(this.resi);
+        BDDMockito.given(this.managerService.findResidenciaByManagerUsername(PeticionExcursionControllerTests.TEST_MANAGER_NOMBRE))
+		        .willReturn(this.resi);
 	}
 
 	@WithMockUser(username = PeticionExcursionControllerTests.TEST_MANAGER_NOMBRE)

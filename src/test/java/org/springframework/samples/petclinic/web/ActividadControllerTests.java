@@ -23,6 +23,7 @@ import org.springframework.samples.petclinic.service.ActividadService;
 import org.springframework.samples.petclinic.service.AncianoService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ManagerService;
+import org.springframework.samples.petclinic.service.ResidenciaService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -48,6 +49,9 @@ class ActividadControllerTests {
 
 	@MockBean
 	private AuthoritiesService authoritiesService;
+	
+	@MockBean
+	private ResidenciaService			residenciaService;
 
 	@Autowired
 	private MockMvc mockMvc;
