@@ -20,8 +20,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolationException;
 
@@ -44,23 +44,23 @@ import org.springframework.transaction.annotation.Transactional;
 class ResidenciaServiceTests {
 
 	@Autowired
-	protected ResidenciaService	residenciaService;
+	protected ResidenciaService			residenciaService;
 
 	@Autowired
-	protected ManagerService	managerService;
-	
+	protected ManagerService			managerService;
+
 	@Autowired
-	protected OrganizadorService organizadorService;
-	
+	protected OrganizadorService		organizadorService;
+
 	@Autowired
-	protected IncidenciaService	incidenciaService;
-	
+	protected IncidenciaService			incidenciaService;
+
 	@Autowired
-	protected BuenaAccionService	buenaAccionService;
-	
+	protected BuenaAccionService		buenaAccionService;
+
 	@Autowired
-	protected ExcursionService	excursionService;
-	
+	protected ExcursionService			excursionService;
+
 	@Autowired
 	protected PeticionExcursionService	peticionExcursionService;
 
@@ -79,13 +79,13 @@ class ResidenciaServiceTests {
 		Assertions.assertTrue(re.getHoraApertura().equals(horaApertura));
 		Assertions.assertTrue(re.getHoraCierre().equals(horaCierre));
 	}
-	
+
 	@Test
 	void noDebeEncontrarResidenciaConIdInexistente() {
 		Residencia re = this.residenciaService.findResidenciaById(99999);
 		Assertions.assertNull(re);
 	}
-	
+
 	@Test
 	void debeEncontrarTodasLasResidencias() {
 		Iterable<Residencia> res = this.residenciaService.findAll();
@@ -97,7 +97,7 @@ class ResidenciaServiceTests {
 		Residencia re2 = resis.get(0);
 		Assertions.assertTrue(re2.getCorreo().equals("residencia1@mail.es"));
 	}
-	
+
 	@Test
 	void noDebeEncontrarResidenciaInexistente() {
 		Iterable<Residencia> res = this.residenciaService.findAll();
@@ -117,10 +117,10 @@ class ResidenciaServiceTests {
 		Residencia res = this.residenciaService.findMine(m);
 		Assertions.assertTrue(res.getCorreo().equals("residencia1@mail.es"));
 	}
-	
+
 	@Test
 	void noDebeEncontrarResidenciaConIdManagerInexistente() {
-		Manager m = this.managerService.findManagerById(9999999);		
+		Manager m = this.managerService.findManagerById(9999999);
 		Assertions.assertThrows(NullPointerException.class, () -> {
 			this.residenciaService.findMine(m);
 		});
@@ -130,7 +130,7 @@ class ResidenciaServiceTests {
 	@Transactional
 	public void debeCrearResidenciaManagerSinUna() {
 		Manager m = this.managerService.findManagerById(7);
-		
+
 		Residencia ra = new Residencia();
 		LocalTime horaApertura = LocalTime.of(07, 00);
 		LocalTime horaCierre = LocalTime.of(21, 00);
@@ -153,14 +153,14 @@ class ResidenciaServiceTests {
 		Assertions.assertTrue(rres2 != null);
 		Assertions.assertTrue(ra.getId() != null);
 	}
-	
+
 	/*
 	 * @Test
-	 * 
+	 *
 	 * @Transactional public void
 	 * debeLanzarExcepcionCreandoResidenciaManagerConUna() { Manager m =
 	 * this.managerService.findManagerById(3);
-	 * 
+	 *
 	 * Residencia ra = new Residencia(); LocalTime horaApertura = LocalTime.of(07,
 	 * 00); LocalTime horaCierre = LocalTime.of(21, 00);
 	 * ra.setAceptaDependenciaGrave(false); ra.setAforo(100);
@@ -169,11 +169,11 @@ class ResidenciaServiceTests {
 	 * ra.setEdadMaxima(70); ra.setHoraApertura(horaApertura);
 	 * ra.setHoraCierre(horaCierre); ra.setMasInfo("http://www.resi1.com");
 	 * ra.setNombre("Reidencia 1"); ra.setTelefono("987654321"); ra.setManager(m);
-	 * 
+	 *
 	 * Assertions.assertThrows(IllegalArgumentException.class, () -> {
 	 * this.residenciaService.saveResidencia(ra); }); }
 	 */
-	
+
 	@Test
 	@Transactional
 	public void debeLanzarExcepcionCreandoResidenciaEnBlanco() {
@@ -182,273 +182,294 @@ class ResidenciaServiceTests {
 			this.residenciaService.saveResidencia(ra);
 		});
 	}
-	
+
 	@Test
 	@Transactional
 	public void debeCalcularRatio() {
-	 
-	  Residencia ra = new Residencia();
-	  LocalTime horaApertura = LocalTime.of(07, 00);
-	  LocalTime horaCierre = LocalTime.of(21, 00);
-	  ra.setAceptaDependenciaGrave(false);
-	  ra.setAforo(100);
-	  ra.setCorreo("residencia1@mail.es");
-	  ra.setDescripcion("Descripcion de prueba");
-	  ra.setDireccion("Direccion");
-	  ra.setEdadMaxima(70);
-	  ra.setHoraApertura(horaApertura);
-	  ra.setHoraCierre(horaCierre);
-	  ra.setMasInfo("http://www.resi1.com");
-	  ra.setNombre("Reidencia 1");
-	  ra.setTelefono("987654321");
-	  this.residenciaService.saveResidencia(ra);
-	  
-	  //Primera incidencia
-	  Incidencia inci = new Incidencia();
-	  inci.setId(1);
-	  inci.setDescripcion("desc");
-	  Date fecha = new Date();
-	  inci.setFecha(fecha);
-	  inci.setResidencia(ra);
-	  inci.setTitulo("tit");
-	  this.incidenciaService.saveIncidencia(inci);
-	  
-	  //Segunda incidencia
-	  Incidencia inci2 = new Incidencia();
-	  inci2.setId(2);
-	  inci2.setDescripcion("desc");
-	  Date fecha2 = new Date();
-	  inci2.setFecha(fecha2);
-	  inci2.setResidencia(ra);
-	  inci2.setTitulo("tit");
-	  this.incidenciaService.saveIncidencia(inci2);
-	  
-	  //Primera buena acción
-	  BuenaAccion buena = new BuenaAccion();
-	  buena.setId(1);
-	  buena.setDescripcion("desc");
-	  Date fechaDes = new Date();
-	  buena.setFecha(fechaDes);
-	  buena.setResidencia(ra);
-	  buena.setTitulo("tit");
-	  this.buenaAccionService.saveBuenaAccion(buena);
-	  
-	  Double m = this.residenciaService.getRatio(ra);
-	  Assertions.assertTrue(m == 0.5);
+
+		Residencia ra = new Residencia();
+		LocalTime horaApertura = LocalTime.of(07, 00);
+		LocalTime horaCierre = LocalTime.of(21, 00);
+		ra.setAceptaDependenciaGrave(false);
+		ra.setAforo(100);
+		ra.setCorreo("residencia1@mail.es");
+		ra.setDescripcion("Descripcion de prueba");
+		ra.setDireccion("Direccion");
+		ra.setEdadMaxima(70);
+		ra.setHoraApertura(horaApertura);
+		ra.setHoraCierre(horaCierre);
+		ra.setMasInfo("http://www.resi1.com");
+		ra.setNombre("Reidencia 1");
+		ra.setTelefono("987654321");
+		this.residenciaService.saveResidencia(ra);
+
+		//Primera incidencia
+		Incidencia inci = new Incidencia();
+		inci.setId(1);
+		inci.setDescripcion("desc");
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(2018, 11, 31, 12, 59, 59);
+		Date fecha = calendar.getTime();
+		inci.setFecha(fecha);
+		inci.setResidencia(ra);
+		inci.setTitulo("tit");
+		this.incidenciaService.saveIncidencia(inci);
+
+		//Segunda incidencia
+		Incidencia inci2 = new Incidencia();
+		inci2.setId(2);
+		inci2.setDescripcion("desc");
+		Calendar calendar2 = Calendar.getInstance();
+		calendar2.set(2018, 11, 31, 12, 59, 59);
+		Date fecha2 = calendar2.getTime();
+		inci.setFecha(fecha2);
+		inci2.setResidencia(ra);
+		inci2.setTitulo("tit");
+		this.incidenciaService.saveIncidencia(inci2);
+
+		//Primera buena acción
+		BuenaAccion buena = new BuenaAccion();
+		buena.setId(1);
+		buena.setDescripcion("desc");
+		Calendar calendar3 = Calendar.getInstance();
+		calendar3.set(2018, 11, 31, 12, 59, 59);
+		Date fecha3 = calendar3.getTime();
+		buena.setFecha(fecha3);
+		buena.setResidencia(ra);
+		buena.setTitulo("tit");
+		this.buenaAccionService.saveBuenaAccion(buena);
+
+		Double m = this.residenciaService.getRatio(ra);
+		Assertions.assertTrue(m == 0.5);
 	}
-	
+
 	@Test
 	@Transactional
 	public void debeCalcularRatioSinIncidencias() {
-	 
-	  Residencia ra = new Residencia();
-	  LocalTime horaApertura = LocalTime.of(07, 00);
-	  LocalTime horaCierre = LocalTime.of(21, 00);
-	  ra.setAceptaDependenciaGrave(false);
-	  ra.setAforo(100);
-	  ra.setCorreo("residencia1@mail.es");
-	  ra.setDescripcion("Descripcion de prueba");
-	  ra.setDireccion("Direccion");
-	  ra.setEdadMaxima(70);
-	  ra.setHoraApertura(horaApertura);
-	  ra.setHoraCierre(horaCierre);
-	  ra.setMasInfo("http://www.resi1.com");
-	  ra.setNombre("Reidencia 1");
-	  ra.setTelefono("987654321");
-	  this.residenciaService.saveResidencia(ra);
-	  
-	  //Primera buena acción
-	  BuenaAccion buena = new BuenaAccion();
-	  Calendar calendar = Calendar.getInstance();
-	  calendar.set(2018, 11, 31, 12, 59, 59);
-	  Date fechaDes = calendar.getTime();
-	  buena.setId(1);
-	  buena.setDescripcion("desc");
-	  buena.setFecha(fechaDes);
-	  buena.setResidencia(ra);
-	  buena.setTitulo("tit");
-	  this.buenaAccionService.saveBuenaAccion(buena);
-	  
-	  Double m = this.residenciaService.getRatio(ra);
-	  Assertions.assertTrue(m == 1);
+
+		Residencia ra = new Residencia();
+		LocalTime horaApertura = LocalTime.of(07, 00);
+		LocalTime horaCierre = LocalTime.of(21, 00);
+		ra.setAceptaDependenciaGrave(false);
+		ra.setAforo(100);
+		ra.setCorreo("residencia1@mail.es");
+		ra.setDescripcion("Descripcion de prueba");
+		ra.setDireccion("Direccion");
+		ra.setEdadMaxima(70);
+		ra.setHoraApertura(horaApertura);
+		ra.setHoraCierre(horaCierre);
+		ra.setMasInfo("http://www.resi1.com");
+		ra.setNombre("Reidencia 1");
+		ra.setTelefono("987654321");
+		this.residenciaService.saveResidencia(ra);
+
+		//Primera buena acción
+		BuenaAccion buena = new BuenaAccion();
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(2018, 11, 31, 12, 59, 59);
+		Date fechaDes = calendar.getTime();
+		buena.setId(1);
+		buena.setDescripcion("desc");
+		buena.setFecha(fechaDes);
+		buena.setResidencia(ra);
+		buena.setTitulo("tit");
+		this.buenaAccionService.saveBuenaAccion(buena);
+
+		Double m = this.residenciaService.getRatio(ra);
+		Assertions.assertTrue(m == 1);
 	}
-	 
+
 	@Test
 	@Transactional
 	public void debeCalcularRatioSinBuenasAcciones() {
-	 
-	  Residencia ra = new Residencia();
-	  LocalTime horaApertura = LocalTime.of(07, 00);
-	  LocalTime horaCierre = LocalTime.of(21, 00);
-	  ra.setAceptaDependenciaGrave(false);
-	  ra.setAforo(100);
-	  ra.setCorreo("residencia1@mail.es");
-	  ra.setDescripcion("Descripcion de prueba");
-	  ra.setDireccion("Direccion");
-	  ra.setEdadMaxima(70);
-	  ra.setHoraApertura(horaApertura);
-	  ra.setHoraCierre(horaCierre);
-	  ra.setMasInfo("http://www.resi1.com");
-	  ra.setNombre("Reidencia 1");
-	  ra.setTelefono("987654321");
-	  this.residenciaService.saveResidencia(ra);
-	  
-	  //Primera incidencia
-	  Incidencia inci = new Incidencia();
-	  inci.setId(1);
-	  inci.setDescripcion("desc");
-	  Calendar calendar = Calendar.getInstance();
-	  calendar.set(2018, 11, 31, 12, 59, 59);
-	  Date fechaInci = calendar.getTime();	  
-	  inci.setFecha(fechaInci);
-	  inci.setResidencia(ra);
-	  inci.setTitulo("tit");
-	  this.incidenciaService.saveIncidencia(inci);
-	  
-	  Double m = this.residenciaService.getRatio(ra);
-	  Assertions.assertTrue(m == 0);
+
+		Residencia ra = new Residencia();
+		LocalTime horaApertura = LocalTime.of(07, 00);
+		LocalTime horaCierre = LocalTime.of(21, 00);
+		ra.setAceptaDependenciaGrave(false);
+		ra.setAforo(100);
+		ra.setCorreo("residencia1@mail.es");
+		ra.setDescripcion("Descripcion de prueba");
+		ra.setDireccion("Direccion");
+		ra.setEdadMaxima(70);
+		ra.setHoraApertura(horaApertura);
+		ra.setHoraCierre(horaCierre);
+		ra.setMasInfo("http://www.resi1.com");
+		ra.setNombre("Reidencia 1");
+		ra.setTelefono("987654321");
+		this.residenciaService.saveResidencia(ra);
+
+		//Primera incidencia
+		Incidencia inci = new Incidencia();
+		inci.setId(1);
+		inci.setDescripcion("desc");
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(2018, 11, 31, 12, 59, 59);
+		Date fechaInci = calendar.getTime();
+		inci.setFecha(fechaInci);
+		inci.setResidencia(ra);
+		inci.setTitulo("tit");
+		this.incidenciaService.saveIncidencia(inci);
+
+		Double m = this.residenciaService.getRatio(ra);
+		Assertions.assertTrue(m == 0);
 	}
-	
+
 	@Test
 	@Transactional
 	public void debeEncontrarResidenciaTop() {
-		
-		List<Residencia> residenciasTop = new LinkedList<>();
-		 //RESIDENCIA 1
-		  Residencia RE1 = new Residencia();
-		  LocalTime horaApertura = LocalTime.of(07, 00);
-		  LocalTime horaCierre = LocalTime.of(21, 00);
-		  RE1.setAceptaDependenciaGrave(false);
-		  RE1.setAforo(100);
-		  RE1.setCorreo("residencia1@mail.es");
-		  RE1.setDescripcion("Descripcion de prueba");
-		  RE1.setDireccion("Direccion");
-		  RE1.setEdadMaxima(70);
-		  RE1.setHoraApertura(horaApertura);
-		  RE1.setHoraCierre(horaCierre);
-		  RE1.setMasInfo("http://www.resi1.com");
-		  RE1.setNombre("Reidencia 1");
-		  RE1.setTelefono("987654321");
-		  this.residenciaService.saveResidencia(RE1);
-		  
-		  //RESIDENCIA 2
-		  Residencia RE2 = new Residencia();
-		  RE2.setAceptaDependenciaGrave(false);
-		  RE2.setAforo(102);
-		  RE2.setCorreo("residencia2@mail.es");
-		  RE2.setDescripcion("Descripcion de prueba");
-		  RE2.setDireccion("Direccion");
-		  RE2.setEdadMaxima(70);
-		  RE2.setHoraApertura(horaApertura);
-		  RE2.setHoraCierre(horaCierre);
-		  RE2.setMasInfo("http://www.resi2.com");
-		  RE2.setNombre("Reidencia 2");
-		  RE2.setTelefono("987654322");
-		  this.residenciaService.saveResidencia(RE2);
-		  
-		  //Primera incidencia RESIDENCIA 1
-		  Incidencia inci = new Incidencia();
-		  inci.setId(5);
-		  inci.setDescripcion("desc");
-		  Calendar calendar = Calendar.getInstance();
-		  calendar.set(2018, 11, 31, 12, 59, 59);
-		  Date fechaInciRE1UNO = calendar.getTime();
-		  inci.setFecha(fechaInciRE1UNO);
-		  inci.setResidencia(RE1);
-		  inci.setTitulo("tit");
-		  this.incidenciaService.saveIncidencia(inci);
-		  
-		  //Segunda incidencia RESIDENCIA 1
-		  Incidencia inci2 = new Incidencia();
-		  inci2.setId(6);
-		  inci2.setDescripcion("desc");
-		  Calendar calendar2 = Calendar.getInstance();
-		  calendar2.set(2018, 11, 31, 12, 59, 59);
-		  Date fechaInciRE1DOS = calendar.getTime();
-		  inci2.setFecha(fechaInciRE1DOS);
-		  inci2.setTitulo("tit");
-		  this.incidenciaService.saveIncidencia(inci2);
-		  
-		  //Primera buena acción RESIDENCIA 1
-		  BuenaAccion buena = new BuenaAccion();
-		  buena.setId(4);
-		  buena.setDescripcion("desc");
-		  Calendar calendar3 = Calendar.getInstance();
-		  calendar3.set(2018, 11, 31, 12, 59, 59);
-		  Date fechaBUENARE1UNO = calendar.getTime();
-		  buena.setFecha(fechaBUENARE1UNO);
-		  buena.setResidencia(RE1);
-		  buena.setTitulo("tit");
-		  this.buenaAccionService.saveBuenaAccion(buena);
-		  
-		  //Primera buena acción RESIDENCIA 2
-		  BuenaAccion buena2 = new BuenaAccion();
-		  buena2.setId(5);
-		  buena2.setDescripcion("desc");
-		  Calendar calendar4 = Calendar.getInstance();
-		  calendar4.set(2018, 11, 31, 12, 59, 59);
-		  Date fechaBuenaRE2UNO = calendar.getTime();
-		  buena2.setFecha(fechaBuenaRE2UNO);
-		  buena2.setResidencia(RE2);
-		  buena2.setTitulo("tit");
-		  this.buenaAccionService.saveBuenaAccion(buena2);
-		  
-		  //Primera incidencia RESIDENCIA 2
-		  Incidencia inci3 = new Incidencia();
-		  inci3.setId(7);
-		  inci3.setDescripcion("desc");
-		  Calendar calendar5 = Calendar.getInstance();
-		  calendar5.set(2018, 11, 31, 12, 59, 59);
-		  Date fechaInciRE2UNO = calendar.getTime();
-		  inci3.setFecha(fechaInciRE2UNO);
-		  inci3.setResidencia(RE2);
-		  inci3.setTitulo("tit");
-		  this.incidenciaService.saveIncidencia(inci3);
-		  
-		  residenciasTop.add(RE1); residenciasTop.add(RE2);
-		  //System.out.println("AQUI todas:----------------------------------------------"+residenciasTop.stream().map(x -> x.getAforo()).collect(Collectors.toList()));
-		  List<Residencia> res = this.residenciaService.findTop(5);
-		  //System.out.println("AQUI top:-----------------------------------------------"+res.stream().map(x -> x.getAforo()).collect(Collectors.toList()));
-		  Assertions.assertFalse(res.equals(residenciasTop));	  
+
+		//RESIDENCIA 1
+		Residencia RE1 = new Residencia();
+		LocalTime horaApertura = LocalTime.of(07, 00);
+		LocalTime horaCierre = LocalTime.of(21, 00);
+		RE1.setAceptaDependenciaGrave(false);
+		RE1.setAforo(100);
+		RE1.setCorreo("residencia1@mail.es");
+		RE1.setDescripcion("Descripcion de prueba");
+		RE1.setDireccion("Direccion");
+		RE1.setEdadMaxima(70);
+		RE1.setHoraApertura(horaApertura);
+		RE1.setHoraCierre(horaCierre);
+		RE1.setMasInfo("http://www.resi1.com");
+		RE1.setNombre("Residencia Test Buena");
+		RE1.setTelefono("987654321");
+		this.residenciaService.saveResidencia(RE1);
+
+		//RESIDENCIA 2
+		Residencia RE2 = new Residencia();
+		RE2.setAceptaDependenciaGrave(false);
+		RE2.setAforo(102);
+		RE2.setCorreo("residencia2@mail.es");
+		RE2.setDescripcion("Descripcion de prueba");
+		RE2.setDireccion("Direccion");
+		RE2.setEdadMaxima(70);
+		RE2.setHoraApertura(horaApertura);
+		RE2.setHoraCierre(horaCierre);
+		RE2.setMasInfo("http://www.resi2.com");
+		RE2.setNombre("Residencia Test Mala");
+		RE2.setTelefono("987654322");
+		this.residenciaService.saveResidencia(RE2);
+
+		//Primera incidencia RESIDENCIA 2
+		Incidencia inci = new Incidencia();
+		inci.setId(5);
+		inci.setDescripcion("desc");
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(2018, 11, 31, 12, 59, 59);
+		Date fechaInciRE2UNO = calendar.getTime();
+		inci.setFecha(fechaInciRE2UNO);
+		inci.setResidencia(RE2);
+		inci.setTitulo("tit");
+		this.incidenciaService.saveIncidencia(inci);
+
+		//Segunda incidencia RESIDENCIA 2
+		Incidencia inci2 = new Incidencia();
+		inci2.setId(6);
+		inci2.setDescripcion("desc");
+		Calendar calendar2 = Calendar.getInstance();
+		calendar2.set(2018, 11, 31, 12, 59, 59);
+		Date fechaInciRE2DOS = calendar.getTime();
+		inci2.setFecha(fechaInciRE2DOS);
+		inci2.setResidencia(RE2);
+		inci2.setTitulo("tit");
+		this.incidenciaService.saveIncidencia(inci2);
+
+		//Primera buena acción RESIDENCIA 1
+		BuenaAccion buena = new BuenaAccion();
+		buena.setId(4);
+		buena.setDescripcion("desc");
+		Calendar calendar3 = Calendar.getInstance();
+		calendar3.set(2018, 11, 31, 12, 59, 59);
+		Date fechaBUENARE1UNO = calendar.getTime();
+		buena.setFecha(fechaBUENARE1UNO);
+		buena.setResidencia(RE1);
+		buena.setTitulo("tit");
+		this.buenaAccionService.saveBuenaAccion(buena);
+
+		//Segunda buena acción RESIDENCIA 1
+		BuenaAccion buena2 = new BuenaAccion();
+		buena2.setId(5);
+		buena2.setDescripcion("desc");
+		Calendar calendar4 = Calendar.getInstance();
+		calendar4.set(2018, 11, 31, 12, 59, 59);
+		Date fechaBuenaRE1DOS = calendar.getTime();
+		buena2.setFecha(fechaBuenaRE1DOS);
+		buena2.setResidencia(RE1);
+		buena2.setTitulo("tit");
+		this.buenaAccionService.saveBuenaAccion(buena2);
+
+		//Tercera buena acción RESIDENCIA 1
+		BuenaAccion buena3 = new BuenaAccion();
+		buena3.setId(5);
+		buena3.setDescripcion("desc");
+		Calendar calendar5 = Calendar.getInstance();
+		calendar5.set(2018, 11, 31, 12, 59, 59);
+		Date fechaBuenaRE1TRES = calendar.getTime();
+		buena3.setFecha(fechaBuenaRE1TRES);
+		buena3.setResidencia(RE1);
+		buena3.setTitulo("tit");
+		this.buenaAccionService.saveBuenaAccion(buena3);
+
+		//RE1 tiene 3 buenas acciones y 0 incidencias
+		//RE2 tiene 0 buenas acciones y 2 incidencias
+
+		//Comprobamos que RE1 está en el top 3 y que RE2 no está
+
+		boolean RE1EnTop = false;
+		boolean RE2EnTop = false;
+		List<Residencia> resIterator = this.residenciaService.findTop(3);
+		for (Residencia r : resIterator) {
+			if (RE1.equals(r)) {
+				RE1EnTop = true;
+			} else if (RE2.equals(r)) {
+				RE2EnTop = true;
+			}
+		}
+
+		System.out.println("TOP: " + resIterator.stream().map(x -> x.getNombre()).collect(Collectors.toList()));
+		Assertions.assertTrue(RE1EnTop);
+		Assertions.assertFalse(RE2EnTop);
+
 	}
-	
+
 	@Test
 	@Transactional
 	public void debeEncontrarResidenciaSinParticipantes() {
-		 //RESIDENCIA 1
-		  Residencia RE1 = new Residencia();
-		  LocalTime horaApertura = LocalTime.of(07, 00);
-		  LocalTime horaCierre = LocalTime.of(21, 00);
-		  RE1.setAceptaDependenciaGrave(false);
-		  RE1.setAforo(100);
-		  RE1.setCorreo("residencia1@mail.es");
-		  RE1.setDescripcion("Descripcion de prueba");
-		  RE1.setDireccion("Direccion");
-		  RE1.setEdadMaxima(70);
-		  RE1.setHoraApertura(horaApertura);
-		  RE1.setHoraCierre(horaCierre);
-		  RE1.setMasInfo("http://www.resi1.com");
-		  RE1.setNombre("Reidencia 1");
-		  RE1.setTelefono("987654321");
-		  this.residenciaService.saveResidencia(RE1);
-		  
+		//RESIDENCIA 1
+		Residencia ra = new Residencia();
+		LocalTime horaApertura = LocalTime.of(07, 00);
+		LocalTime horaCierre = LocalTime.of(21, 00);
+		ra.setAceptaDependenciaGrave(false);
+		ra.setAforo(100);
+		ra.setCorreo("residencia1@mail.es");
+		ra.setDescripcion("Descripcion de prueba");
+		ra.setDireccion("Direccion");
+		ra.setEdadMaxima(70);
+		ra.setHoraApertura(horaApertura);
+		ra.setHoraCierre(horaCierre);
+		ra.setMasInfo("http://www.resi1.com");
+		ra.setNombre("Reidencia 1");
+		ra.setTelefono("987654321");
+		this.residenciaService.saveResidencia(ra);
+
 		//RESIDENCIA 2 (sin peticiones)
-		  Residencia RE2 = new Residencia();
-		  LocalTime horaApertura2 = LocalTime.of(07, 00);
-		  LocalTime horaCierre2 = LocalTime.of(21, 00);
-		  RE2.setAceptaDependenciaGrave(false);
-		  RE2.setAforo(100);
-		  RE2.setCorreo("residencia2@mail.es");
-		  RE2.setDescripcion("Descripcion de prueba");
-		  RE2.setDireccion("Direccion");
-		  RE2.setEdadMaxima(70);
-		  RE2.setHoraApertura(horaApertura2);
-		  RE2.setHoraCierre(horaCierre2);
-		  RE2.setMasInfo("http://www.resi2.com");
-		  RE2.setNombre("Reidencia 2");
-		  RE2.setTelefono("987654322");
-		  this.residenciaService.saveResidencia(RE2);
-		
+		Residencia RE2 = new Residencia();
+		LocalTime horaApertura2 = LocalTime.of(07, 00);
+		LocalTime horaCierre2 = LocalTime.of(21, 00);
+		RE2.setAceptaDependenciaGrave(false);
+		RE2.setAforo(100);
+		RE2.setCorreo("residencia2@mail.es");
+		RE2.setDescripcion("Descripcion de prueba");
+		RE2.setDireccion("Direccion");
+		RE2.setEdadMaxima(70);
+		RE2.setHoraApertura(horaApertura2);
+		RE2.setHoraCierre(horaCierre2);
+		RE2.setMasInfo("http://www.resi2.com");
+		RE2.setNombre("Reidencia 2");
+		RE2.setTelefono("987654322");
+		this.residenciaService.saveResidencia(RE2);
+
 		//Excursion 1
 		Excursion ex1 = new Excursion();
 		Organizador organizador1 = this.organizadorService.findOrganizadorById(1);
@@ -459,21 +480,21 @@ class ResidenciaServiceTests {
 		excursion1FechaInicio.set(2018, 11, 31, 12, 59, 59);
 		Date fechaInicio = excursion1FechaInicio.getTime();
 		ex1.setFechaInicio(fechaInicio);
-		
+
 		Calendar excursion1FechaFin = Calendar.getInstance();
 		excursion1FechaFin.set(2018, 12, 01, 13, 59, 59);
 		Date fechaFin = excursion1FechaFin.getTime();
 		ex1.setFechaFin(fechaFin);
-		
+
 		ex1.setFinalMode(true);
-		
-		ex1.setHoraInicio(LocalTime.of(12,59));
-		ex1.setHoraFin(LocalTime.of(13,59));
+
+		ex1.setHoraInicio(LocalTime.of(12, 59));
+		ex1.setHoraFin(LocalTime.of(13, 59));
 		ex1.setRatioAceptacion(92.);
 		ex1.setTitulo("tit");
 		ex1.setNumeroResidencias(2);
 		ex1.setOrganizador(organizador1);
-		
+
 		//Peticion 1
 		PeticionExcursion insc = new PeticionExcursion();
 		insc.setDeclaracion("decl");
@@ -485,11 +506,16 @@ class ResidenciaServiceTests {
 		insc.setFecha(fechaPeticion);
 		insc.setId(1);
 		insc.setJustificacion(null);
-		insc.setResidencia(RE1);
-		
-		List<Residencia> residencias = new LinkedList<>();
-		residencias.add(RE1); residencias.add(RE2);
-		Iterable<Residencia> resIterator = residencias;
-		Assertions.assertTrue(resIterator.equals(this.residenciaService.findResidenciasNoParticipantes(organizador1)));	  
+		insc.setResidencia(ra);
+
+		boolean r2EnNoParticipantes = false;
+		Iterable<Residencia> resIterator = this.residenciaService.findResidenciasNoParticipantes(organizador1);
+		for (Residencia r : resIterator) {
+			if (RE2.equals(r)) {
+				r2EnNoParticipantes = true;
+				break;
+			}
+		}
+		Assertions.assertTrue(r2EnNoParticipantes);
 	}
 }

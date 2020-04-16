@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Actividad;
+import org.springframework.samples.petclinic.model.Anciano;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.stereotype.Service;
@@ -40,14 +41,17 @@ class ActividadServiceTests {
 	protected ActividadService	actividadService;
 
 	@Autowired
-	protected ManagerService		managerService;
+	protected ManagerService	managerService;
 
 	@Autowired
-	protected ResidenciaService		residenciaService;
+	protected ResidenciaService	residenciaService;
+
+	@Autowired
+	protected AncianoService	ancianoService;
 
 
 	@Test
-	void debeEncontrarAcrividadConIdCorrecto() {
+	void debeEncontrarActividadConIdCorrecto() {
 		Actividad act = this.actividadService.findActividadById(1);
 		Assertions.assertTrue(act.getTitulo().equals("Prueba1"));
 		Assertions.assertTrue(act.getResidencia().getNombre().equals("Residencia 1"));
@@ -55,7 +59,7 @@ class ActividadServiceTests {
 	}
 
 	@Test
-	void debeEncontrarTodasLasBuenasAcciones() {
+	void debeEncontrarTodasLasActividades() {
 		Iterable<Actividad> acts = this.actividadService.findAll();
 
 		ArrayList<Actividad> actividades = new ArrayList<Actividad>();
@@ -67,7 +71,7 @@ class ActividadServiceTests {
 	}
 
 	@Test
-	void debeEncontrarTodasLasBuenasAccionesPorManager() {
+	void debeEncontrarTodasLasActividadesPorManager() {
 		Manager m = this.managerService.findManagerById(3);
 		Iterable<Actividad> acts = this.actividadService.findAllMine(m);
 
@@ -82,7 +86,7 @@ class ActividadServiceTests {
 
 	@Test
 	@Transactional
-	public void debeCrearBuenaAccion() {
+	public void debeCrearActividad() {
 		Manager manager = this.managerService.findManagerById(3);
 		Iterable<Actividad> acts = this.actividadService.findAllMine(manager);
 		ArrayList<Actividad> actividades1 = new ArrayList<Actividad>();
@@ -119,13 +123,27 @@ class ActividadServiceTests {
 
 	@Test
 	@Transactional
-	public void debeLanzarExcepcionCreandoBuenaAccionEnBlanco() {
+	public void debeLanzarExcepcionCreandoActividadEnBlanco() {
 
 		Actividad ba = new Actividad();
 
 		Assertions.assertThrows(ConstraintViolationException.class, () -> {
 			this.actividadService.saveActividad(ba);
 		});
+	}
+
+	@Test
+	void debeEncontrarTodasLasActividadesPorAnciano() {
+		Anciano anciano = this.ancianoService.findAncianoById(7);
+		Iterable<Actividad> acts = this.actividadService.findAllMineAnciano(anciano);
+
+		ArrayList<Actividad> actividades = new ArrayList<Actividad>();
+		for (Actividad a : acts) {
+			actividades.add(a);
+		}
+
+		Actividad actividad = actividades.get(0);
+		Assertions.assertTrue(actividad.getTitulo().equals("Prueba5"));
 	}
 
 }
