@@ -57,28 +57,29 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/residencias")
 public class ResidenciaController {
 
-	private static final String VIEWS_RESIDENCIA_CREATE_OR_UPDATE_FORM = "residencias/createOrUpdateResidenciaForm";
+	private static final String	VIEWS_RESIDENCIA_CREATE_OR_UPDATE_FORM	= "residencias/createOrUpdateResidenciaForm";
 
 	@Autowired
-	private AuthoritiesService authoritiesService;
+	private AuthoritiesService	authoritiesService;
 
 	@Autowired
-	private ResidenciaService residenciaService;
+	private ResidenciaService	residenciaService;
 
 	@Autowired
-	private ManagerService managerService;
+	private ManagerService		managerService;
 
 	@Autowired
-	private AncianoService ancianoService;
+	private AncianoService		ancianoService;
 
 	@Autowired
-	private InscripcionService inscripcionService;
-	
-	@Autowired
-	private OrganizadorService organizadorService;
+	private InscripcionService	inscripcionService;
 
-	private boolean tienePendiente = false;
-	private boolean tieneAceptada = false;
+	@Autowired
+	private OrganizadorService	organizadorService;
+
+	private boolean				tienePendiente							= false;
+	private boolean				tieneAceptada							= false;
+
 
 	@InitBinder("manager")
 	public void initManagerBinder(final WebDataBinder dataBinder) {
@@ -96,14 +97,13 @@ public class ResidenciaController {
 	public String listResidencias(final Map<String, Object> model, final Principal p) {
 		String auth = this.authoritiesService.findAuthority(p.getName());
 		if (auth.equals("manager")) {
-			Residencia residencia = this.residenciaService
-					.findMine(this.managerService.findManagerByUsername(p.getName()));
+			Residencia residencia = this.residenciaService.findMine(this.managerService.findManagerByUsername(p.getName()));
 			model.put("residencia", residencia);
 			return "residencias/residenciasDetails";
 		} else {
-			if (auth.equals("organizador"))
+			if (auth.equals("organizador")) {
 				model.put("puedeVerOrganizador", true);
-			else {
+			} else {
 				Anciano anciano = this.ancianoService.findAncianoByUsername(p.getName());
 				Iterable<Inscripcion> inscripciones = this.inscripcionService.findAllMineAnciano(anciano);
 				System.out.println("--------------");
@@ -138,7 +138,7 @@ public class ResidenciaController {
 		model.put("residencias", residencias);
 		return "residencias/residenciasList";
 	}
-	
+
 	@GetMapping(value = "/new")
 	public String initCreationForm(final Map<String, Object> model, final Principal p) {
 		Manager manager = this.managerService.findManagerByUsername(p.getName());
@@ -160,8 +160,7 @@ public class ResidenciaController {
 	}
 
 	@PostMapping(value = "/new")
-	public String processCreationForm(@Valid final Residencia residencia, final BindingResult result,
-			final Map<String, Object> model, final Principal p) {
+	public String processCreationForm(@Valid final Residencia residencia, final BindingResult result, final Map<String, Object> model, final Principal p) {
 		if (result.hasErrors()) {
 			model.put("residencia", residencia);
 			return ResidenciaController.VIEWS_RESIDENCIA_CREATE_OR_UPDATE_FORM;
@@ -170,13 +169,12 @@ public class ResidenciaController {
 			residencia.setManager(manager);
 			this.residenciaService.saveResidencia(residencia);
 			model.put("message", "Se ha registrado la residencia correctamente");
-			return "redirect:../../";
+			return "redirect:../residencias/" + residencia.getId();
 		}
 	}
 
 	@GetMapping(value = "/{residenciaId}/edit")
-	public String initUpdateResidenciaForm(@PathVariable("residenciaId") final int residenciaId, final Model model,
-			final Principal p) {
+	public String initUpdateResidenciaForm(@PathVariable("residenciaId") final int residenciaId, final Model model, final Principal p) {
 		Residencia residencia = this.residenciaService.findResidenciaById(residenciaId);
 		Manager manager = this.managerService.findManagerByUsername(p.getName());
 		if (!residencia.getManager().equals(manager)) {
@@ -187,8 +185,7 @@ public class ResidenciaController {
 	}
 
 	@PostMapping(value = "/{residenciaId}/edit")
-	public String processUpdateResidenciaForm(@Valid final Residencia residencia, final BindingResult result,
-			@PathVariable("residenciaId") final int residenciaId, final ModelMap model, final Principal p) {
+	public String processUpdateResidenciaForm(@Valid final Residencia residencia, final BindingResult result, @PathVariable("residenciaId") final int residenciaId, final ModelMap model, final Principal p) {
 		Residencia residenciaToUpdate = this.residenciaService.findResidenciaById(residenciaId);
 		residencia.setManager(residenciaToUpdate.getManager());
 		Manager manager = this.managerService.findManagerByUsername(p.getName());
