@@ -171,6 +171,10 @@ INSERT INTO excursiones VALUES (2, 'Descripcion de prueba2', '2020-09-07',  '22:
 	'Prueba2', '2020-09-07', FALSE, '7', '1.0', 1);
 INSERT INTO excursiones VALUES (3, 'Descripcion de prueba3', '2020-09-07',  '22:30', '17:00', 
 	'Prueba3', '2020-09-07', TRUE, '2', '1.0', 1);
+INSERT INTO excursiones VALUES (4, 'Descripcion de prueba4', '2020-09-07',  '22:30', '17:00', 
+	'Excursión exigente', '2020-09-07', TRUE, '2', '5.0', 1);
+INSERT INTO excursiones VALUES (5, 'Descripcion de prueba5', '2020-09-07',  '22:30', '17:00', 
+	'Excursión prueba UI', '2020-09-07', TRUE, '2', '1.0', 1);
 	
 -- PeticionesExcursion
 

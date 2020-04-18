@@ -131,6 +131,10 @@ public class PeticionExcursionController {
 
 		model.put("hasPeticion", peticiones != 0);
 		model.put("hasResidencia", residencia != null);
+		
+		if(this.residenciaService.getRatio(residencia)<excursion.getRatioAceptacion()) {
+			model.put("noCumpleRatio", true);
+		}
 
 		model.put("peticionExcursion", peticionExcursion);
 		return VIEWS_PETICION_EXCURSION_CREATE_OR_UPDATE_FORM;
