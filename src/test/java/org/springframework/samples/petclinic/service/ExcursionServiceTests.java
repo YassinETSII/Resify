@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.samples.petclinic.model.Anciano;
 import org.springframework.samples.petclinic.model.Excursion;
 import org.springframework.samples.petclinic.model.Organizador;
 import org.springframework.stereotype.Service;
@@ -36,10 +37,14 @@ import org.springframework.transaction.annotation.Transactional;
 class ExcursionServiceTests {
 
 	@Autowired
-	protected ExcursionService	excursionService;
-	
+	protected ExcursionService		excursionService;
+
 	@Autowired
 	protected OrganizadorService	organizadorService;
+
+	@Autowired
+	protected AncianoService		ancianoService;
+
 
 	@Test
 	void debeEncontrarExcursionConIdCorrecto() {
@@ -138,40 +143,52 @@ class ExcursionServiceTests {
 			this.excursionService.saveExcursion(exc);
 		});
 	}
-	
-//	@Test
-//	@Transactional
-//	public void debeEliminarExcursion() {
-//		Organizador organizador = this.organizadorService.findOrganizadorById(1);
-//		Iterable<Excursion> exc1 = this.excursionService.findAllMine(organizador);
-//		ArrayList<Excursion> excursiones1 = new ArrayList<Excursion>();
-//		for (Excursion b : exc1) {
-//			excursiones1.add(b);
-//		}
-//
-//		int total = excursiones1.size();
-//
-//		Excursion excursion = excursiones1.get(0);
-//		System.out.println("dadafsdfsadfs "+excursiones1.get(0).getId());
-//		this.excursionService.deleteExcursion(excursion);;
-//
-//		Iterable<Excursion> exc2 = this.excursionService.findAllMine(organizador);
-//		if(exc2 != null) {
-//			ArrayList<Excursion> excursiones2 = new ArrayList<Excursion>();
-//			for (Excursion e : exc2) {
-//				excursiones2.add(e);
-//
-//			}				
-//			Assertions.assertTrue(excursiones2.size() == total - 1);
-//			Assertions.assertTrue(excursion.getId() == null);
-//
-//		}else {
-//			Assertions.assertTrue(exc2 == null);
-//		}
-//		
-//
-//
-//	}
 
+	//	@Test
+	//	@Transactional
+	//	public void debeEliminarExcursion() {
+	//		Organizador organizador = this.organizadorService.findOrganizadorById(1);
+	//		Iterable<Excursion> exc1 = this.excursionService.findAllMine(organizador);
+	//		ArrayList<Excursion> excursiones1 = new ArrayList<Excursion>();
+	//		for (Excursion b : exc1) {
+	//			excursiones1.add(b);
+	//		}
+	//
+	//		int total = excursiones1.size();
+	//
+	//		Excursion excursion = excursiones1.get(0);
+	//		System.out.println("dadafsdfsadfs "+excursiones1.get(0).getId());
+	//		this.excursionService.deleteExcursion(excursion);;
+	//
+	//		Iterable<Excursion> exc2 = this.excursionService.findAllMine(organizador);
+	//		if(exc2 != null) {
+	//			ArrayList<Excursion> excursiones2 = new ArrayList<Excursion>();
+	//			for (Excursion e : exc2) {
+	//				excursiones2.add(e);
+	//
+	//			}				
+	//			Assertions.assertTrue(excursiones2.size() == total - 1);
+	//			Assertions.assertTrue(excursion.getId() == null);
+	//
+	//		}else {
+	//			Assertions.assertTrue(exc2 == null);
+	//		}
+	//		
+	//
+	//
+	//	}
+
+	@Test
+	void debeEncontrarTodasLasExcursionesPorAnciano() {
+		Anciano anciano = this.ancianoService.findAncianoById(7);
+		Iterable<Excursion> exc = this.excursionService.findAllMineAnciano(anciano);
+
+		ArrayList<Excursion> excursiones = new ArrayList<Excursion>();
+		for (Excursion e : exc) {
+			excursiones.add(e);
+		}
+		Excursion excursion1 = excursiones.get(0);
+		Assertions.assertTrue(excursion1.getTitulo().equals("Prueba3"));
+	}
 
 }

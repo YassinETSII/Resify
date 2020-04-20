@@ -7,6 +7,13 @@
 
 <resify:layout pageName="peticionesExcursion">
     <jsp:body>
+    	<c:choose>
+    		<c:when test="${noCumpleRatio == true}">
+    			<p>Lo sentimos, no cumple con el ratio de aceptación</p>
+    		</c:when>
+    		
+    		<c:otherwise>
+    		
         <h2>
             Petición de Excursion
         </h2>
@@ -53,5 +60,8 @@
 		
 	</form:form>
     </security:authorize>
+    
+    </c:otherwise>
+    	</c:choose>
     </jsp:body>
 </resify:layout>

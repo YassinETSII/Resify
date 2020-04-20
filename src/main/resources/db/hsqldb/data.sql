@@ -29,9 +29,13 @@ INSERT INTO authorities VALUES ('manager2','manager');
 INSERT INTO users(username,password,enabled) VALUES ('manager3','manager3',TRUE);
 INSERT INTO authorities VALUES ('manager3','manager');
 
+INSERT INTO users(username,password,enabled) VALUES ('manager4','manager4',TRUE);
+INSERT INTO authorities VALUES ('manager4','manager');
+
 INSERT INTO managers VALUES (3, 'Rodríguez', 'Rosa', 'Prueba1', 'Prueba1', 'manager1');
 INSERT INTO managers VALUES (4, 'Domínguez', 'Carlos', 'Prueba2', 'Prueba2', 'manager2');
 INSERT INTO managers VALUES (7, 'Sánchez', 'Roberto', 'Pureba3', 'Prueba3', 'manager3');
+INSERT INTO managers VALUES (8, 'Jiménez', 'Laura', 'Prueba4', 'Prueba4', 'manager4');
 
 -- Residencias
 
@@ -40,6 +44,9 @@ INSERT INTO residencias VALUES (1, false, 100, 'residencia1@mail.es', 'Descripci
   
 INSERT INTO residencias VALUES (2, false, 100, 'residencia2@mail.es', 'Descripcion de prueba 2', 'Direccion 2', '70', '07:00', '21:00', 
 	'http://www.resi2.com', 'Residencia 2', '987654321', 4);
+	
+INSERT INTO residencias VALUES (3, false, 10, 'residenciaSinPlazas@mail.es', 'Descripcion sin plazas', 'Direccion sin plazas', '70', '07:00', '21:00', 
+	'http://www.resisinplazas.com', 'Residencia Sin Plazas', '987654322', 8);
 
 -- Actividades
 
@@ -70,6 +77,58 @@ INSERT INTO authorities VALUES ('anciano3','anciano');
 
 INSERT INTO ancianos VALUES (7, 'González', 'Rosa', 'Presentacion3', 66, false, 'anciano3');
 
+	-- Ancianos para Residencia sin plazas --
+
+INSERT INTO users(username,password,enabled) VALUES ('ancianoRS1','ancianoRS1',TRUE);
+INSERT INTO authorities VALUES ('ancianoRS1','anciano');
+
+INSERT INTO ancianos VALUES (11, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianoRS1');
+
+INSERT INTO users(username,password,enabled) VALUES ('ancianoRS2','ancianoRS2',TRUE);
+INSERT INTO authorities VALUES ('ancianoRS2','anciano');
+
+INSERT INTO ancianos VALUES (12, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianoRS2');
+
+INSERT INTO users(username,password,enabled) VALUES ('ancianoRS3','ancianoRS3',TRUE);
+INSERT INTO authorities VALUES ('ancianoRS3','anciano');
+
+INSERT INTO ancianos VALUES (13, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianoRS3');
+
+INSERT INTO users(username,password,enabled) VALUES ('ancianoRS4','ancianoRS4',TRUE);
+INSERT INTO authorities VALUES ('ancianoRS4','anciano');
+
+INSERT INTO ancianos VALUES (14, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianoRS4');
+
+INSERT INTO users(username,password,enabled) VALUES ('ancianoRS5','ancianoRS5',TRUE);
+INSERT INTO authorities VALUES ('ancianoRS5','anciano');
+
+INSERT INTO ancianos VALUES (15, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianoRS5');
+
+INSERT INTO users(username,password,enabled) VALUES ('ancianoRS6','ancianoRS6',TRUE);
+INSERT INTO authorities VALUES ('ancianoRS6','anciano');
+
+INSERT INTO ancianos VALUES (16, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianoRS6');
+
+INSERT INTO users(username,password,enabled) VALUES ('ancianoRS7','ancianoRS7',TRUE);
+INSERT INTO authorities VALUES ('ancianoRS7','anciano');
+
+INSERT INTO ancianos VALUES (17, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianoRS7');
+
+INSERT INTO users(username,password,enabled) VALUES ('ancianoRS8','ancianoRS8',TRUE);
+INSERT INTO authorities VALUES ('ancianoRS8','anciano');
+
+INSERT INTO ancianos VALUES (18, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianoRS8');
+
+INSERT INTO users(username,password,enabled) VALUES ('ancianoRS9','ancianoRS9',TRUE);
+INSERT INTO authorities VALUES ('ancianoRS9','anciano');
+
+INSERT INTO ancianos VALUES (19, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianoRS9');
+
+INSERT INTO users(username,password,enabled) VALUES ('ancianoRS10','ancianoRS10',TRUE);
+INSERT INTO authorities VALUES ('ancianoRS10','anciano');
+
+INSERT INTO ancianos VALUES (20, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianoRS10');
+
 -- Incidencias
 
 INSERT INTO incidencias VALUES (1, 'Descripcion de incidencia1', '2010-09-07', 'titulo1', 1);
@@ -91,6 +150,19 @@ INSERT INTO inscripciones VALUES (2, 'Declaración2', 'pendiente', '2020-02-01',
 INSERT INTO inscripciones VALUES (3, 'Declaración4', 'rechazada', '2020-02-01', 'justificacion de prueba', 6, 2);
 INSERT INTO inscripciones VALUES (4, 'Declaración5', 'aceptada', '2020-02-01', null , 7, 1);
 
+	-- Inscripciones Residencia sin plazas --
+
+INSERT INTO inscripciones VALUES (11, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 11, 3);
+INSERT INTO inscripciones VALUES (12, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 12, 3);
+INSERT INTO inscripciones VALUES (13, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 13, 3);
+INSERT INTO inscripciones VALUES (14, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 14, 3);
+INSERT INTO inscripciones VALUES (15, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 15, 3);
+INSERT INTO inscripciones VALUES (16, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 16, 3);
+INSERT INTO inscripciones VALUES (17, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 17, 3);
+INSERT INTO inscripciones VALUES (18, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 18, 3);
+INSERT INTO inscripciones VALUES (19, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 19, 3);
+INSERT INTO inscripciones VALUES (20, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 20, 3);
+
 -- Excursiones
 
 INSERT INTO excursiones VALUES (1, 'Descripcion de prueba1', '2020-01-01',  '22:30', '17:00', 
@@ -99,6 +171,10 @@ INSERT INTO excursiones VALUES (2, 'Descripcion de prueba2', '2020-09-07',  '22:
 	'Prueba2', '2020-09-07', FALSE, '7', '1.0', 1);
 INSERT INTO excursiones VALUES (3, 'Descripcion de prueba3', '2020-09-07',  '22:30', '17:00', 
 	'Prueba3', '2020-09-07', TRUE, '2', '1.0', 1);
+INSERT INTO excursiones VALUES (4, 'Descripcion de prueba4', '2020-09-07',  '22:30', '17:00', 
+	'Excursión exigente', '2020-09-07', TRUE, '2', '5.0', 1);
+INSERT INTO excursiones VALUES (5, 'Descripcion de prueba5', '2020-09-07',  '22:30', '17:00', 
+	'Excursión prueba UI', '2020-09-07', TRUE, '2', '1.0', 1);
 	
 -- PeticionesExcursion
 

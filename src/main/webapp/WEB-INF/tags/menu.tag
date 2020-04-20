@@ -35,6 +35,12 @@
 						<span>Residencias</span>
 					</petclinic:menuItem>
 					
+					<petclinic:menuItem active="${name eq 'inscripciones'}"
+						url="/inscripciones" title="inscripciones">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Inscripciones</span>
+					</petclinic:menuItem>
+					
 					<petclinic:menuItem active="${name eq 'excursiones'}"
 						url="/excursiones" title="find excursiones">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -68,6 +74,12 @@
 				<!-- 				------------------------------------------------------------ -->
 
 				<sec:authorize access="hasAuthority('manager')">
+					<petclinic:menuItem active="${name eq 'inscripciones'}"
+						url="/inscripciones" title="inscripciones">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Inscripciones</span>
+					</petclinic:menuItem>
+					
 					<petclinic:menuItem active="${name eq 'excursiones'}"
 						url="/excursiones" title="find excursiones">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>

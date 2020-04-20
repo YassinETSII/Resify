@@ -50,6 +50,15 @@
             <th>Edad máxima</th>
             <td><c:out value="${residencia.edadMaxima}"/></td>
         </tr>
+        <tr>
+            <th>¿Acepta personas con dependencia grave?</th>
+            <c:if test="${residencia.aceptaDependenciaGrave == true}">
+            <td><c:out value="Sí"/></td>
+            </c:if>
+            <c:if test="${residencia.aceptaDependenciaGrave == false}">
+            <td><c:out value="No"/></td>
+            </c:if>
+        </tr>
     </table>
     
     <c:if test="${pageContext['request'].userPrincipal.name == residencia.manager.user.username}"> 

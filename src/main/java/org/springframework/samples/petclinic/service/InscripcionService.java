@@ -21,6 +21,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Anciano;
 import org.springframework.samples.petclinic.model.Inscripcion;
 import org.springframework.samples.petclinic.model.Manager;
+import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.repository.springdatajpa.InscripcionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +57,11 @@ public class InscripcionService {
 	@Transactional
 	public Iterable<Inscripcion> findAllMineManager(final Manager manager) {
 		return this.inscripcionRepository.findAllMineManager(manager.getId());
+	}
+
+	@Transactional
+	public Integer cuentaAceptadasEnResidencia(final Residencia residencia) {
+		return this.inscripcionRepository.cuentaAceptadasEnResidencia(residencia.getId());
 	}
 
 	@Transactional
