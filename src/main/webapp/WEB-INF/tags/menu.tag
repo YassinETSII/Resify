@@ -52,6 +52,12 @@
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Actividades</span>
 					</petclinic:menuItem>
+					
+					<petclinic:menuItem active="${name eq 'quejas'}"
+						url="/quejas/new" title="quejas">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Quejas</span>
+					</petclinic:menuItem>
 				</sec:authorize>
 				
 				
@@ -114,6 +120,12 @@
 						url="/incidencias" title="incidencias">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Incidencias</span>
+					</petclinic:menuItem>
+					
+					<petclinic:menuItem active="${name eq 'quejas'}"
+						url="/quejas" title="quejas">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Quejas</span>
 					</petclinic:menuItem>
 				</sec:authorize>
 				

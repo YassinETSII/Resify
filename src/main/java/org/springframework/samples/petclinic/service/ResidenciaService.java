@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Anciano;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Organizador;
 import org.springframework.samples.petclinic.model.Residencia;
@@ -110,6 +111,14 @@ public class ResidenciaService {
 	public Iterable<Residencia> findResidenciasNoParticipantes(final Organizador organizador) {
 		return this.residenciaRepository.findResidenciasSinParticipar(organizador.getId());
 	}
+	
+	@Transactional
+	public Residencia findResidenciaByAnciano(final Anciano anciano) {
+		return this.residenciaRepository.findResidenciaByAncianoId(anciano.getId());
+	}
+
+	
+	
 
 	private List<Residencia> ordenaPorRatio(final List<Residencia> listaPorOrdenar, final List<Residencia> listaYaOrdenada, final Double ratioInicial) {
 		List<Residencia> res = listaYaOrdenada;
