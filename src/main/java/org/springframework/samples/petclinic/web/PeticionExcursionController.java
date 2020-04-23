@@ -135,6 +135,10 @@ public class PeticionExcursionController {
 		if(this.residenciaService.getRatio(residencia)<excursion.getRatioAceptacion()) {
 			model.put("noCumpleRatio", true);
 		}
+		
+		if(excursion.getNumeroResidencias()<=this.peticionExcursionService.countPeticionExcursionAceptadaByExcursion(excursion)) {
+			model.put("aforoCompleto", true);
+		}
 
 		model.put("peticionExcursion", peticionExcursion);
 		return VIEWS_PETICION_EXCURSION_CREATE_OR_UPDATE_FORM;
@@ -154,7 +158,9 @@ public class PeticionExcursionController {
 
 		if (!(peticionExcursion.getExcursion().isFinalMode())
 				|| peticionExcursion.getExcursion().getFechaInicio().before(peticionExcursion.getFecha())
-				|| peticionExcursion.getFecha().after(peticionExcursion.getExcursion().getFechaFin())) {
+				|| peticionExcursion.getFecha().after(peticionExcursion.getExcursion().getFechaFin())
+				|| this.residenciaService.getRatio(residencia)<excursion.getRatioAceptacion()
+				|| residencia.getAforo()<=this.peticionExcursionService.countPeticionExcursionAceptadaByExcursion(excursion)) {
 			return "exception";
 
 		} else if (result.hasErrors()) {
