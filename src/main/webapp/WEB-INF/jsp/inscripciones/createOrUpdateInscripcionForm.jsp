@@ -11,8 +11,16 @@
     			<p>Lo sentimos, la residencia se encuentra sin plazas disponibles</p>
     		</c:when>
     		
-    		<c:otherwise>
+    		<c:when test="${tieneAceptada == true}">
+    			<p>Usted ya se encuentra registrado en una residencia</p>
+    		</c:when>
     		
+    		<c:when test="${tienePendiente == true}">
+    			<p>Aún tiene una inscripción pendiente en esta residencia, por favor, espere una respuesta</p>
+    		</c:when>
+    		
+    		<c:otherwise>
+  
     		
     		<h2>
             <c:if test="${inscripcion['new']}">Nueva </c:if> Inscripcion

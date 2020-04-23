@@ -111,6 +111,10 @@ public class ActividadController {
 
 	@GetMapping(value = "/new")
 	public String initCreationForm(final Map<String, Object> model, final Principal p) {
+		Residencia resi = this.managerService.findResidenciaByManagerUsername(p.getName());
+		if (resi == null) {
+			return "exception";
+		}
 		Actividad actividad = new Actividad();
 		model.put("actividad", actividad);
 		return ActividadController.VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM;
