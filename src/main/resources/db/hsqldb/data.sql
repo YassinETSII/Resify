@@ -34,8 +34,10 @@ INSERT INTO authorities VALUES ('manager4','manager');
 
 INSERT INTO managers VALUES (3, 'Rodríguez', 'Rosa', 'Prueba1', 'Prueba1', 'manager1');
 INSERT INTO managers VALUES (4, 'Domínguez', 'Carlos', 'Prueba2', 'Prueba2', 'manager2');
-INSERT INTO managers VALUES (7, 'Sánchez', 'Roberto', 'Pureba3', 'Prueba3', 'manager3');
 INSERT INTO managers VALUES (8, 'Jiménez', 'Laura', 'Prueba4', 'Prueba4', 'manager4');
+
+-- Mánager sin residencia
+INSERT INTO managers VALUES (7, 'Sánchez', 'Roberto', 'Pureba3', 'Prueba3', 'manager3');
 
 -- Residencias
 
@@ -79,10 +81,10 @@ INSERT INTO ancianos VALUES (7, 'González', 'Rosa', 'Presentacion3', 66, false,
 
 	-- Ancianos para Residencia sin plazas --
 
-INSERT INTO users(username,password,enabled) VALUES ('ancianoRS1','ancianoRS1',TRUE);
-INSERT INTO authorities VALUES ('ancianoRS1','anciano');
+INSERT INTO users(username,password,enabled) VALUES ('ancianors1','ancianors1',TRUE);
+INSERT INTO authorities VALUES ('ancianors1','anciano');
 
-INSERT INTO ancianos VALUES (11, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianoRS1');
+INSERT INTO ancianos VALUES (11, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianors1');
 
 INSERT INTO users(username,password,enabled) VALUES ('ancianoRS2','ancianoRS2',TRUE);
 INSERT INTO authorities VALUES ('ancianoRS2','anciano');
@@ -128,6 +130,13 @@ INSERT INTO users(username,password,enabled) VALUES ('ancianoRS10','ancianoRS10'
 INSERT INTO authorities VALUES ('ancianoRS10','anciano');
 
 INSERT INTO ancianos VALUES (20, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianoRS10');
+
+
+-- Anciano sin inscripción
+INSERT INTO users(username,password,enabled) VALUES ('joselitoanca','joselitoanca',TRUE);
+INSERT INTO authorities VALUES ('joselitoanca','anciano');
+
+INSERT INTO ancianos VALUES (21, 'Joselito', 'Angelo', 'PresentacionRes', 69, false, 'joselitoanca');
 
 -- Incidencias
 

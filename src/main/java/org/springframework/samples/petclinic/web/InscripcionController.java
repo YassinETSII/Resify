@@ -134,12 +134,36 @@ public class InscripcionController {
 	@GetMapping(value = "/new/{residenciaId}")
 	public String initCreationForm(final ModelMap model, final Principal p, @PathVariable("residenciaId") final int residenciaId) {
 		Inscripcion inscripcion = new Inscripcion();
-		Residencia residencia = this.residenciaService.findResidenciaById(residenciaId);
-		if (this.inscripcionService.cuentaAceptadasEnResidencia(residencia) == residencia.getAforo()) {
-			model.put("aforoMaximo", true);
-		} else {
-			inscripcion.setEstado("pendiente");
-			inscripcion.setResidencia(residencia);
+		Anciano anciano = this.ancianoService.findAncianoByUsername(p.getName());
+
+		Iterable<Inscripcion> ins = this.inscripcionService.findAllMineAnciano(anciano);
+		boolean tieneAceptada = false;
+		boolean tienePendiente = false;
+
+		for (Inscripcion i : ins) {
+			if (i.getEstado().equals("aceptada")) {
+				tieneAceptada = true;
+				break;
+			}
+		}
+		model.put("tieneAceptada", tieneAceptada);
+		if (tieneAceptada == false) {
+			Residencia residencia = this.residenciaService.findResidenciaById(residenciaId);
+			for (Inscripcion i2 : ins) {
+				if (i2.getEstado().equals("pendiente") && i2.getResidencia().equals(residencia)) {
+					tienePendiente = true;
+					break;
+				}
+			}
+			model.put("tienePendiente", tienePendiente);
+			if (tienePendiente == false) {
+				if (this.inscripcionService.cuentaAceptadasEnResidencia(residencia) == residencia.getAforo()) {
+					model.put("aforoMaximo", true);
+				} else {
+					inscripcion.setEstado("pendiente");
+					inscripcion.setResidencia(residencia);
+				}
+			}
 		}
 		model.put("inscripcion", inscripcion);
 		return InscripcionController.VIEWS_INSCRIPCION_CREATE_OR_UPDATE_FORM;

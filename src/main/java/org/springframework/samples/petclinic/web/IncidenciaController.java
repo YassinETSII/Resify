@@ -83,6 +83,10 @@ public class IncidenciaController {
 	
 	@GetMapping(value = "/new")
 	public String initCreationForm(Map<String, Object> model, Principal p) {
+		Residencia resi = this.managerService.findResidenciaByManagerUsername(p.getName());
+		if (resi == null) {
+			return "exception";
+		}
 		Incidencia incidencia = new Incidencia();
 		model.put("incidencia", incidencia);
 		return VIEWS_INCIDENCIA_CREATE_OR_UPDATE_FORM;
