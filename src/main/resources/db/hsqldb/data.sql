@@ -186,6 +186,12 @@ INSERT INTO peticiones_excursion VALUES (3, 'Declaración3', 'pendiente', '2020-
 
 INSERT INTO participaciones VALUES (1, 'Declaración', 'aceptada', '2020-03-02', null, 7, 3);
 
+-- Quejas
+
+INSERT INTO quejas VALUES (1, 'Descripcion Prueba 1', '2020-03-02', FALSE, 'Titulo Prueba 1', 7);
+INSERT INTO quejas VALUES (2, 'Descripcion Prueba 2', '2020-03-02', FALSE, 'Titulo Prueba 2', 7);
+
+
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
 INSERT INTO vets VALUES (3, 'Linda', 'Douglas');
