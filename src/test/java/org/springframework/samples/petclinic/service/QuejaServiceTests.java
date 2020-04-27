@@ -79,7 +79,7 @@ class QuejaServiceTests {
 	@Test
 	void debeContarTodasLasQuejasPorAnciano() {
 		Anciano a = this.ancianoService.findAncianoById(7);
-		Double quejas = this.quejaService.countQuejasByAnciano(a);
+		Double quejas = this.quejaService.countQuejasHoyByAnciano(a);
 
 		Assertions.assertTrue(quejas.equals(2.));
 	}

@@ -98,7 +98,7 @@ public class QuejaController {
 	public String initCreationForm(final Map<String, Object> model, final Principal p) {
 		Queja queja = new Queja();
 		Anciano anciano = this.ancianoService.findAncianoByUsername(p.getName());
-		Double numQuejas = this.quejaService.countQuejasByAnciano(anciano);
+		Double numQuejas = this.quejaService.countQuejasHoyByAnciano(anciano);
 		Residencia residencia = this.residenciaService.findResidenciaByAnciano(anciano);
 		model.put("hasMaxQuejas", numQuejas >= 3);
 		model.put("hasResidencia", residencia != null);
@@ -110,7 +110,7 @@ public class QuejaController {
 	public String processCreationForm(@Valid final Queja queja, final BindingResult result, final Map<String, Object> model, final Principal p) {
 		Anciano anciano = this.ancianoService.findAncianoByUsername(p.getName());
 		Residencia residencia = this.residenciaService.findResidenciaByAnciano(anciano);
-		Double numQuejas = this.quejaService.countQuejasByAnciano(anciano);
+		Double numQuejas = this.quejaService.countQuejasHoyByAnciano(anciano);
 		if (result.hasErrors()) {
 			model.put("hasMaxQuejas", numQuejas >= 3);
 			model.put("hasResidencia", residencia != null);

@@ -155,7 +155,7 @@ class QuejaControllerTests {
 
 	@WithMockUser(username = QuejaControllerTests.TEST_MANAGER_NOMBRE)
 	@Test
-	void testShowQuejaNoAnonimo() throws Exception {
+	void testShowQueja() throws Exception {
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.get("/quejas/{quejaId}",
 						QuejaControllerTests.TEST_QUEJA_ID))

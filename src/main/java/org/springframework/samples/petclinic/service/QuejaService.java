@@ -15,6 +15,10 @@
  */
 package org.springframework.samples.petclinic.service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Anciano;
@@ -47,8 +51,9 @@ public class QuejaService {
 	}
 
 	@Transactional(readOnly = true)
-	public Double countQuejasByAnciano(Anciano anciano) throws DataAccessException {
-		return quejaRepository.countQuejasByAncianoId(anciano.getId());
+	public Double countQuejasHoyByAnciano(Anciano anciano) throws DataAccessException {
+		
+		return quejaRepository.countQuejasByTiempoYAncianoId(anciano.getId(),Date.from(LocalDate.now().minusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 	}
 
 	@Transactional
