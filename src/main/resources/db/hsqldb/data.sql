@@ -131,6 +131,11 @@ INSERT INTO authorities VALUES ('ancianoRS10','anciano');
 
 INSERT INTO ancianos VALUES (20, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianoRS10');
 
+INSERT INTO users(username,password,enabled) VALUES ('ancianoDependencia','ancianoDependencia',TRUE);
+INSERT INTO authorities VALUES ('ancianoDependencia','anciano');
+
+INSERT INTO ancianos VALUES (22, 'Con Dependencia', 'Anciano', 'PresentacionDependencia', 69, true, 'ancianoDependencia');
+
 
 -- Anciano sin inscripción
 INSERT INTO users(username,password,enabled) VALUES ('joselitoanca','joselitoanca',TRUE);
@@ -171,6 +176,12 @@ INSERT INTO inscripciones VALUES (17, 'DeclaraciónRS', 'aceptada', '2020-02-01'
 INSERT INTO inscripciones VALUES (18, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 18, 3);
 INSERT INTO inscripciones VALUES (19, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 19, 3);
 INSERT INTO inscripciones VALUES (20, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 20, 3);
+INSERT INTO inscripciones VALUES (21, 'DeclaraciónDependencia', 'aceptada', '2020-02-01', null , 22, 3);
+
+-- Visitas sanitarias
+
+INSERT INTO visitas_sanitarias VALUES (1, 'visita sanitaria', '2020-04-20', '22:00', '17:00', 'Ejemplo', 'Sanitario prueba', 22, 3);
+
 
 -- Excursiones
 

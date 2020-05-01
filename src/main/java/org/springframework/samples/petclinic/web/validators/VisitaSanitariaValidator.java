@@ -15,25 +15,18 @@
  */
 package org.springframework.samples.petclinic.web.validators;
 
-import java.util.Date;
-
-import org.springframework.samples.petclinic.model.Actividad;
+import org.springframework.samples.petclinic.model.VisitaSanitaria;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-public class ActividadValidator implements Validator {
+public class VisitaSanitariaValidator implements Validator {
 
 	@Override
 	public void validate(Object obj, Errors errors) {
-		Actividad actividad = (Actividad) obj;
-		Date currentDate = new Date();
+		VisitaSanitaria visitaSanitaria = (VisitaSanitaria) obj;
 
-		if (actividad.getFechaInicio() != null && !actividad.getFechaInicio().after(currentDate)) {
-			errors.rejectValue("fechaInicio", "debe ser fecha futura", "debe ser fecha futura");
-		}
-
-		if (actividad.getHoraFin() != null && actividad.getHoraInicio() != null
-				&& actividad.getHoraInicio().isAfter(actividad.getHoraFin())) {
+		if (visitaSanitaria.getHoraFin() != null && visitaSanitaria.getHoraInicio() != null
+				&& visitaSanitaria.getHoraInicio().isAfter(visitaSanitaria.getHoraFin())) {
 			errors.rejectValue("horaFin", "debe ser igual o posterior a la hora inicio",
 					"debe ser igual o posterior a la hora inicio");
 		}
@@ -41,7 +34,7 @@ public class ActividadValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Actividad.class.isAssignableFrom(clazz);
+		return VisitaSanitaria.class.isAssignableFrom(clazz);
 	}
 
 }
