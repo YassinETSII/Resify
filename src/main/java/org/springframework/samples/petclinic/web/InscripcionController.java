@@ -191,6 +191,9 @@ public class InscripcionController {
 	public String initUpdateInscripcionForm(@PathVariable("inscripcionId") final int inscripcionId, final ModelMap model, final Principal p) {
 		Inscripcion inscripcion = this.inscripcionService.findInscripcionById(inscripcionId);
 		Manager manager = this.managerService.findManagerByUsername(p.getName());
+		if (inscripcion.getEstado().equals("aceptada") || inscripcion.getEstado().equals("rechazada")) {
+			return "exception";
+		}
 		if (!(inscripcion.getResidencia().getManager() == manager)) {
 			return "exception";
 		} else {
