@@ -69,6 +69,12 @@
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Peticiones de excursion</span>
 					</petclinic:menuItem>
+					
+					<petclinic:menuItem active="${name eq 'residenciasNoParticipantes'}"
+						url="/residencias/no-participantes" title="find residencias no participantes">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Residencias no participantes</span>
+					</petclinic:menuItem>
 				</sec:authorize>
 
 				<!-- 				------------------------------------------------------------ -->
