@@ -1,22 +1,38 @@
 
 package org.springframework.samples.petclinic.interfaz;
 
-import java.util.regex.Pattern;
-import java.util.concurrent.TimeUnit;
-import org.junit.*;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+import java.util.concurrent.TimeUnit;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class HU15NegativoUITest {
+	
+	@LocalServerPort
+	private int				port;
+	
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     driver = new FirefoxDriver();
     baseUrl = "https://www.google.com/";
@@ -26,7 +42,7 @@ public class HU15NegativoUITest {
   @Test
   public void testNegative() throws Exception {
     driver.get("http://localhost:8080/");
-    driver.findElement(By.linkText("Login")).click();
+    driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
     driver.findElement(By.id("username")).clear();
     driver.findElement(By.id("username")).sendKeys("anciano3");
     driver.findElement(By.id("password")).click();
@@ -39,7 +55,7 @@ public class HU15NegativoUITest {
     assertEquals("requerido", driver.findElement(By.xpath("//form[@id='queja']/div/div[2]/div/span[2]")).getText());
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     driver.quit();
     String verificationErrorString = verificationErrors.toString();
