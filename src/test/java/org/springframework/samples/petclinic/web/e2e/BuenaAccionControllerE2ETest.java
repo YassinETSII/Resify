@@ -74,7 +74,7 @@ public class BuenaAccionControllerE2ETest {
 	@Test
 	void testShowBuenaAccion() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/buenas-acciones/{buenaAccionId}", BuenaAccionControllerE2ETest.TEST_BA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("buenaAccion"))
-			.andExpect(MockMvcResultMatchers.model().attribute("buenaAccion", Matchers.hasProperty("descripcion", Matchers.is("Descripcion de buena acción1"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("buenaAccion", Matchers.hasProperty("descripcion", Matchers.is("Descripcion de buena accion1"))))
 			.andExpect(MockMvcResultMatchers.model().attribute("buenaAccion", Matchers.hasProperty("titulo", Matchers.is("titulo1")))).andExpect(MockMvcResultMatchers.view().name("buenasAcciones/buenasAccionesDetails"));
 	}
 

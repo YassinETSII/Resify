@@ -52,7 +52,7 @@ class InscripcionServiceTests {
 	@Test
 	void debeEncontrarInscripcionConIdCorrecto() {
 		Inscripcion i = this.inscripcionService.findInscripcionById(1);
-		Assertions.assertTrue(i.getDeclaracion().equals("Declaración1"));
+		Assertions.assertTrue(i.getDeclaracion().equals("Declaracion1"));
 	}
 
 	@Test
@@ -64,7 +64,7 @@ class InscripcionServiceTests {
 			basc.add(b);
 		}
 		Inscripcion ba = basc.get(0);
-		Assertions.assertTrue(ba.getDeclaracion().equals("Declaración1"));
+		Assertions.assertTrue(ba.getDeclaracion().equals("Declaracion1"));
 	}
 
 	@Test
@@ -78,7 +78,7 @@ class InscripcionServiceTests {
 		}
 
 		Inscripcion ba = basc.get(0);
-		Assertions.assertTrue(ba.getDeclaracion().equals("Declaración1"));
+		Assertions.assertTrue(ba.getDeclaracion().equals("Declaracion1"));
 	}
 
 	/*

@@ -17,7 +17,6 @@
 package org.springframework.samples.petclinic.service;
 
 import java.time.LocalTime;
-import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,6 +29,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.BuenaAccion;
@@ -70,8 +70,6 @@ class ResidenciaServiceTests {
 
 	@Test
 	void debeEncontrarResidenciaConIdCorrecto() {
-		LocalTime horaApertura = LocalTime.of(07, 00);
-		LocalTime horaCierre = LocalTime.of(21, 00);
 		Residencia re = this.residenciaService.findResidenciaById(1);
 		Assertions.assertTrue(re.getAceptaDependenciaGrave() == false);
 		Assertions.assertTrue(re.getAforo().equals(100));
@@ -79,8 +77,6 @@ class ResidenciaServiceTests {
 		Assertions.assertTrue(re.getDescripcion().equals("Descripcion de prueba"));
 		Assertions.assertTrue(re.getDireccion().equals("Direccion"));
 		Assertions.assertTrue(re.getEdadMaxima().equals(70));
-		Assertions.assertTrue(re.getHoraApertura().equals(horaApertura));
-		Assertions.assertTrue(re.getHoraCierre().equals(horaCierre));
 	}
 
 	@Test
