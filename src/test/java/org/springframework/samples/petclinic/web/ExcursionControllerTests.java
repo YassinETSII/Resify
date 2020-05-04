@@ -25,9 +25,11 @@ import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AncianoService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ExcursionService;
+import org.springframework.samples.petclinic.service.FeedbackService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.service.OrganizadorService;
 import org.springframework.samples.petclinic.service.PeticionExcursionService;
+import org.springframework.samples.petclinic.service.ResidenciaService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -59,6 +61,13 @@ class ExcursionControllerTests {
 	
 	@MockBean
 	private AncianoService 		ancianoService;
+	
+	@MockBean
+	private ResidenciaService 		residenciaService;
+	
+	@MockBean
+	private FeedbackService 		feedbackService;
+
 
 
 	@Autowired
