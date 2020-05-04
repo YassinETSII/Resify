@@ -107,18 +107,18 @@ public class VisitaSanitariaController {
 		visitaSanitaria.setAnciano(anciano);
 		visitaSanitaria.setFecha(hoy);
 		
-		if(!tienePermiso(p, visitaSanitaria)) 
-			return "exception";
-
+		if (!tienePermiso(p, visitaSanitaria))
+			return "exception";	
+		
 		if (result.hasErrors()) {
 			Iterable<Anciano> misAncianos = ancianoService.findAncianosMiResidencia(residencia);
-
+			
 			model.put("ancianos", misAncianos);
 			model.put("visitaSanitaria", visitaSanitaria);
 			return VIEWS_VISITA_SANITARIA_CREATE_OR_UPDATE_FORM;
 		} else if (!visitaSanitaria.getAnciano().getTieneDependenciaGrave()) {
 			Iterable<Anciano> misAncianos = ancianoService.findAncianosMiResidencia(residencia);
-
+			
 			model.put("ancianos", misAncianos);
 			model.put("noVale", "este anciano no tiene dependencia grave");
 			return VIEWS_VISITA_SANITARIA_CREATE_OR_UPDATE_FORM;
@@ -134,14 +134,11 @@ public class VisitaSanitariaController {
 			Principal p) {
 		VisitaSanitaria visitaSanitaria = this.visitaSanitariaService.findVisitaSanitariaById(visitaSanitariaId);
 		ModelAndView mav = new ModelAndView("visitasSanitarias/visitasSanitariasDetails");
-		System.out.println("1");
 		mav.addObject(visitaSanitaria);
-
-		System.out.println("2");
-		if (!tienePermiso(p, visitaSanitaria)) {
-			mav = new ModelAndView("exception");
-			System.out.println("3");
-		}
+		
+		if (!tienePermiso(p, visitaSanitaria))
+			return new ModelAndView("exception");	
+		
 
 		return mav;
 	}
@@ -150,15 +147,14 @@ public class VisitaSanitariaController {
 	public String deleteVisitaSanitaria(@PathVariable("visitaSanitariaId") int visitaSanitariaId, Principal p) {
 		VisitaSanitaria visitaSanitaria = this.visitaSanitariaService.findVisitaSanitariaById(visitaSanitariaId);
 		
-		if (!tienePermiso(p, visitaSanitaria)) {
-			return "exception";
-		}
+		if (!tienePermiso(p, visitaSanitaria))
+			return "exception";	
 		
 		this.visitaSanitariaService.deleteVisitaSanitaria(visitaSanitaria);
 		return "redirect:/visitas-sanitarias";
 	}
 
-	private boolean tienePermiso(Principal p, VisitaSanitaria v) {
+	public boolean tienePermiso(Principal p, VisitaSanitaria v) {
 		Residencia residenciaPrincipal = residenciaService.findMine(managerService.findManagerByUsername(p.getName()));
 		Iterable<Anciano> misAncianos = ancianoService.findAncianosMiResidencia(residenciaPrincipal);
 		boolean esMiAnciano = StreamSupport.stream(misAncianos.spliterator(), false)

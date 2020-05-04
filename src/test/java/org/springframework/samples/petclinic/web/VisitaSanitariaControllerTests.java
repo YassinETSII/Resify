@@ -95,9 +95,10 @@ class VisitaSanitariaControllerTests {
 				.willReturn(this.vis);
 		BDDMockito.given(this.managerService.findManagerByUsername(VisitaSanitariaControllerTests.TEST_MANAGER_NOMBRE))
 				.willReturn(this.man);
-		BDDMockito.given(this.ancianoService.findAncianoById(VisitaSanitariaControllerTests.TEST_ANCIANO_ID)).willReturn(this.anciano);
-		BDDMockito.given(this.ancianoService.findAncianosMiResidencia(this.resi)).willReturn(this.misAncianos);
+		BDDMockito.given(this.ancianoService.findAncianoById(VisitaSanitariaControllerTests.TEST_ANCIANO_ID))
+				.willReturn(this.anciano);
 		BDDMockito.given(this.residenciaService.findMine(this.man)).willReturn(this.resi);
+		BDDMockito.given(this.ancianoService.findAncianosMiResidencia(this.resi)).willReturn(this.misAncianos);
 	}
 
 	@WithMockUser(username = VisitaSanitariaControllerTests.TEST_MANAGER_NOMBRE)
@@ -109,7 +110,7 @@ class VisitaSanitariaControllerTests {
 				.andExpect(MockMvcResultMatchers.view().name("visitasSanitarias/visitasSanitariasList"));
 	}
 
-	@WithMockUser(authorities = VisitaSanitariaControllerTests.TEST_MANAGER_NOMBRE)
+	@WithMockUser(username = VisitaSanitariaControllerTests.TEST_MANAGER_NOMBRE)
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/visitas-sanitarias/new"))
@@ -118,39 +119,43 @@ class VisitaSanitariaControllerTests {
 				.andExpect(MockMvcResultMatchers.model().attributeExists("visitaSanitaria"));
 	}
 
-//	@WithMockUser(authorities = "manager")
-//	@Test
-//	void testProcessCreationFormSuccess() throws Exception {
-//		this.mockMvc
-//				.perform(MockMvcRequestBuilders.post("/visitas-sanitarias/new").param("motivo", "Motivo prueba")
-//						.param("descripcion", "Prueba descrip").with(SecurityMockMvcRequestPostProcessors.csrf())
-//						.param("sanitario", "sanitario prueba").param("horaInicio", String.valueOf(this.horini))
-//						.param("horaFin", String.valueOf(this.horfin)))
-//				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
-//	}
+	@WithMockUser(username = VisitaSanitariaControllerTests.TEST_MANAGER_NOMBRE)
+	@Test
+	void testProcessCreationFormSuccess() throws Exception {
+		this.anciano.setTieneDependenciaGrave(true);
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/visitas-sanitarias/new").param("motivo", "Motivo prueba")
+						.param("descripcion", "Prueba descrip").param("sanitario", "sanitario prueba")
+						.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", "2020/01/01")
+						.param("horaInicio", String.valueOf(this.horini)).param("horaFin", String.valueOf(this.horfin))
+						.param("anciano.id", String.valueOf(TEST_ANCIANO_ID)))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+	}
 
-//	@WithMockUser(authorities = VisitaSanitariaControllerTests.TEST_MANAGER_NOMBRE)
-//	@Test
-//	void testProcessCreationFormHasErrorsBlank() throws Exception {
-//		this.mockMvc
-//				.perform(MockMvcRequestBuilders.post("/visitas-sanitarias/new").param("motivo", "")
-//						.param("sanitario", "").param("descripcion", "Prueba descrip")
-//						.param("horaInicio", String.valueOf(this.horini)).param("horaFin", String.valueOf(this.horfin)))
-//				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("visitaSanitaria"))
-//				.andExpect(MockMvcResultMatchers.status().isOk())
-//				.andExpect(MockMvcResultMatchers.view().name("visitasSanitarias/createOrUpdateVisitaSanitariaForm"));
-//	}
+	@WithMockUser(username = VisitaSanitariaControllerTests.TEST_MANAGER_NOMBRE)
+	@Test
+	void testProcessCreationFormHasErrorsBlank() throws Exception {
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/visitas-sanitarias/new").param("motivo", "")
+						.param("sanitario", "").param("descripcion", "Prueba descrip")
+						.param("horaInicio", String.valueOf(this.horini)).param("horaFin", String.valueOf(this.horfin))
+						.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", "2020/01/01")
+						.param("anciano.id", String.valueOf(TEST_ANCIANO_ID)))
+				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("visitaSanitaria"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("visitasSanitarias/createOrUpdateVisitaSanitariaForm"));
+	}
 
-	@WithMockUser(authorities = VisitaSanitariaControllerTests.TEST_MANAGER_NOMBRE)
+	@WithMockUser(username = VisitaSanitariaControllerTests.TEST_MANAGER_NOMBRE)
 	@Test
 	void testProcessCreationFormHasErrorsAncianoSinDependencia() throws Exception {
 		this.anciano.setTieneDependenciaGrave(false);
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.post("/visitas-sanitarias/new").param("motivo", "Motivo prueba")
 						.param("sanitario", "sanitario prueba").param("descripcion", "Prueba descrip")
-						.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaInicio", "2020/01/01")
-						.param("horaInicio", String.valueOf(this.horini)).param("horaFin", String.valueOf(this.horfin)))
-				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("visitaSanitaria"))
+						.param("horaInicio", String.valueOf(this.horini)).param("horaFin", String.valueOf(this.horfin))
+						.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", "2020/01/01")
+						.param("anciano.id", String.valueOf(TEST_ANCIANO_ID)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.view().name("visitasSanitarias/createOrUpdateVisitaSanitariaForm"));
 	}

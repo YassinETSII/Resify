@@ -115,6 +115,12 @@
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Incidencias</span>
 					</petclinic:menuItem>
+					
+					<petclinic:menuItem active="${name eq 'visitasSanitarias'}"
+						url="/visitas-sanitarias" title="visitas sanitarias">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Visitas sanitarias</span>
+					</petclinic:menuItem>
 				</sec:authorize>
 				
 				<!-- 				------------------------------------------------------------ -->
