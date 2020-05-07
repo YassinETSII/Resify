@@ -17,6 +17,7 @@ import org.springframework.samples.petclinic.model.Incidencia;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.IncidenciaService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.service.ResidenciaService;
@@ -48,6 +49,9 @@ class IncidenciaControllerTest {
 	@MockBean
 	private ResidenciaService			residenciaService;
 	
+	@MockBean
+	private AuthoritiesService			authoritiesService;
+	
 	@Autowired
 	private MockMvc					mockMvc;
 
@@ -72,6 +76,10 @@ class IncidenciaControllerTest {
 		this.incidenciaService.saveIncidencia(this.ba);
 		BDDMockito.given(this.incidenciaService.findIncidenciaById(IncidenciaControllerTest.TEST_BUENA_ACCION_ID)).willReturn(this.ba);
 		BDDMockito.given(this.managerService.findManagerByUsername(IncidenciaControllerTest.TEST_MANAGER_NOMBRE)).willReturn(this.man);
+		BDDMockito.given(this.authoritiesService.findAuthority(IncidenciaControllerTest.TEST_MANAGER_NOMBRE))
+		.willReturn("manager");
+		BDDMockito.given(this.managerService.findResidenciaByManagerUsername(IncidenciaControllerTest.TEST_MANAGER_NOMBRE))
+		.willReturn(this.resi);
 	}
 
 	@WithMockUser(username = "manager1")
@@ -81,7 +89,7 @@ class IncidenciaControllerTest {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/incidencias")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("incidencias/incidenciasList"));
 	}
 
-	@WithMockUser(authorities = "manager")
+	@WithMockUser(username = IncidenciaControllerTest.TEST_MANAGER_NOMBRE)
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/incidencias/new")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("incidencias/createOrUpdateIncidenciaForm"))
