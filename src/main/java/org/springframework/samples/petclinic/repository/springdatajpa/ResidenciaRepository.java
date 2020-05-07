@@ -19,6 +19,9 @@ public interface ResidenciaRepository extends CrudRepository<Residencia, String>
 
 	@Query("SELECT count(incidencia.id) FROM Incidencia incidencia WHERE incidencia.residencia.id =:id")
 	Double countIncidenciasByResidenciaId(@Param("id") int id) throws DataAccessException;
+	
+	@Query("SELECT i.residencia FROM Inscripcion i WHERE i.anciano.id = :id AND i.estado = 'aceptada'")
+	Residencia findResidenciaByAncianoId(@Param("id") int id) throws DataAccessException;
 
 	// @Query("SELECT r, CASE WHEN (COUNT(DISTINCT b.id) = 0) THEN 0 WHEN
 	// (COUNT(DISTINCT i.id) = 0) THEN COUNT(DISTINCT b.id) "

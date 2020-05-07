@@ -32,6 +32,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.samples.petclinic.model.Anciano;
 import org.springframework.samples.petclinic.model.BuenaAccion;
 import org.springframework.samples.petclinic.model.Excursion;
 import org.springframework.samples.petclinic.model.Incidencia;
@@ -66,6 +67,9 @@ class ResidenciaServiceTests {
 
 	@Autowired
 	protected PeticionExcursionService	peticionExcursionService;
+	
+	@Autowired
+	protected AncianoService	ancianoService;
 
 
 	@Test
@@ -497,4 +501,21 @@ class ResidenciaServiceTests {
 		}
 		Assertions.assertTrue(r2EnNoParticipantes);
 	}
+	
+	@Test
+	void debeEncontrarResidenciaPorAnciano() {
+		LocalTime horaApertura = LocalTime.of(07, 00);
+		LocalTime horaCierre = LocalTime.of(21, 00);
+		Anciano anciano = this.ancianoService.findAncianoById(7);
+		Residencia residencia = this.residenciaService.findResidenciaByAnciano(anciano);
+		Assertions.assertTrue(residencia.getAceptaDependenciaGrave() == false);
+		Assertions.assertTrue(residencia.getAforo().equals(100));
+		Assertions.assertTrue(residencia.getCorreo().equals("residencia1@mail.es"));
+		Assertions.assertTrue(residencia.getDescripcion().equals("Descripcion de prueba"));
+		Assertions.assertTrue(residencia.getDireccion().equals("Direccion"));
+		Assertions.assertTrue(residencia.getEdadMaxima().equals(70));
+		Assertions.assertTrue(residencia.getHoraApertura().equals(horaApertura));
+		Assertions.assertTrue(residencia.getHoraCierre().equals(horaCierre));
+	}
+
 }

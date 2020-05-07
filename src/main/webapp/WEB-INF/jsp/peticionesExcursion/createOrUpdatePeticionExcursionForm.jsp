@@ -8,6 +8,12 @@
 <resify:layout pageName="peticionesExcursion">
     <jsp:body>
     	<c:choose>
+    		<c:when test="${aforoCompleto == true}">
+    			<p>Lo sentimos, el aforo está completo</p>
+    		</c:when>
+    		    		
+    		<c:otherwise>
+    		<c:choose>
     		<c:when test="${noCumpleRatio == true}">
     			<p>Lo sentimos, no cumple con el ratio de aceptación</p>
     		</c:when>
@@ -34,11 +40,11 @@
         </form:form>
         </c:if>
     <c:if test="${hasPeticion && hasResidencia}">
-    <td><c:out value="YA LE HA ENVIADO UNA PECICION"/></td>
+    <p>ya le ha enviado una petición</p>
     </c:if>
     
     <c:if test="${!hasResidencia}">
-    <td><c:out value="NO TIENE UNA RESIDENCIA QUE INSCRIBIR"/></td>
+    <p>no tiene una residencia que inscribir</p>
     </c:if>
     </security:authorize>
         
@@ -61,6 +67,8 @@
 	</form:form>
     </security:authorize>
     
+    </c:otherwise>
+    	</c:choose>
     </c:otherwise>
     	</c:choose>
     </jsp:body>

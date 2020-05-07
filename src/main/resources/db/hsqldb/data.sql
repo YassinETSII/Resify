@@ -210,3 +210,9 @@ INSERT INTO peticiones_excursion VALUES (6, 'Declaracion6', 'aceptada', '2020-02
 -- Participaciones
 
 INSERT INTO participaciones VALUES (1, 'Declaracion', 'aceptada', '2020-03-02', null, 7, 3);
+
+-- Quejas
+
+INSERT INTO quejas VALUES (1, 'Descripcion Prueba 1', '2020-03-02', FALSE, 'Titulo Prueba 1', 7);
+INSERT INTO quejas VALUES (2, 'Descripcion Prueba 2', '2020-03-02', FALSE, 'Titulo Prueba 2', 7);
+
