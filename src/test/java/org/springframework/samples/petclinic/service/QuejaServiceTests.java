@@ -23,6 +23,8 @@ import java.util.Date;
 
 import javax.validation.ConstraintViolationException;
 
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 class QuejaServiceTests {
 
 	@Autowired
@@ -81,7 +84,7 @@ class QuejaServiceTests {
 		Anciano a = this.ancianoService.findAncianoById(7);
 		Double quejas = this.quejaService.countQuejasHoyByAnciano(a);
 
-		Assertions.assertTrue(quejas.equals(2.));
+		Assertions.assertTrue(quejas.equals(0.));
 	}
 
 	@Test
@@ -113,7 +116,7 @@ class QuejaServiceTests {
 			quejas2.add(q2);
 		}
 
-		//Comprueba que se ha añadido a las buenas acciones del manager
+		//Comprueba que se ha añadido a las quejas del manager
 		Assertions.assertTrue(quejas2.size() == total + 1);
 
 		//Comprueba que su id ya no es nulo

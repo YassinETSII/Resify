@@ -144,6 +144,7 @@
 						url="/quejas" title="quejas">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Quejas</span>
+            		</petclinic:menuItem>
             
 					<petclinic:menuItem active="${name eq 'visitasSanitarias'}"
 						url="/visitas-sanitarias" title="visitas sanitarias">

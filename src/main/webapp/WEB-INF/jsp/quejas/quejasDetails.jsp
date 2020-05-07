@@ -6,7 +6,7 @@
 <%@ taglib uri="http://www.springframework.org/security/tags"
 	prefix="security"%>
 
-<resify:layout pageName="actividades">
+<resify:layout pageName="quejas">
 
 	<h2>Informacion de la queja</h2>
 

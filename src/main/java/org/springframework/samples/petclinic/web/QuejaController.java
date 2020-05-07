@@ -81,7 +81,7 @@ public class QuejaController {
 	}
 
 	@InitBinder("queja")
-	public void initActividadBinder(final WebDataBinder dataBinder) {
+	public void initQuejaBinder(final WebDataBinder dataBinder) {
 		dataBinder.setValidator(new QuejaValidator());
 	}
 
@@ -130,7 +130,7 @@ public class QuejaController {
 	}
 
 	@GetMapping("/{quejaId}")
-	public ModelAndView showActividad(@PathVariable("quejaId") final int quejaId, final Principal p) {
+	public ModelAndView showQueja(@PathVariable("quejaId") final int quejaId, final Principal p) {
 		Queja queja = this.quejaService.findQuejaById(quejaId);
 		ModelAndView mav = new ModelAndView("quejas/quejasDetails");
 		mav.addObject(queja);

@@ -55,9 +55,10 @@ public class VisitaSanitariaService {
 	}
 
 	@Transactional
-	public Iterable<VisitaSanitaria> findAllMine(Manager manager) {
-		Residencia residencia = residenciaService.findMine(manager);
-		return visitaSanitariaRepository.findAllMine(residencia);
+	public Iterable<VisitaSanitaria> findAllMine(final Manager manager) {
+		Residencia residencia = this.residenciaService.findMine(manager);
+		int id = residencia.getId();
+		return this.visitaSanitariaRepository.findAllMine(id);
 	}	
 
 }

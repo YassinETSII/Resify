@@ -10,7 +10,7 @@
 <resify:layout pageName="quejas">
     <h2>Quejas</h2>
 
-    <table id="actividadesTable" class="table table-striped">
+    <table id="quejasTable" class="table table-striped">
         <thead>
         <tr>
             <th style="width: 200px;">Queja</th>
@@ -44,15 +44,6 @@
             </tr>
         </c:forEach>
         </tbody>
-    </table>
-    
-    <security:authorize access="hasAuthority('manager')">
-    	<c:if test="${noTieneResi == false}">
-	    	<spring:url value="/actividades/new" var="addUrl">
-		    </spring:url>
-		    <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Añadir nueva actividad</a>
-		</c:if>
-	</security:authorize>
-    
+    </table>  
     
 </resify:layout>

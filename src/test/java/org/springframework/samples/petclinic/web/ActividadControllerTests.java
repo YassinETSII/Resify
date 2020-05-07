@@ -116,7 +116,7 @@ class ActividadControllerTests {
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
-	@WithMockUser(authorities = "manager")
+	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
 	@Test
 	void testProcessCreationFormHasErrors() throws Exception {
 		this.mockMvc

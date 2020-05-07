@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.web.validators;
 
 import java.util.Date;
@@ -24,23 +25,41 @@ import org.springframework.validation.Validator;
 public class ActividadValidator implements Validator {
 
 	@Override
-	public void validate(Object obj, Errors errors) {
+	public void validate(final Object obj, final Errors errors) {
 		Actividad actividad = (Actividad) obj;
 		Date currentDate = new Date();
+
+		if (actividad.getTitulo().isEmpty()) {
+			errors.rejectValue("titulo", "requerido", "requerido");
+		}
+
+		if (actividad.getDescripcion().isEmpty()) {
+			errors.rejectValue("descripcion", "requerido", "requerido");
+		}
+
+		if (actividad.getFechaInicio() == null) {
+			errors.rejectValue("fechaInicio", "requerido", "requerido");
+		}
+
+		if (actividad.getHoraInicio() == null) {
+			errors.rejectValue("horaInicio", "requerido", "requerido");
+		}
+
+		if (actividad.getHoraFin() == null) {
+			errors.rejectValue("horaFin", "requerido", "requerido");
+		}
 
 		if (actividad.getFechaInicio() != null && !actividad.getFechaInicio().after(currentDate)) {
 			errors.rejectValue("fechaInicio", "debe ser fecha futura", "debe ser fecha futura");
 		}
 
-		if (actividad.getHoraFin() != null && actividad.getHoraInicio() != null
-				&& actividad.getHoraInicio().isAfter(actividad.getHoraFin())) {
-			errors.rejectValue("horaFin", "debe ser igual o posterior a la hora inicio",
-					"debe ser igual o posterior a la hora inicio");
+		if (actividad.getHoraFin() != null && actividad.getHoraInicio() != null && actividad.getHoraInicio().isAfter(actividad.getHoraFin())) {
+			errors.rejectValue("horaFin", "debe ser igual o posterior a la hora inicio", "debe ser igual o posterior a la hora inicio");
 		}
 	}
 
 	@Override
-	public boolean supports(Class<?> clazz) {
+	public boolean supports(final Class<?> clazz) {
 		return Actividad.class.isAssignableFrom(clazz);
 	}
 
