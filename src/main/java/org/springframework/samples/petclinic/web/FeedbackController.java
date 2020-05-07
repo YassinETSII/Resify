@@ -64,7 +64,6 @@ public class FeedbackController {
 	public void initFeedbackBinder(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 		dataBinder.setDisallowedFields("excursion");
-		//dataBinder.setValidator(new FeedbackValidator());
 	}
 
 	@GetMapping(value = "/feedbacks")

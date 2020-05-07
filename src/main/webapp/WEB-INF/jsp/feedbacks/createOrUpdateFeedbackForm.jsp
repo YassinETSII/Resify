@@ -42,10 +42,15 @@
      <form:form modelAttribute="feedback" class="form-horizontal">
         <input type="hidden" name="id" value="${feedback.id}"/>
      
-             <input type="hidden" name="descripcion" value="${feedback.descripcion}"/>
-		<button class="btn btn-default" type="submit">Actualizar Feedback</button>
-		
-		
+            <input type="hidden" name="descripcion" value="${feedback.descripcion}"/>
+            <input type="hidden" name="valoracion" value="${feedback.valoracion}"/>
+            
+            <label class="col-sm-2 control-label">¿Desea rechazar este feedback?</label><input type="checkbox" name="descartaFeedback"/> 
+			<br/>
+			<div class="col-sm-offset-2 col-sm-10">	
+			<button class="btn btn-default" type="submit">Actualizar Feedback</button>
+            </div>
+            
 	</form:form>
     </security:authorize>
     </jsp:body>

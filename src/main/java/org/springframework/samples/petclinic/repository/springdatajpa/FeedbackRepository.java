@@ -17,7 +17,7 @@ public interface FeedbackRepository extends CrudRepository<Feedback, String> {
 	@Query("SELECT f FROM Feedback f WHERE f.residencia.id =:id AND f.excursion.fechaInicio > :today")
 	Iterable<Feedback> findByResidencia(@Param("id") int id, @Param("today") Date today) throws DataAccessException;
 
-	@Query("SELECT f FROM Feedback f WHERE f.excursion.organizador.id =:id")
+	@Query("SELECT f FROM Feedback f WHERE f.excursion.organizador.id =:id and f.descartaFeedback = false")
 	Iterable<Feedback> findByOrganizador(@Param("id") int id) throws DataAccessException;
 	
 	@Query("SELECT count(f.id) FROM Feedback f WHERE f.excursion.id =:id")
