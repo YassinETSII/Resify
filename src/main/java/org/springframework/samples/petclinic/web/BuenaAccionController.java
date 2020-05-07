@@ -85,6 +85,10 @@ public class BuenaAccionController {
 
 	@GetMapping(value = "/new")
 	public String initCreationForm(final Map<String, Object> model, final Principal p) {
+		Residencia resi = this.managerService.findResidenciaByManagerUsername(p.getName());
+		if (resi == null) {
+			return "exception";
+		}
 		BuenaAccion buenaAccion = new BuenaAccion();
 		model.put("buenaAccion", buenaAccion);
 		return BuenaAccionController.VIEWS_BUENA_ACCION_CREATE_OR_UPDATE_FORM;

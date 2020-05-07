@@ -1,18 +1,3 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.springframework.samples.petclinic.service;
 
 import java.time.LocalDate;
@@ -22,16 +7,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Anciano;
 import org.springframework.samples.petclinic.model.Excursion;
 import org.springframework.samples.petclinic.model.Organizador;
+import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.repository.springdatajpa.ExcursionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Mostly used as a facade for all Petclinic controllers Also a placeholder
- * for @Transactional and @Cacheable annotations
- *
- * @author Michael Isvy
- */
 @Service
 public class ExcursionService {
 
@@ -72,7 +52,12 @@ public class ExcursionService {
 	@Transactional
 	public Iterable<Excursion> findAllPublished() {
 		return excursionRepository.findAllPublishedAndFuture(java.sql.Date.valueOf(LocalDate.now()));
-	}	
+	}
+	
+	@Transactional
+	public Iterable<Excursion> findAllGone(Residencia resi) {
+		return excursionRepository.findAllFinishedResidencia(resi.getId(), java.sql.Date.valueOf(LocalDate.now()));
+	}
 	
 	@Transactional
 	public Iterable<Excursion> findAll() {
@@ -82,7 +67,5 @@ public class ExcursionService {
 	public Iterable<Excursion> findAllMineAnciano(Anciano anciano) {
 		return excursionRepository.findAllMineAnciano(anciano.getId(), java.sql.Date.valueOf(LocalDate.now()));
 	}		
-	
-	
 
 }

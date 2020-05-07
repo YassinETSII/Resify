@@ -28,6 +28,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -48,6 +49,7 @@ public class Residencia extends BaseEntity {
 	private String		descripcion;
 
 	@Column(name = "aforo")
+	@Range(min = 10, max = 1000)
 	private int			aforo;
 
 	@URL
@@ -76,6 +78,7 @@ public class Residencia extends BaseEntity {
 
 	@Column(name = "edad_maxima")
 	@NotNull
+	@Range(min = 65, max = 110)
 	private Integer		edadMaxima;
 
 	@Column(name = "acepta_dependencia_grave")

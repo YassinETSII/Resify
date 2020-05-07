@@ -19,6 +19,7 @@ package org.springframework.samples.petclinic.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Anciano;
+import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.repository.springdatajpa.AncianoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,6 +60,11 @@ public class AncianoService {
 	@Transactional(readOnly = true)
 	public Anciano findAncianoByUsername(final String username) throws DataAccessException {
 		return this.ancianoRepository.findByUsername(username);
+	}
+	
+	@Transactional(readOnly = true)
+	public Iterable<Anciano> findAncianosMiResidencia(final Residencia residencia) throws DataAccessException {
+		return this.ancianoRepository.findAncianosMiResidencia(residencia.getId());
 	}
 
 	@Transactional

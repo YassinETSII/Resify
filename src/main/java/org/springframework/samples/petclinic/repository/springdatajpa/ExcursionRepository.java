@@ -21,5 +21,7 @@ public interface ExcursionRepository extends CrudRepository<Excursion, String> {
 
 	@Query("SELECT excursion FROM Participacion p JOIN p.excursion excursion WHERE  p.anciano.id =:id AND excursion.finalMode = true AND excursion.fechaInicio > :today")
 	Iterable<Excursion> findAllMineAnciano(@Param("id") int id, @Param("today") Date today);
-
+	
+	@Query("SELECT e FROM PeticionExcursion p JOIN p.excursion e WHERE p.residencia.id =:id AND p.estado = 'aceptada' AND e.finalMode = true AND e.fechaFin <= :today")
+	Iterable<Excursion> findAllFinishedResidencia(@Param("id") int id, @Param("today") Date today);
 }

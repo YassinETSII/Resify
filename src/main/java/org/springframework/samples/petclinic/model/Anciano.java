@@ -35,7 +35,7 @@ public class Anciano extends Persona {
 
 	@Column(name = "edad")
 	@NotNull
-	@Range(min = 66, max = 110)
+	@Range(min = 65, max = 110)
 	private Integer	edad;
 
 	@Column(name = "cartaPresentacion")

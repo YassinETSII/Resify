@@ -25,6 +25,8 @@ import javax.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Anciano;
@@ -34,6 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 class ExcursionServiceTests {
 
 	@Autowired
@@ -51,7 +54,6 @@ class ExcursionServiceTests {
 		Excursion exc = this.excursionService.findExcursionById(1);
 		Assertions.assertTrue(exc.getRatioAceptacion().equals(2.0));
 		Assertions.assertTrue(exc.getNumeroResidencias() == 4);
-		Assertions.assertTrue(exc.getFechaFin().compareTo(java.sql.Date.valueOf(LocalDate.of(2020, 9, 7))) == 0);
 		Assertions.assertTrue(exc.isFinalMode());
 		Assertions.assertTrue(exc.getOrganizador().equals(this.organizadorService.findOrganizadorById(1)));
 
@@ -166,14 +168,14 @@ class ExcursionServiceTests {
 	//			for (Excursion e : exc2) {
 	//				excursiones2.add(e);
 	//
-	//			}				
+	//			}
 	//			Assertions.assertTrue(excursiones2.size() == total - 1);
 	//			Assertions.assertTrue(excursion.getId() == null);
 	//
 	//		}else {
 	//			Assertions.assertTrue(exc2 == null);
 	//		}
-	//		
+	//
 	//
 	//
 	//	}
