@@ -8,8 +8,8 @@ INSERT INTO authorities VALUES ('organizador1','organizador');
 INSERT INTO users(username,password,enabled) VALUES ('organizador2','0rg4n1z4d0r',TRUE);
 INSERT INTO authorities VALUES ('organizador2','organizador');
 
-INSERT INTO organizadores VALUES (1, 'Fernández', 'Juan', 'Prueba1', 'Prueba1', 'organizador1');
-INSERT INTO organizadores VALUES (2,  'Limón', 'Maria', 'Prueba2', 'Prueba2', 'organizador2');
+INSERT INTO organizadores VALUES (1, 'Fernandez', 'Juan', 'Prueba1', 'Prueba1', 'organizador1');
+INSERT INTO organizadores VALUES (2,  'Limon', 'Maria', 'Prueba2', 'Prueba2', 'organizador2');
 	
 	
 -- Managers
@@ -26,12 +26,12 @@ INSERT INTO authorities VALUES ('manager3','manager');
 INSERT INTO users(username,password,enabled) VALUES ('manager4','manager4',TRUE);
 INSERT INTO authorities VALUES ('manager4','manager');
 
-INSERT INTO managers VALUES (3, 'Rodríguez', 'Rosa', 'Prueba1', 'Prueba1', 'manager1');
-INSERT INTO managers VALUES (4, 'Domínguez', 'Carlos', 'Prueba2', 'Prueba2', 'manager2');
-INSERT INTO managers VALUES (8, 'Jiménez', 'Laura', 'Prueba4', 'Prueba4', 'manager4');
+INSERT INTO managers VALUES (3, 'Rodriguez', 'Rosa', 'Prueba1', 'Prueba1', 'manager1');
+INSERT INTO managers VALUES (4, 'Dominguez', 'Carlos', 'Prueba2', 'Prueba2', 'manager2');
+INSERT INTO managers VALUES (8, 'Jimenez', 'Laura', 'Prueba4', 'Prueba4', 'manager4');
 
--- Mánager sin residencia
-INSERT INTO managers VALUES (7, 'Sánchez', 'Roberto', 'Pureba3', 'Prueba3', 'manager3');
+-- Manager sin residencia
+INSERT INTO managers VALUES (7, 'Sanchez', 'Roberto', 'Pureba3', 'Prueba3', 'manager3');
 
 -- Residencias
 
@@ -65,13 +65,13 @@ INSERT INTO authorities VALUES ('anciano1','anciano');
 INSERT INTO users(username,password,enabled) VALUES ('anciano2','anciano2',TRUE);
 INSERT INTO authorities VALUES ('anciano2','anciano');
 
-INSERT INTO ancianos VALUES (5, 'García', 'Anacleto', 'Presentacion1', 70, false, 'anciano1');
+INSERT INTO ancianos VALUES (5, 'Garcia', 'Anacleto', 'Presentacion1', 70, false, 'anciano1');
 INSERT INTO ancianos VALUES (6, 'Prieto', 'Dolores', 'Presentacion2', 80, true, 'anciano2');
 
 INSERT INTO users(username,password,enabled) VALUES ('anciano3','anciano3',TRUE);
 INSERT INTO authorities VALUES ('anciano3','anciano');
 
-INSERT INTO ancianos VALUES (7, 'González', 'Rosa', 'Presentacion3', 66, false, 'anciano3');
+INSERT INTO ancianos VALUES (7, 'Gonzalez', 'Rosa', 'Presentacion3', 66, false, 'anciano3');
 
 	-- Ancianos para Residencia sin plazas --
 
@@ -126,7 +126,7 @@ INSERT INTO authorities VALUES ('ancianoRS10','anciano');
 INSERT INTO ancianos VALUES (20, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianoRS10');
 
 
--- Anciano sin inscripción
+-- Anciano sin inscripcion
 INSERT INTO users(username,password,enabled) VALUES ('joselitoanca','joselitoanca',TRUE);
 INSERT INTO authorities VALUES ('joselitoanca','anciano');
 
@@ -141,30 +141,30 @@ INSERT INTO incidencias VALUES (4, 'Descripcion de incidencia4', '2010-09-07', '
 
 -- Buenas acciones
 
-INSERT INTO buenas_acciones VALUES (1, 'Descripcion de buena acción1', '2010-09-07', 'titulo1', 1);
-INSERT INTO buenas_acciones VALUES (2, 'Descripcion de buena acción2', '2010-09-07', 'titulo2', 1);
-INSERT INTO buenas_acciones VALUES (3, 'Descripcion de buena acción3', '2010-09-07', 'titulo3', 2);
-INSERT INTO buenas_acciones VALUES (4, 'Descripcion de buena acción4', '2010-09-07', 'titulo4', 2);
+INSERT INTO buenas_acciones VALUES (1, 'Descripcion de buena accion1', '2010-09-07', 'titulo1', 1);
+INSERT INTO buenas_acciones VALUES (2, 'Descripcion de buena accion2', '2010-09-07', 'titulo2', 1);
+INSERT INTO buenas_acciones VALUES (3, 'Descripcion de buena accion3', '2010-09-07', 'titulo3', 2);
+INSERT INTO buenas_acciones VALUES (4, 'Descripcion de buena accion4', '2010-09-07', 'titulo4', 2);
 
 -- Inscripciones
 
-INSERT INTO inscripciones VALUES (1, 'Declaración1', 'pendiente', '2020-02-01', null , 5, 1);
-INSERT INTO inscripciones VALUES (2, 'Declaración2', 'pendiente', '2020-02-01', null , 6, 1);
-INSERT INTO inscripciones VALUES (3, 'Declaración4', 'rechazada', '2020-02-01', 'justificacion de prueba', 6, 2);
-INSERT INTO inscripciones VALUES (4, 'Declaración5', 'aceptada', '2020-02-01', null , 7, 1);
+INSERT INTO inscripciones VALUES (1, 'Declaracion1', 'pendiente', '2020-02-01', null , 5, 1);
+INSERT INTO inscripciones VALUES (2, 'Declaracion2', 'pendiente', '2020-02-01', null , 6, 1);
+INSERT INTO inscripciones VALUES (3, 'Declaracion4', 'rechazada', '2020-02-01', 'justificacion de prueba', 6, 2);
+INSERT INTO inscripciones VALUES (4, 'Declaracion5', 'aceptada', '2020-02-01', null , 7, 1);
 
 	-- Inscripciones Residencia sin plazas --
 
-INSERT INTO inscripciones VALUES (11, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 11, 3);
-INSERT INTO inscripciones VALUES (12, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 12, 3);
-INSERT INTO inscripciones VALUES (13, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 13, 3);
-INSERT INTO inscripciones VALUES (14, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 14, 3);
-INSERT INTO inscripciones VALUES (15, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 15, 3);
-INSERT INTO inscripciones VALUES (16, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 16, 3);
-INSERT INTO inscripciones VALUES (17, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 17, 3);
-INSERT INTO inscripciones VALUES (18, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 18, 3);
-INSERT INTO inscripciones VALUES (19, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 19, 3);
-INSERT INTO inscripciones VALUES (20, 'DeclaraciónRS', 'aceptada', '2020-02-01', null , 20, 3);
+INSERT INTO inscripciones VALUES (11, 'DeclaracionRS', 'aceptada', '2020-02-01', null , 11, 3);
+INSERT INTO inscripciones VALUES (12, 'DeclaracionRS', 'aceptada', '2020-02-01', null , 12, 3);
+INSERT INTO inscripciones VALUES (13, 'DeclaracionRS', 'aceptada', '2020-02-01', null , 13, 3);
+INSERT INTO inscripciones VALUES (14, 'DeclaracionRS', 'aceptada', '2020-02-01', null , 14, 3);
+INSERT INTO inscripciones VALUES (15, 'DeclaracionRS', 'aceptada', '2020-02-01', null , 15, 3);
+INSERT INTO inscripciones VALUES (16, 'DeclaracionRS', 'aceptada', '2020-02-01', null , 16, 3);
+INSERT INTO inscripciones VALUES (17, 'DeclaracionRS', 'aceptada', '2020-02-01', null , 17, 3);
+INSERT INTO inscripciones VALUES (18, 'DeclaracionRS', 'aceptada', '2020-02-01', null , 18, 3);
+INSERT INTO inscripciones VALUES (19, 'DeclaracionRS', 'aceptada', '2020-02-01', null , 19, 3);
+INSERT INTO inscripciones VALUES (20, 'DeclaracionRS', 'aceptada', '2020-02-01', null , 20, 3);
 
 -- Excursiones
 
@@ -175,28 +175,28 @@ INSERT INTO excursiones VALUES (2, 'Descripcion de prueba2', '2020-09-07',  '22:
 INSERT INTO excursiones VALUES (3, 'Descripcion de prueba3', '2020-09-07',  '22:30', '17:00', 
 	'Prueba3', '2020-09-07', TRUE, '2', '1.0', 1);
 INSERT INTO excursiones VALUES (4, 'Descripcion de prueba4', '2020-09-07',  '22:30', '17:00', 
-	'Excursión exigente', '2020-09-07', TRUE, '2', '5.0', 1);
+	'Excursion exigente', '2020-09-07', TRUE, '2', '5.0', 1);
 INSERT INTO excursiones VALUES (5, 'Descripcion de prueba5', '2020-09-07',  '22:30', '17:00', 
-	'Excursión prueba UI', '2020-09-07', TRUE, '2', '1.0', 1);
+	'Excursion prueba UI', '2020-09-07', TRUE, '2', '1.0', 1);
 	
 	
-INSERT INTO excursiones VALUES (6, 'Excursión mía terminada 1', '2020-05-02',  '23:30', '17:00', 
-	'Excursión acabada 1 res1', '2020-05-03', TRUE, '2', '1.0', 1);
-INSERT INTO excursiones VALUES (7, 'Excursión mía terminada 2', '2020-05-01',  '09:58', '17:00', 
-	'Excursión acabada 2 res1', '2020-05-02', TRUE, '2', '1.0', 1);
+INSERT INTO excursiones VALUES (6, 'Excursion mia terminada 1', '2020-05-02',  '23:30', '17:00', 
+	'Excursion acabada 1 res1', '2020-05-03', TRUE, '2', '1.0', 1);
+INSERT INTO excursiones VALUES (7, 'Excursion mia terminada 2', '2020-05-01',  '09:58', '17:00', 
+	'Excursion acabada 2 res1', '2020-05-02', TRUE, '2', '1.0', 1);
 INSERT INTO excursiones VALUES (8, 'Descripcion de prueba6', '2020-09-07',  '22:30', '17:00', 
-	'Excursión acabada 3 res2', '2020-09-07', TRUE, '2', '1.0', 1);
+	'Excursion acabada 3 res2', '2020-09-07', TRUE, '2', '1.0', 1);
 	
 -- PeticionesExcursion
 
-INSERT INTO peticiones_excursion VALUES (1, 'Declaración1', 'aceptada', '2020-02-01', null , 3, 1);
-INSERT INTO peticiones_excursion VALUES (2, 'Declaración2', 'aceptada', '2020-02-01', null , 3, 2);
-INSERT INTO peticiones_excursion VALUES (3, 'Declaración3', 'pendiente', '2020-02-01', null , 1, 1);
+INSERT INTO peticiones_excursion VALUES (1, 'Declaracion1', 'aceptada', '2020-02-01', null , 3, 1);
+INSERT INTO peticiones_excursion VALUES (2, 'Declaracion2', 'aceptada', '2020-02-01', null , 3, 2);
+INSERT INTO peticiones_excursion VALUES (3, 'Declaracion3', 'pendiente', '2020-02-01', null , 1, 1);
 
-INSERT INTO peticiones_excursion VALUES (4, 'Declaración4', 'aceptada', '2020-02-01', null , 6, 1);
-INSERT INTO peticiones_excursion VALUES (5, 'Declaración5', 'aceptada', '2020-02-01', null , 7, 1);
-INSERT INTO peticiones_excursion VALUES (6, 'Declaración6', 'aceptada', '2020-02-01', null , 8, 2);
+INSERT INTO peticiones_excursion VALUES (4, 'Declaracion4', 'aceptada', '2020-02-01', null , 6, 1);
+INSERT INTO peticiones_excursion VALUES (5, 'Declaracion5', 'aceptada', '2020-02-01', null , 7, 1);
+INSERT INTO peticiones_excursion VALUES (6, 'Declaracion6', 'aceptada', '2020-02-01', null , 8, 2);
 
 -- Participaciones
 
-INSERT INTO participaciones VALUES (1, 'Declaración', 'aceptada', '2020-03-02', null, 7, 3);
+INSERT INTO participaciones VALUES (1, 'Declaracion', 'aceptada', '2020-03-02', null, 7, 3);

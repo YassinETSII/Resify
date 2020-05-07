@@ -17,43 +17,42 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.petclinic.model.Anciano;
 import org.springframework.samples.petclinic.model.Inscripcion;
 import org.springframework.samples.petclinic.model.Manager;
-import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 class InscripcionServiceTests {
 
 	@Autowired
 	protected InscripcionService	inscripcionService;
 
 	@Autowired
-	protected ManagerService	managerService;
-	
-	@Autowired
-	protected AncianoService	ancianoService;
-
+	protected ManagerService		managerService;
 
 	@Autowired
-	protected ResidenciaService	residenciaService;
+	protected AncianoService		ancianoService;
+
+	@Autowired
+	protected ResidenciaService		residenciaService;
 
 
 	@Test
 	void debeEncontrarInscripcionConIdCorrecto() {
 		Inscripcion i = this.inscripcionService.findInscripcionById(1);
-		Assertions.assertTrue(i.getDeclaracion().equals("Declaración1"));
+		Assertions.assertTrue(i.getDeclaracion().equals("Declaracion1"));
 	}
 
 	@Test
@@ -65,7 +64,7 @@ class InscripcionServiceTests {
 			basc.add(b);
 		}
 		Inscripcion ba = basc.get(0);
-		Assertions.assertTrue(ba.getDeclaracion().equals("Declaración1"));
+		Assertions.assertTrue(ba.getDeclaracion().equals("Declaracion1"));
 	}
 
 	@Test
@@ -79,40 +78,40 @@ class InscripcionServiceTests {
 		}
 
 		Inscripcion ba = basc.get(0);
-		Assertions.assertTrue(ba.getDeclaracion().equals("Declaración1"));
+		Assertions.assertTrue(ba.getDeclaracion().equals("Declaracion1"));
 	}
 
 	/*
 	 * @Test
-	 * 
+	 *
 	 * @Transactional public void debeCrearInscripcion() { Anciano a =
 	 * this.ancianoService.findAncianoById(5); Manager m =
 	 * this.managerService.findManagerById(3);
-	 * 
+	 *
 	 * Iterable<Inscripcion> bas = this.inscripcionService.findAllMineAnciano(a);
 	 * ArrayList<Inscripcion> basc = new ArrayList<Inscripcion>(); for (Inscripcion
 	 * b : bas) { basc.add(b); }
-	 * 
+	 *
 	 * int total = basc.size();
-	 * 
+	 *
 	 * Iterable<Residencia> res = this.residenciaService.findAllMine(m);
 	 * ArrayList<Residencia> ress = new ArrayList<Residencia>(); for (Residencia r :
 	 * res) { ress.add(r); }
-	 * 
+	 *
 	 * Inscripcion ba = new Inscripcion(); ba.setDeclaracion("Prueba");
 	 * ba.setFecha(new Date(System.currentTimeMillis() - 1));
 	 * ba.setEstado("pendiente"); ba.setJustificacion(null);
 	 * ba.setResidencia(ress.get(0));
-	 * 
+	 *
 	 * this.inscripcionService.saveInscripcion(ba);
-	 * 
+	 *
 	 * Iterable<Inscripcion> bas2 = this.inscripcionService.findAllMineAnciano(a);
 	 * ArrayList<Inscripcion> basc2 = new ArrayList<Inscripcion>(); for (Inscripcion
 	 * b2 : bas2) { basc2.add(b2); }
-	 * 
+	 *
 	 * //Comprueba que se ha añadido a las inscripcions del anciano
 	 * Assertions.assertTrue(basc2.size() == total + 1);
-	 * 
+	 *
 	 * //Comprueba que su id ya no es nulo Assertions.assertTrue(ba.getId() !=
 	 * null); }
 	 */
@@ -126,6 +125,5 @@ class InscripcionServiceTests {
 			this.inscripcionService.saveInscripcion(ba);
 		});
 	}
-	
 
 }
