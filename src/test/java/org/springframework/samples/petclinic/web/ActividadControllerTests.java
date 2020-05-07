@@ -84,6 +84,8 @@ class ActividadControllerTests {
 				.willReturn(this.man);
 		BDDMockito.given(this.authoritiesService.findAuthority(ActividadControllerTests.TEST_MANAGER_NOMBRE))
 				.willReturn("manager");
+		BDDMockito.given(this.managerService.findResidenciaByManagerUsername(ActividadControllerTests.TEST_MANAGER_NOMBRE))
+		.willReturn(this.resi);
 	}
 
 	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
@@ -95,7 +97,7 @@ class ActividadControllerTests {
 				.andExpect(MockMvcResultMatchers.view().name("actividades/actividadesList"));
 	}
 
-	@WithMockUser(authorities = "manager")
+	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades/new"))

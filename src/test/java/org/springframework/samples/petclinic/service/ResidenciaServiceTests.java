@@ -153,26 +153,6 @@ class ResidenciaServiceTests {
 		Assertions.assertTrue(ra.getId() != null);
 	}
 
-	/*
-	 * @Test
-	 *
-	 * @Transactional public void
-	 * debeLanzarExcepcionCreandoResidenciaManagerConUna() { Manager m =
-	 * this.managerService.findManagerById(3);
-	 *
-	 * Residencia ra = new Residencia(); LocalTime horaApertura = LocalTime.of(07,
-	 * 00); LocalTime horaCierre = LocalTime.of(21, 00);
-	 * ra.setAceptaDependenciaGrave(false); ra.setAforo(100);
-	 * ra.setCorreo("residencia1@mail.es");
-	 * ra.setDescripcion("Descripcion de prueba"); ra.setDireccion("Direccion");
-	 * ra.setEdadMaxima(70); ra.setHoraApertura(horaApertura);
-	 * ra.setHoraCierre(horaCierre); ra.setMasInfo("http://www.resi1.com");
-	 * ra.setNombre("Reidencia 1"); ra.setTelefono("987654321"); ra.setManager(m);
-	 *
-	 * Assertions.assertThrows(IllegalArgumentException.class, () -> {
-	 * this.residenciaService.saveResidencia(ra); }); }
-	 */
-
 	@Test
 	@Transactional
 	public void debeLanzarExcepcionCreandoResidenciaEnBlanco() {

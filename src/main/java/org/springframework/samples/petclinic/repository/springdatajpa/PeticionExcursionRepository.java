@@ -26,6 +26,10 @@ public interface PeticionExcursionRepository extends CrudRepository<PeticionExcu
 	@Query("SELECT count(peticiones.id) FROM PeticionExcursion peticiones WHERE peticiones.excursion LIKE :excursion AND peticiones.residencia.manager LIKE :manager ")
 	Integer countPeticionesByExcursion(@Param("excursion") Excursion excursion, @Param("manager") Manager manager)
 			throws DataAccessException;
+	
+	@Query("SELECT count(peticiones.id) FROM PeticionExcursion peticiones WHERE peticiones.excursion LIKE :excursion AND peticiones.residencia.manager LIKE :manager AND peticiones.estado = 'aceptada'")
+	Integer countPeticionesAceptadasByExcursion(@Param("excursion") Excursion excursion, @Param("manager") Manager manager)
+			throws DataAccessException;
 
 	
 }

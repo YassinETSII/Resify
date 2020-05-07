@@ -17,6 +17,7 @@ import org.springframework.samples.petclinic.model.BuenaAccion;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.BuenaAccionService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.service.ResidenciaService;
@@ -47,6 +48,9 @@ class BuenaAccionControllerTests {
 	
 	@MockBean
 	private ResidenciaService			residenciaService;
+	
+	@MockBean
+	private AuthoritiesService			authoritiesService;
 
 	@Autowired
 	private MockMvc					mockMvc;
@@ -72,6 +76,10 @@ class BuenaAccionControllerTests {
 		this.buenaAccionService.saveBuenaAccion(this.ba);
 		BDDMockito.given(this.buenaAccionService.findBuenaAccionById(BuenaAccionControllerTests.TEST_BUENA_ACCION_ID)).willReturn(this.ba);
 		BDDMockito.given(this.managerService.findManagerByUsername(BuenaAccionControllerTests.TEST_MANAGER_NOMBRE)).willReturn(this.man);
+		BDDMockito.given(this.authoritiesService.findAuthority(BuenaAccionControllerTests.TEST_MANAGER_NOMBRE))
+		.willReturn("manager");
+		BDDMockito.given(this.managerService.findResidenciaByManagerUsername(BuenaAccionControllerTests.TEST_MANAGER_NOMBRE))
+		.willReturn(this.resi);
 	}
 
 	@WithMockUser(username = "manager1")
@@ -81,7 +89,7 @@ class BuenaAccionControllerTests {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/buenas-acciones")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("buenasAcciones/buenasAccionesList"));
 	}
 
-	@WithMockUser(authorities = "manager")
+	@WithMockUser(username = BuenaAccionControllerTests.TEST_MANAGER_NOMBRE)
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/buenas-acciones/new")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("buenasAcciones/createOrUpdateBuenaAccionForm"))

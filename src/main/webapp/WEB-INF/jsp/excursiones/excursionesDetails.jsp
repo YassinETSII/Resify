@@ -90,5 +90,30 @@
 			<td><c:out value="NO TIENE UNA RESIDENCIA QUE INSCRIBIR" /></td>
 		</c:if>
 	</security:authorize>
+	
+	<security:authorize access="hasAuthority('manager')">
+		<c:if test="${hasResidencia }">
+			<c:if test="${!hasFeedback}">
+				<c:if test="${asistida}">
+				<spring:url
+					value="/excursiones/{excursionId}/feedbacks/new"
+					var="editUrl">
+					<spring:param name="excursionId" value="${excursion.id}" />
+				</spring:url>
+				<br/>
+				<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Dar feedback</a>
+				</c:if>
+			</c:if>
+
+			<c:if test="${hasFeedback}">
+				<br/>
+				<td><c:out value="YA HA DADO FEEDBACK DE ESTA EXCURSIÓN" /></td>
+			</c:if>
+		</c:if>
+
+		<c:if test="${!hasResidencia}">
+			<td><c:out value="NO TIENE UNA RESIDENCIA QUE INSCRIBIR" /></td>
+		</c:if>
+	</security:authorize>
 
 </resify:layout>

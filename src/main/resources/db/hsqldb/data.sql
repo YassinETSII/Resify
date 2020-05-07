@@ -1,12 +1,6 @@
 -- One admin user, named admin1 with passwor 4dm1n and authority admin
 INSERT INTO users(username,password,enabled) VALUES ('admin1','4dm1n',TRUE);
 INSERT INTO authorities VALUES ('admin1','admin');
--- One owner user, named owner1 with passwor 0wn3r
-INSERT INTO users(username,password,enabled) VALUES ('owner1','0wn3r',TRUE);
-INSERT INTO authorities VALUES ('owner1','owner');
--- One vet user, named vet1 with passwor v3t
-INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
-INSERT INTO authorities VALUES ('vet1','veterinarian');
 
 INSERT INTO users(username,password,enabled) VALUES ('organizador1','0rg4n1z4d0r',TRUE);
 INSERT INTO authorities VALUES ('organizador1','organizador');
@@ -14,8 +8,8 @@ INSERT INTO authorities VALUES ('organizador1','organizador');
 INSERT INTO users(username,password,enabled) VALUES ('organizador2','0rg4n1z4d0r',TRUE);
 INSERT INTO authorities VALUES ('organizador2','organizador');
 
-INSERT INTO organizadores VALUES (1, 'Fernández', 'Juan', 'Prueba1', 'Prueba1', 'organizador1');
-INSERT INTO organizadores VALUES (2,  'Limón', 'Maria', 'Prueba2', 'Prueba2', 'organizador2');
+INSERT INTO organizadores VALUES (1, 'Fernandez', 'Juan', 'Prueba1', 'Prueba1', 'organizador1');
+INSERT INTO organizadores VALUES (2,  'Limon', 'Maria', 'Prueba2', 'Prueba2', 'organizador2');
 	
 	
 -- Managers
@@ -32,12 +26,12 @@ INSERT INTO authorities VALUES ('manager3','manager');
 INSERT INTO users(username,password,enabled) VALUES ('manager4','manager4',TRUE);
 INSERT INTO authorities VALUES ('manager4','manager');
 
-INSERT INTO managers VALUES (3, 'Rodríguez', 'Rosa', 'Prueba1', 'Prueba1', 'manager1');
-INSERT INTO managers VALUES (4, 'Domínguez', 'Carlos', 'Prueba2', 'Prueba2', 'manager2');
-INSERT INTO managers VALUES (8, 'Jiménez', 'Laura', 'Prueba4', 'Prueba4', 'manager4');
+INSERT INTO managers VALUES (3, 'Rodriguez', 'Rosa', 'Prueba1', 'Prueba1', 'manager1');
+INSERT INTO managers VALUES (4, 'Dominguez', 'Carlos', 'Prueba2', 'Prueba2', 'manager2');
+INSERT INTO managers VALUES (8, 'Jimenez', 'Laura', 'Prueba4', 'Prueba4', 'manager4');
 
--- Mánager sin residencia
-INSERT INTO managers VALUES (7, 'Sánchez', 'Roberto', 'Pureba3', 'Prueba3', 'manager3');
+-- Manager sin residencia
+INSERT INTO managers VALUES (7, 'Sanchez', 'Roberto', 'Pureba3', 'Prueba3', 'manager3');
 
 -- Residencias
 
@@ -132,7 +126,7 @@ INSERT INTO authorities VALUES ('ancianoRS10','anciano');
 INSERT INTO ancianos VALUES (20, 'Plaza', 'Sin', 'PresentacionRS', 69, false, 'ancianoRS10');
 
 
--- Anciano sin inscripción
+-- Anciano sin inscripcion
 INSERT INTO users(username,password,enabled) VALUES ('joselitoanca','joselitoanca',TRUE);
 INSERT INTO authorities VALUES ('joselitoanca','anciano');
 
@@ -181,9 +175,17 @@ INSERT INTO excursiones VALUES (2, 'Descripcion de prueba2', '2020-09-07',  '22:
 INSERT INTO excursiones VALUES (3, 'Descripcion de prueba3', '2020-09-07',  '22:30', '17:00', 
 	'Prueba3', '2020-09-07', TRUE, '2', '1.0', 1);
 INSERT INTO excursiones VALUES (4, 'Descripcion de prueba4', '2020-09-07',  '22:30', '17:00', 
-	'Excursión exigente', '2020-09-07', TRUE, '2', '5.0', 1);
+	'Excursion exigente', '2020-09-07', TRUE, '2', '5.0', 1);
 INSERT INTO excursiones VALUES (5, 'Descripcion de prueba5', '2020-09-07',  '22:30', '17:00', 
-	'Excursión prueba UI', '2020-09-07', TRUE, '2', '1.0', 1);
+	'Excursion prueba UI', '2020-09-07', TRUE, '2', '1.0', 1);
+	
+	
+INSERT INTO excursiones VALUES (6, 'Excursion mia terminada 1', '2020-05-02',  '23:30', '17:00', 
+	'Excursion acabada 1 res1', '2020-05-03', TRUE, '2', '1.0', 1);
+INSERT INTO excursiones VALUES (7, 'Excursion mia terminada 2', '2020-05-01',  '09:58', '17:00', 
+	'Excursion acabada 2 res1', '2020-05-02', TRUE, '2', '1.0', 1);
+INSERT INTO excursiones VALUES (8, 'Descripcion de prueba6', '2020-09-07',  '22:30', '17:00', 
+	'Excursion acabada 3 res2', '2020-09-07', TRUE, '2', '1.0', 1);
 	
 -- PeticionesExcursion
 
@@ -191,60 +193,10 @@ INSERT INTO peticiones_excursion VALUES (1, 'Declaracion1', 'aceptada', '2020-02
 INSERT INTO peticiones_excursion VALUES (2, 'Declaracion2', 'aceptada', '2020-02-01', null , 3, 2);
 INSERT INTO peticiones_excursion VALUES (3, 'Declaracion3', 'pendiente', '2020-02-01', null , 1, 1);
 
+INSERT INTO peticiones_excursion VALUES (4, 'Declaracion4', 'aceptada', '2020-02-01', null , 6, 1);
+INSERT INTO peticiones_excursion VALUES (5, 'Declaracion5', 'aceptada', '2020-02-01', null , 7, 1);
+INSERT INTO peticiones_excursion VALUES (6, 'Declaracion6', 'aceptada', '2020-02-01', null , 8, 2);
+
 -- Participaciones
 
 INSERT INTO participaciones VALUES (1, 'Declaracion', 'aceptada', '2020-03-02', null, 7, 3);
-
-INSERT INTO vets VALUES (1, 'James', 'Carter');
-INSERT INTO vets VALUES (2, 'Helen', 'Leary');
-INSERT INTO vets VALUES (3, 'Linda', 'Douglas');
-INSERT INTO vets VALUES (4, 'Rafael', 'Ortega');
-INSERT INTO vets VALUES (5, 'Henry', 'Stevens');
-INSERT INTO vets VALUES (6, 'Sharon', 'Jenkins');
-
-INSERT INTO specialties VALUES (1, 'radiology');
-INSERT INTO specialties VALUES (2, 'surgery');
-INSERT INTO specialties VALUES (3, 'dentistry');
-
-INSERT INTO vet_specialties VALUES (2, 1);
-INSERT INTO vet_specialties VALUES (3, 2);
-INSERT INTO vet_specialties VALUES (3, 3);
-INSERT INTO vet_specialties VALUES (4, 2);
-INSERT INTO vet_specialties VALUES (5, 1);
-
-INSERT INTO types VALUES (1, 'cat');
-INSERT INTO types VALUES (2, 'dog');
-INSERT INTO types VALUES (3, 'lizard');
-INSERT INTO types VALUES (4, 'snake');
-INSERT INTO types VALUES (5, 'bird');
-INSERT INTO types VALUES (6, 'hamster');
-
-INSERT INTO owners VALUES (1, 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023', 'owner1');
-INSERT INTO owners VALUES (2, 'Betty', 'Davis', '638 Cardinal Ave.', 'Sun Prairie', '6085551749', 'owner1');
-INSERT INTO owners VALUES (3, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'McFarland', '6085558763', 'owner1');
-INSERT INTO owners VALUES (4, 'Harold', 'Davis', '563 Friendly St.', 'Windsor', '6085553198', 'owner1');
-INSERT INTO owners VALUES (5, 'Peter', 'McTavish', '2387 S. Fair Way', 'Madison', '6085552765', 'owner1');
-INSERT INTO owners VALUES (6, 'Jean', 'Coleman', '105 N. Lake St.', 'Monona', '6085552654', 'owner1');
-INSERT INTO owners VALUES (7, 'Jeff', 'Black', '1450 Oak Blvd.', 'Monona', '6085555387', 'owner1');
-INSERT INTO owners VALUES (8, 'Maria', 'Escobito', '345 Maple St.', 'Madison', '6085557683', 'owner1');
-INSERT INTO owners VALUES (9, 'David', 'Schroeder', '2749 Blackhawk Trail', 'Madison', '6085559435', 'owner1');
-INSERT INTO owners VALUES (10, 'Carlos', 'Estaban', '2335 Independence La.', 'Waunakee', '6085555487', 'owner1');
-
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (1, 'Leo', '2010-09-07', 1, 1);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (2, 'Basil', '2012-08-06', 6, 2);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (3, 'Rosy', '2011-04-17', 2, 3);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (4, 'Jewel', '2010-03-07', 2, 3);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (5, 'Iggy', '2010-11-30', 3, 4);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (6, 'George', '2010-01-20', 4, 5);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (7, 'Samantha', '2012-09-04', 1, 6);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (8, 'Max', '2012-09-04', 1, 6);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (9, 'Lucky', '2011-08-06', 5, 7);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (10, 'Mulligan', '2007-02-24', 2, 8);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (11, 'Freddy', '2010-03-09', 5, 9);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (12, 'Lucky', '2010-06-24', 2, 10);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (13, 'Sly', '2012-06-08', 1, 10);
-
-INSERT INTO visits(id,pet_id,visit_date,description) VALUES (1, 7, '2013-01-01', 'rabies shot');
-INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02', 'rabies shot');
-INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
-INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
