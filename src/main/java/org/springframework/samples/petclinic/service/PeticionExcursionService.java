@@ -69,5 +69,10 @@ public class PeticionExcursionService {
 	public int countPeticionesByExcursion(Excursion excursion, Manager manager) throws DataAccessException {
 		return peticionExcursionRepository.countPeticionesByExcursion(excursion, manager);
 	}
+	
+	@Transactional(readOnly = true)
+	public int countPeticionesByExcursionAceptada(Excursion excursion, Manager manager) throws DataAccessException {
+		return peticionExcursionRepository.countPeticionesAceptadasByExcursion(excursion, manager);
+	}
 
 }

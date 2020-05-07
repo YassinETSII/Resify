@@ -28,6 +28,8 @@ import javax.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.BuenaAccion;
@@ -41,6 +43,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 class ResidenciaServiceTests {
 
 	@Autowired
@@ -67,8 +70,6 @@ class ResidenciaServiceTests {
 
 	@Test
 	void debeEncontrarResidenciaConIdCorrecto() {
-		LocalTime horaApertura = LocalTime.of(07, 00);
-		LocalTime horaCierre = LocalTime.of(21, 00);
 		Residencia re = this.residenciaService.findResidenciaById(1);
 		Assertions.assertTrue(re.getAceptaDependenciaGrave() == false);
 		Assertions.assertTrue(re.getAforo().equals(100));
@@ -76,8 +77,6 @@ class ResidenciaServiceTests {
 		Assertions.assertTrue(re.getDescripcion().equals("Descripcion de prueba"));
 		Assertions.assertTrue(re.getDireccion().equals("Direccion"));
 		Assertions.assertTrue(re.getEdadMaxima().equals(70));
-		Assertions.assertTrue(re.getHoraApertura().equals(horaApertura));
-		Assertions.assertTrue(re.getHoraCierre().equals(horaCierre));
 	}
 
 	@Test
@@ -153,26 +152,6 @@ class ResidenciaServiceTests {
 		Assertions.assertTrue(rres2 != null);
 		Assertions.assertTrue(ra.getId() != null);
 	}
-
-	/*
-	 * @Test
-	 *
-	 * @Transactional public void
-	 * debeLanzarExcepcionCreandoResidenciaManagerConUna() { Manager m =
-	 * this.managerService.findManagerById(3);
-	 *
-	 * Residencia ra = new Residencia(); LocalTime horaApertura = LocalTime.of(07,
-	 * 00); LocalTime horaCierre = LocalTime.of(21, 00);
-	 * ra.setAceptaDependenciaGrave(false); ra.setAforo(100);
-	 * ra.setCorreo("residencia1@mail.es");
-	 * ra.setDescripcion("Descripcion de prueba"); ra.setDireccion("Direccion");
-	 * ra.setEdadMaxima(70); ra.setHoraApertura(horaApertura);
-	 * ra.setHoraCierre(horaCierre); ra.setMasInfo("http://www.resi1.com");
-	 * ra.setNombre("Reidencia 1"); ra.setTelefono("987654321"); ra.setManager(m);
-	 *
-	 * Assertions.assertThrows(IllegalArgumentException.class, () -> {
-	 * this.residenciaService.saveResidencia(ra); }); }
-	 */
 
 	@Test
 	@Transactional

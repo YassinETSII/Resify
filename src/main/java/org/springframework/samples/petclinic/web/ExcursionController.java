@@ -1,21 +1,8 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -31,9 +18,11 @@ import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.service.AncianoService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ExcursionService;
+import org.springframework.samples.petclinic.service.FeedbackService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.service.OrganizadorService;
 import org.springframework.samples.petclinic.service.PeticionExcursionService;
+import org.springframework.samples.petclinic.service.ResidenciaService;
 import org.springframework.samples.petclinic.web.validators.ExcursionValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,12 +36,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * @author Juergen Hoeller
- * @author Ken Krebs
- * @author Arjen Poutsma
- * @author Michael Isvy
- */
 @Controller
 @RequestMapping("/excursiones")
 public class ExcursionController {
@@ -73,7 +56,12 @@ public class ExcursionController {
 
 	@Autowired
 	private AuthoritiesService authoritiesService;
-
+	
+	@Autowired
+	private ResidenciaService residenciaService;
+	
+	@Autowired
+	private FeedbackService feedbackService;
 
 	@Autowired
 	private PeticionExcursionService peticionExcursionService;
@@ -105,6 +93,19 @@ public class ExcursionController {
 		} else if (authority.equals("anciano")) {
 			Anciano anciano = ancianoService.findAncianoByUsername(p.getName());
 			excursiones = excursionService.findAllMineAnciano(anciano);
+		}
+		model.put("excursiones", excursiones);
+		return "excursiones/excursionesList";
+	}
+	
+	@GetMapping("/feedback")
+	public String listExcursionesAsisitidas(Map<String, Object> model, Principal p) {
+		String authority = authoritiesService.findAuthority(p.getName());
+		Iterable<Excursion> excursiones = new ArrayList<>();
+		if (authority.equals("manager")) {
+			Manager manager = managerService.findManagerByUsername(p.getName());
+			Residencia res = residenciaService.findMine(manager);
+			excursiones = excursionService.findAllGone(res);
 		}
 		model.put("excursiones", excursiones);
 		return "excursiones/excursionesList";
@@ -175,13 +176,17 @@ public class ExcursionController {
 		else if (authority.equals("manager")) {
 			Manager manager = managerService.findManagerByUserName(p.getName());
 			Integer peticiones = peticionExcursionService.countPeticionesByExcursion(excursion, manager);
+			Integer feedbacks = feedbackService.countFeedbacksByExcursion(excursion, manager);
 			Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
+			Integer peticionesAceptadas = peticionExcursionService.countPeticionesByExcursionAceptada(excursion, manager);
 			if (!excursion.isFinalMode()) {
 				mav = new ModelAndView("exception");
 				return mav;
 			}
 			mav.addObject("hasPeticion", peticiones != 0);
 			mav.addObject("hasResidencia", residencia != null);
+			mav.addObject("hasFeedback", feedbacks != 0);
+			mav.addObject("asistida",  excursion.getFechaFin().before(Date.valueOf(LocalDate.now())) && peticionesAceptadas.equals(1));
 		}
 		
 		else if (authority.equals("anciano")) {

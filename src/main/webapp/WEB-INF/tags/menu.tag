@@ -69,6 +69,18 @@
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Peticiones de excursion</span>
 					</petclinic:menuItem>
+					
+					<petclinic:menuItem active="${name eq 'residenciasNoParticipantes'}"
+						url="/residencias/no-participantes" title="find residencias no participantes">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Residencias no participantes</span>
+					</petclinic:menuItem>
+					
+					<petclinic:menuItem active="${name eq 'feedbacks'}"
+						url="/feedbacks" title="find feedbacks">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Feedback de excursiones</span>
+					</petclinic:menuItem>
 				</sec:authorize>
 
 				<!-- 				------------------------------------------------------------ -->
@@ -90,6 +102,12 @@
 						url="/peticiones-excursion" title="find peticiones excursion">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Peticiones excursion</span>
+					</petclinic:menuItem>
+					
+					<petclinic:menuItem active="${name eq 'feedbacks'}"
+						url="/excursiones/feedback" title="write feedbacks">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Feedback para organizadores</span>
 					</petclinic:menuItem>
 
 					<petclinic:menuItem active="${name eq 'residencia'}"
