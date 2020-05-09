@@ -1,8 +1,14 @@
 
 package org.springframework.samples.petclinic.web;
 
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import java.time.LocalTime;
-import java.util.Date;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +24,6 @@ import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.model.Anciano;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Organizador;
-import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.ResidenciaService;
 import org.springframework.samples.petclinic.service.AncianoService;
@@ -71,7 +76,8 @@ class ResidenciaControllerTest {
 	User							userOrganiza			= new User();
 	User							userAnciano				= new User();
 	
-
+	private LocalTime horini = LocalTime.of(9, 0);
+	private LocalTime horfin = LocalTime.of(20, 0);
 
 	@BeforeEach
 	void setup() {
@@ -127,45 +133,145 @@ class ResidenciaControllerTest {
 	  .andExpect(MockMvcResultMatchers.view().name("residencias/residenciasList")); 
 	  }
 	  
-
-	/*
-	 * @WithMockUser(roles = "manager")
-	 * 
-	 * @Test void testProcessCreationFormSuccess() throws Exception {
-	 * this.mockMvc.perform(MockMvcRequestBuilders.post("/residencias/new").param(
-	 * "aceptaDependenciaGrave", "false").param("descripcion",
-	 * "Prueba descrip").with(SecurityMockMvcRequestPostProcessors.csrf()).param(
-	 * "fecha", "2020/01/01"))
-	 * .andExpect(MockMvcResultMatchers.status().is3xxRedirection()); }
-	 * 
-	 * @WithMockUser(authorities = "manager")
-	 * 
-	 * @Test void testProcessCreationFormHasErrors() throws Exception {
-	 * this.mockMvc.perform(MockMvcRequestBuilders.post("/residencias/new").param(
-	 * "titulo",
-	 * "Prueba").with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha",
-	 * "2020/01/01").param("descripcion", ""))
-	 * .andExpect(MockMvcResultMatchers.model().attributeHasErrors("residencia")).
-	 * andExpect(MockMvcResultMatchers.status().isOk()).andExpect(
-	 * MockMvcResultMatchers.view().name("residencias/createOrUpdateResidenciaForm")
-	 * ); }
-	 * 
-	 * @WithMockUser(username = ResidenciaControllerTest.TEST_MANAGER_NOMBRE)
-	 * 
-	 * @Test void testShowResidencia() throws Exception {
-	 * this.mockMvc.perform(MockMvcRequestBuilders.get(
-	 * "/residencias/{residenciaId}",
-	 * ResidenciaControllerTest.TEST_RESIDENCIA_ID)).andExpect(MockMvcResultMatchers
-	 * .status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists(
-	 * "residencia"))
-	 * .andExpect(MockMvcResultMatchers.model().attribute("residencia",
-	 * Matchers.hasProperty("descripcion", Matchers.is("Prueba desc"))))
-	 * .andExpect(MockMvcResultMatchers.model().attribute("residencia",
-	 * Matchers.hasProperty("titulo",
-	 * Matchers.is("Prueba")))).andExpect(MockMvcResultMatchers.model().attribute(
-	 * "residencia", Matchers.hasProperty("fecha", Matchers.is(this.hoy))))
-	 * .andExpect(MockMvcResultMatchers.view().name("residencias/residenciasDetails"
-	 * )); }
-	 */
-
+	  @WithMockUser(username = ResidenciaControllerTest.TEST_MANAGER_NOMBRE)
+	  @Test 
+	  void testProcessFindTopFormSuccess() throws Exception {
+	  this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/top"))
+	  .andExpect(MockMvcResultMatchers.status().isOk())
+	  .andExpect(MockMvcResultMatchers.view().name("residencias/residenciasList")); 
+	  }
+	  
+	  @WithMockUser(username = ResidenciaControllerTest.TEST_MANAGER_NOMBRE)
+	  @Test 
+	  void testProcessFindNoParticipantesFormSuccess() throws Exception {
+	  this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/no-participantes"))
+	  .andExpect(MockMvcResultMatchers.status().isOk())
+	  .andExpect(MockMvcResultMatchers.view().name("residencias/residenciasList")); 
+	  }
+	  
+	  @WithMockUser(authorities = "manager")
+		@Test
+		void testInitCreationForm() throws Exception {
+			this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/new"))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.view().name("residencias/createOrUpdateResidenciaForm"))
+			.andExpect(MockMvcResultMatchers.model().attributeExists("residencia"));
+		}
+	  
+		@WithMockUser(username = ResidenciaControllerTest.TEST_MANAGER_NOMBRE)
+		@Test
+		void testProcessCreationFormSuccess() throws Exception {
+			this.mockMvc.perform(MockMvcRequestBuilders.post("/residencias/new").with(csrf())
+					.param("nombre", "residee")
+					.param("direccion", "direc")
+					.param("descripcion", "descp")
+					.param("aforo", "100")
+					.param("masInfo", "")
+					.param("telefono", "674567123")
+					.param("correo", "resi@gmail.com")
+					.param("horaApertura", String.valueOf(this.horini))
+					.param("horaCierre", String.valueOf(this.horfin))
+					.param("edadMaxima", "82")
+					.param("aceptaDependenciaGrave", "true"))
+					.andExpect(MockMvcResultMatchers.status().is3xxRedirection());			
+			}
+		
+		@WithMockUser(username = ResidenciaControllerTest.TEST_MANAGER_NOMBRE)
+		@Test
+		void testProcessCreationFormHasErrors() throws Exception {
+			this.mockMvc.perform(MockMvcRequestBuilders.post("/residencias/new").with(csrf())
+					.param("nombre", "residee")
+					.param("direccion", "direc")
+					.param("descripcion", "")
+					.param("aforo", "100")
+					.param("masInfo", "")
+					.param("telefono", "674567123")
+					.param("correo", "resi@gmail.com")
+					.param("horaApertura", String.valueOf(this.horini))
+					.param("horaCierre", String.valueOf(this.horfin))
+					.param("edadMaxima", "82")
+					.param("aceptaDependenciaGrave", "true"))
+					.andExpect(MockMvcResultMatchers.model().attributeHasErrors("residencia"))
+					.andExpect(MockMvcResultMatchers.status().isOk())
+					.andExpect(MockMvcResultMatchers.view().name("residencias/createOrUpdateResidenciaForm"));
+			}
+		
+		@WithMockUser(username = ResidenciaControllerTest.TEST_MANAGER_NOMBRE)
+		@Test
+		void testShowResidencia() throws Exception {
+			this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/{residenciaId}", ResidenciaControllerTest.TEST_RESIDENCIA_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("residencia"))
+				.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("nombre", Matchers.is("Reidencia 1"))))
+				.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("direccion", Matchers.is("Direccion"))))
+				.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("descripcion", Matchers.is("Descripcion de prueba"))))
+				.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("aforo", Matchers.is(100))))
+				.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("masInfo", Matchers.is("http://www.resi1.com"))))
+				.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("telefono", Matchers.is("987654321"))))
+				.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("correo", Matchers.is("residencia1@mail.es"))))
+				.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("horaCierre", Matchers.is(LocalTime.of(21, 00)))))
+				.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("horaApertura", Matchers.is(LocalTime.of(07, 00)))))
+				.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("edadMaxima", Matchers.is(76))))
+				.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("aceptaDependenciaGrave", Matchers.is(false))))	
+				.andExpect(MockMvcResultMatchers.view().name("residencias/residenciasDetails"));
+		}
+		
+		@WithMockUser(username = ResidenciaControllerTest.TEST_MANAGER_NOMBRE)
+		@Test
+		void testInitUpdateExcursionForm() throws Exception {
+			mockMvc.perform(get("/residencias/{residenciaId}/edit", ResidenciaControllerTest.TEST_RESIDENCIA_ID))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(model().attributeExists("residencia"))
+				.andExpect(model().attribute("residencia", hasProperty("nombre", is("Reidencia 1"))))
+				.andExpect(model().attribute("residencia", hasProperty("direccion", is("Direccion"))))
+				.andExpect(model().attribute("residencia", hasProperty("descripcion", is("Descripcion de prueba"))))
+				.andExpect(model().attribute("residencia", hasProperty("aforo", is(100))))
+				.andExpect(model().attribute("residencia", hasProperty("masInfo", is("http://www.resi1.com"))))
+				.andExpect(model().attribute("residencia", hasProperty("telefono", is("987654321"))))
+				.andExpect(model().attribute("residencia", hasProperty("correo", is("residencia1@mail.es"))))
+				.andExpect(model().attribute("residencia", hasProperty("horaCierre", is(LocalTime.of(21, 00)))))
+				.andExpect(model().attribute("residencia", hasProperty("horaApertura", is(LocalTime.of(07, 00)))))	
+				.andExpect(model().attribute("residencia", hasProperty("edadMaxima", is(76))))
+				.andExpect(model().attribute("residencia", hasProperty("aceptaDependenciaGrave", is(false))))
+				.andExpect(view().name("residencias/createOrUpdateResidenciaForm"));
+		}
+		
+		@WithMockUser(username = ResidenciaControllerTest.TEST_MANAGER_NOMBRE)
+		@Test
+		void testProcessUpdateFormSuccess() throws Exception {
+			this.mockMvc.perform(MockMvcRequestBuilders.post("/residencias/{residenciaId}/edit", ResidenciaControllerTest.TEST_RESIDENCIA_ID)
+					.with(csrf())
+					.param("nombre", "residee")
+					.param("direccion", "direc")
+					.param("descripcion", "desc")
+					.param("aforo", "100")
+					.param("masInfo", "")
+					.param("telefono", "674567123")
+					.param("correo", "resi@gmail.com")
+					.param("horaApertura", String.valueOf(this.horini))
+					.param("horaCierre", String.valueOf(this.horfin))
+					.param("edadMaxima", "82")
+					.param("aceptaDependenciaGrave", "true"))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		}
+		
+		@WithMockUser(username = ResidenciaControllerTest.TEST_MANAGER_NOMBRE)
+		@Test
+		void testProcessUpdateFormHasErrors() throws Exception {
+			this.mockMvc.perform(MockMvcRequestBuilders.post("/residencias/{residenciaId}/edit", ResidenciaControllerTest.TEST_RESIDENCIA_ID)
+					.with(csrf())
+					.param("nombre", "residee")
+					.param("direccion", "direc")
+					.param("descripcion", "")
+					.param("aforo", "100")
+					.param("masInfo", "")
+					.param("telefono", "")
+					.param("correo", "resi@gmail.com")
+					.param("horaApertura", String.valueOf(this.horini))
+					.param("horaCierre", String.valueOf(this.horfin))
+					.param("edadMaxima", "82")
+					.param("aceptaDependenciaGrave", "false"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("residencia"))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.view().name("residencias/createOrUpdateResidenciaForm"));		
+		}			
 }
