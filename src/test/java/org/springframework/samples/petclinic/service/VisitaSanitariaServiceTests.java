@@ -37,6 +37,7 @@ import com.google.common.collect.Iterables;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @AutoConfigureTestDatabase(replace = Replace.NONE)
+@Transactional
 class VisitaSanitariaServiceTests {
 
 	@Autowired

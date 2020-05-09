@@ -67,9 +67,9 @@ class ResidenciaServiceTests {
 
 	@Autowired
 	protected PeticionExcursionService	peticionExcursionService;
-	
+
 	@Autowired
-	protected AncianoService	ancianoService;
+	protected AncianoService			ancianoService;
 
 
 	@Test
@@ -501,11 +501,9 @@ class ResidenciaServiceTests {
 		}
 		Assertions.assertTrue(r2EnNoParticipantes);
 	}
-	
+
 	@Test
 	void debeEncontrarResidenciaPorAnciano() {
-		LocalTime horaApertura = LocalTime.of(07, 00);
-		LocalTime horaCierre = LocalTime.of(21, 00);
 		Anciano anciano = this.ancianoService.findAncianoById(7);
 		Residencia residencia = this.residenciaService.findResidenciaByAnciano(anciano);
 		Assertions.assertTrue(residencia.getAceptaDependenciaGrave() == false);
@@ -514,8 +512,6 @@ class ResidenciaServiceTests {
 		Assertions.assertTrue(residencia.getDescripcion().equals("Descripcion de prueba"));
 		Assertions.assertTrue(residencia.getDireccion().equals("Direccion"));
 		Assertions.assertTrue(residencia.getEdadMaxima().equals(70));
-		Assertions.assertTrue(residencia.getHoraApertura().equals(horaApertura));
-		Assertions.assertTrue(residencia.getHoraCierre().equals(horaCierre));
 	}
 
 }

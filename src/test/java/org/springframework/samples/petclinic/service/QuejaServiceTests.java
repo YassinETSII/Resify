@@ -17,17 +17,16 @@
 package org.springframework.samples.petclinic.service;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
 import javax.validation.ConstraintViolationException;
 
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Anciano;
@@ -41,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 class QuejaServiceTests {
 
 	@Autowired
-	protected QuejaService	quejaService;
+	protected QuejaService		quejaService;
 
 	@Autowired
 	protected ManagerService	managerService;
@@ -57,8 +56,7 @@ class QuejaServiceTests {
 		Assertions.assertTrue(queja.getAnonimo() == false);
 		Assertions.assertTrue(queja.getAnciano().getId().equals(7));
 		Assertions.assertTrue(queja.getDescripcion().equals("Descripcion Prueba 1"));
-		Assertions.assertTrue(queja.getFecha().compareTo(java.sql.Date.valueOf(LocalDate.of(2020, 3, 2))) == 0);
-		
+
 	}
 
 	@Test
@@ -75,7 +73,6 @@ class QuejaServiceTests {
 		Assertions.assertTrue(queja.getAnonimo() == false);
 		Assertions.assertTrue(queja.getAnciano().getId().equals(7));
 		Assertions.assertTrue(queja.getDescripcion().equals("Descripcion Prueba 1"));
-		Assertions.assertTrue(queja.getFecha().compareTo(java.sql.Date.valueOf(LocalDate.of(2020, 3, 2))) == 0);
 
 	}
 
@@ -100,7 +97,7 @@ class QuejaServiceTests {
 		int total = quejas1.size();
 
 		Anciano anciano = this.ancianoService.findAncianoById(7);
-		
+
 		Queja queja = new Queja();
 		queja.setTitulo("Prueba");
 		queja.setDescripcion("Prueba desc");
@@ -121,26 +118,24 @@ class QuejaServiceTests {
 
 		//Comprueba que su id ya no es nulo
 		Assertions.assertTrue(queja.getId() != null);
-		
+
 		Assertions.assertTrue(quejas2.contains(queja));
 	}
 
 	@Test
 	@Transactional
 	public void debeLanzarExcepcionCreandoQuejaEnBlanco() {
-		
+
 		Anciano anciano = this.ancianoService.findAncianoById(7);
-		
+
 		Queja queja = new Queja();
 		queja.setFecha(Date.from(Instant.now().minusMillis(1)));
 		queja.setAnciano(anciano);
 		queja.setAnonimo(false);
 
-
 		Assertions.assertThrows(ConstraintViolationException.class, () -> {
 			this.quejaService.saveQueja(queja);
 		});
 	}
-
 
 }
