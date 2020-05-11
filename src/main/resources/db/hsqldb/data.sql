@@ -205,7 +205,7 @@ INSERT INTO peticiones_excursion VALUES (3, 'Declaracion3', 'pendiente', '2020-0
 
 INSERT INTO peticiones_excursion VALUES (4, 'Declaracion4', 'aceptada', '2020-02-01', null , 6, 1);
 INSERT INTO peticiones_excursion VALUES (5, 'Declaracion5', 'aceptada', '2020-02-01', null , 7, 1);
-INSERT INTO peticiones_excursion VALUES (6, 'Declaracion6', 'aceptada', '2020-02-01', null , 8, 2);
+INSERT INTO peticiones_excursion VALUES (6, 'Declaracion6', 'aceptada', '2020-02-01', null , 8, 1);
 
 -- Participaciones
 
@@ -216,3 +216,6 @@ INSERT INTO participaciones VALUES (1, 'Declaracion', 'aceptada', '2020-03-02', 
 INSERT INTO quejas VALUES (1, 'Descripcion Prueba 1', '2020-03-02', FALSE, 'Titulo Prueba 1', 7);
 INSERT INTO quejas VALUES (2, 'Descripcion Prueba 2', '2020-03-02', FALSE, 'Titulo Prueba 2', 7);
 
+-- Feedbacks
+INSERT INTO feedback VALUES (1, false, 'desc1', 2, 6, 1);
+INSERT INTO feedback VALUES (2, false, 'desc2', 5, 7, 1);
