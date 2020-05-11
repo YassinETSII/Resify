@@ -130,7 +130,7 @@ class ActividadControllerTests {
 
 	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
 	@Test
-	void testShowBuenaAccion() throws Exception {
+	void testShowActividad() throws Exception {
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.get("/actividades/{actividadId}",
 						ActividadControllerTests.TEST_ACTIVIDAD_ID))
@@ -148,5 +148,56 @@ class ActividadControllerTests {
 						Matchers.hasProperty("horaFin", Matchers.is(this.horfin))))
 				.andExpect(MockMvcResultMatchers.view().name("actividades/actividadesDetails"));
 	}
+	
+	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
+	@Test
+	void testInitUpdateForm() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades/{actividadId}/edit", ActividadControllerTests.TEST_ACTIVIDAD_ID))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.model().attributeExists("actividad"))
+		.andExpect(MockMvcResultMatchers.view().name("actividades/createOrUpdateActividadForm"));
+	}
+	
+	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
+	@Test
+	void testProcessUpdateFormSuccessAccept() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/actividades/{actividadId}/edit", ActividadControllerTests.TEST_ACTIVIDAD_ID)
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.param("titulo", "Prueba")
+				.param("descripcion", "Prueba descrip")
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaInicio", "2030/01/01")
+				.param("horaInicio", "10:00")
+				.param("horaFin", "20:00"))
+		.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+		.andExpect(MockMvcResultMatchers.view().name("redirect:/actividades/{actividadId}"));
+	}
+	
+	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
+	@Test
+	void testProcessUpdateFormHasErrors() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/actividades/{actividadId}/edit", ActividadControllerTests.TEST_ACTIVIDAD_ID)
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.param("titulo", "")
+				.param("descripcion", "")
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaInicio", "")
+				.param("horaInicio", "")
+				.param("horaFin", ""))
+		.andExpect(MockMvcResultMatchers.model().attributeHasErrors("actividad"))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.view().name("actividades/createOrUpdateActividadForm"));
+	}
+	
+	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
+	@Test
+	void testProcessDeleteSuccess() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades/{actividadId}/delete", ActividadControllerTests.TEST_ACTIVIDAD_ID))
+		.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+		.andExpect(MockMvcResultMatchers.view().name("redirect:/actividades"));
+	}
+
+
+
+	
+
 
 }
