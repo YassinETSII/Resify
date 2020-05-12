@@ -41,7 +41,7 @@ public class HU15NegativoUITest {
 
   @Test
   public void testNegative() throws Exception {
-    driver.get("http://localhost:8080/");
+	driver.get("http://localhost:" + this.port);
     driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
     driver.findElement(By.id("username")).clear();
     driver.findElement(By.id("username")).sendKeys("anciano3");

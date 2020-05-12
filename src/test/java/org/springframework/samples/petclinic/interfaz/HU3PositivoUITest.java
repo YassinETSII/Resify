@@ -53,7 +53,7 @@ public class HU3PositivoUITest {
 		this.driver.findElement(By.id("password")).sendKeys("manager1");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//a[contains(@href, '/inscripciones')]")).click();
-		this.driver.findElement(By.linkText("Anacleto García")).click();
+		this.driver.findElement(By.linkText("Anacleto Garcia")).click();
 		this.driver.findElement(By.linkText("Editar inscripción")).click();
 		new Select(this.driver.findElement(By.id("estado"))).selectByVisibleText("aceptada");
 		this.driver.findElement(By.xpath("//option[@value='aceptada']")).click();

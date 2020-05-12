@@ -47,19 +47,19 @@ public class HUVisitaNegativoUITest {
 		driver.findElement(By.id("password")).clear();
 		driver.findElement(By.id("password")).sendKeys("manager4");
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
-		driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[9]/a/span[2]")).click();
+		driver.findElement(By.xpath("//a[contains(@href, '/visitas-sanitarias')]")).click();
 		driver.findElement(By.xpath("//a[contains(text(),'Añadir\n			nueva visita')]")).click();
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
 		Assert.assertEquals("Nueva Visita Sanitaria", driver.findElement(By.xpath("//h2")).getText());
-		Assert.assertEquals("must not be blank",
+		Assert.assertEquals("no puede estar vacío",
 				driver.findElement(By.xpath("//form[@id='visitaSanitaria']/div/div/div/span[2]")).getText());
-		Assert.assertEquals("must not be blank",
+		Assert.assertEquals("no puede estar vacío",
 				driver.findElement(By.xpath("//form[@id='visitaSanitaria']/div/div[2]/div/span[2]")).getText());
-		Assert.assertEquals("must not be blank",
+		Assert.assertEquals("no puede estar vacío",
 				driver.findElement(By.xpath("//form[@id='visitaSanitaria']/div/div[3]/div/span[2]")).getText());
-		Assert.assertEquals("must not be null",
+		Assert.assertEquals("no puede ser null",
 				driver.findElement(By.xpath("//form[@id='visitaSanitaria']/div/div[4]/div/span[2]")).getText());
-		Assert.assertEquals("must not be null",
+		Assert.assertEquals("no puede ser null",
 				driver.findElement(By.xpath("//form[@id='visitaSanitaria']/div/div[5]/div/span[2]")).getText());
 	}
 

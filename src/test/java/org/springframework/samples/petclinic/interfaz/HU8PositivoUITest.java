@@ -51,7 +51,7 @@ public class HU8PositivoUITest {
 		this.driver.findElement(By.id("password")).sendKeys("manager1");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//a[contains(@href, '/excursiones')]")).click();
-		this.driver.findElement(By.linkText("Excursión prueba UI")).click();
+		this.driver.findElement(By.linkText("Excursion prueba UI")).click();
 		this.driver.findElement(By.linkText("Inscribirse")).click();
 		this.driver.findElement(By.id("declaracion")).click();
 		this.driver.findElement(By.id("declaracion")).clear();

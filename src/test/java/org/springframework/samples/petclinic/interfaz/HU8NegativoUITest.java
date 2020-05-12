@@ -53,7 +53,7 @@ public class HU8NegativoUITest {
 		this.driver.findElement(By.id("password")).sendKeys("manager1");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//a[contains(@href, '/excursiones')]")).click();
-		this.driver.findElement(By.linkText("Excursión exigente")).click();
+		this.driver.findElement(By.linkText("Excursion exigente")).click();
 		this.driver.findElement(By.linkText("Inscribirse")).click();
 	}
 
