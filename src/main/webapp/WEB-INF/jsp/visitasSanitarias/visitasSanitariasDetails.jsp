@@ -14,8 +14,12 @@
 
 	<table class="table table-striped">
 		<tr>
+			<th>Anciano</th>
+			<td><b><c:out value="${visitaSanitaria.anciano.nombre} ${visitaSanitaria.anciano.apellidos }" /></b></td>
+		</tr>
+		<tr>
 			<th>Motivo</th>
-			<td><b><c:out value="${visitaSanitaria.motivo}" /></b></td>
+			<td><c:out value="${visitaSanitaria.motivo}" /></td>
 		</tr>
 		<tr>
 			<th>Descripcion</th>
@@ -27,7 +31,8 @@
 		</tr>
 		<tr>
 			<th>Fecha</th>
-			<td> <fmt:formatDate value="${visitaSanitaria.fecha}" pattern="yyyy/MM/dd"/></td>
+			<td><fmt:formatDate value="${visitaSanitaria.fecha}"
+					pattern="yyyy/MM/dd" /></td>
 		</tr>
 		<tr>
 			<th>Hora Inicio</th>
