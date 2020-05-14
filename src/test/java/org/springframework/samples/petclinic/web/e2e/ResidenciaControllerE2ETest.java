@@ -11,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -72,6 +74,7 @@ public class ResidenciaControllerE2ETest {
 		"manager"
 	})
 	@Test
+	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/new")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("residencias/createOrUpdateResidenciaForm"))
 			.andExpect(MockMvcResultMatchers.model().attributeExists("residencia"));
@@ -81,6 +84,7 @@ public class ResidenciaControllerE2ETest {
 		"manager"
 	})
 	@Test
+	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc
 			.perform(MockMvcRequestBuilders.post("/residencias/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("nombre", "residee").param("direccion", "direc").param("descripcion", "descp").param("aforo", "100").param("masInfo", "")
@@ -103,6 +107,7 @@ public class ResidenciaControllerE2ETest {
 		"manager"
 	})
 	@Test
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	void testShowResidencia() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/{residenciaId}", ResidenciaControllerE2ETest.TEST_RESIDENCIA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("residencia"))
 			.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("nombre", Matchers.is("Residencia 1"))))
@@ -112,8 +117,6 @@ public class ResidenciaControllerE2ETest {
 			.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("masInfo", Matchers.is("http://www.resi1.com"))))
 			.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("telefono", Matchers.is("987654321"))))
 			.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("correo", Matchers.is("residencia1@mail.es"))))
-			.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("horaCierre", Matchers.is(LocalTime.of(21, 00)))))
-			.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("horaApertura", Matchers.is(LocalTime.of(07, 00)))))
 			.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("edadMaxima", Matchers.is(70))))
 			.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("aceptaDependenciaGrave", Matchers.is(false)))).andExpect(MockMvcResultMatchers.view().name("residencias/residenciasDetails"));
 	}
@@ -122,6 +125,7 @@ public class ResidenciaControllerE2ETest {
 		"manager"
 	})
 	@Test
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	void testInitUpdateResidenciaForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/{residenciaId}/edit", ResidenciaControllerE2ETest.TEST_RESIDENCIA_ID)).andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.model().attributeExists("residencia")).andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("nombre", Matchers.is("Residencia 1"))))
@@ -131,8 +135,6 @@ public class ResidenciaControllerE2ETest {
 			.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("masInfo", Matchers.is("http://www.resi1.com"))))
 			.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("telefono", Matchers.is("987654321"))))
 			.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("correo", Matchers.is("residencia1@mail.es"))))
-			.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("horaCierre", Matchers.is(LocalTime.of(21, 00)))))
-			.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("horaApertura", Matchers.is(LocalTime.of(07, 00)))))
 			.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("edadMaxima", Matchers.is(70))))
 			.andExpect(MockMvcResultMatchers.model().attribute("residencia", Matchers.hasProperty("aceptaDependenciaGrave", Matchers.is(false)))).andExpect(MockMvcResultMatchers.view().name("residencias/createOrUpdateResidenciaForm"));
 	}
@@ -141,6 +143,7 @@ public class ResidenciaControllerE2ETest {
 		"manager"
 	})
 	@Test
+	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
 	void testProcessUpdateFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/residencias/{residenciaId}/edit", ResidenciaControllerE2ETest.TEST_RESIDENCIA_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("nombre", "residee").param("direccion", "direc")
 			.param("descripcion", "desc").param("aforo", "100").param("masInfo", "").param("telefono", "674567123").param("correo", "resi@gmail.com").param("horaApertura", String.valueOf(this.horini)).param("horaCierre", String.valueOf(this.horfin))

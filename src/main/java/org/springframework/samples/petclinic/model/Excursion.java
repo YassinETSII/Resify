@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.model;
 
 import java.util.Date;
@@ -22,6 +23,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
@@ -38,62 +41,64 @@ public class Excursion extends ActivityEntity {
 
 	@Positive
 	@Column(name = "ratio")
-	private double ratioAceptacion;
-	
+	private double		ratioAceptacion;
+
 	@Positive
 	@Column(name = "numeroResidencias")
-	private int numeroResidencias;
+	private int			numeroResidencias;
 
 	@NotNull
-	@Column(name = "fecha_fin")        
+	@Column(name = "fecha_fin")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private Date fechaFin;
-	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date		fechaFin;
+
 	@Column(name = "final_mode")
-	private boolean finalMode;
+	private boolean		finalMode;
 
 	@ManyToOne
 	@JoinColumn(name = "organizador_id")
-	private Organizador organizador;
-	
+	private Organizador	organizador;
+
+
 	public Double getRatioAceptacion() {
-		return ratioAceptacion;
+		return this.ratioAceptacion;
 	}
 
-	public void setRatioAceptacion(Double ratio) {
+	public void setRatioAceptacion(final Double ratio) {
 		this.ratioAceptacion = ratio;
 	}
 
 	public int getNumeroResidencias() {
-		return numeroResidencias;
+		return this.numeroResidencias;
 	}
 
-	public void setNumeroResidencias(int numeroResidencias) {
+	public void setNumeroResidencias(final int numeroResidencias) {
 		this.numeroResidencias = numeroResidencias;
 	}
-	
+
 	public Organizador getOrganizador() {
-		return organizador;
-	}
-	
-	public void setOrganizador(Organizador organizador) {
-		this.organizador = organizador;
-	}
-	
-	public Date getFechaFin() {
-		return fechaFin;
+		return this.organizador;
 	}
 
-	public void setFechaFin(Date fechaFin) {
+	public void setOrganizador(final Organizador organizador) {
+		this.organizador = organizador;
+	}
+
+	public Date getFechaFin() {
+		return this.fechaFin;
+	}
+
+	public void setFechaFin(final Date fechaFin) {
 		this.fechaFin = fechaFin;
 	}
 
 	public boolean isFinalMode() {
-		return finalMode;
+		return this.finalMode;
 	}
 
-	public void setFinalMode(boolean finalMode) {
+	public void setFinalMode(final boolean finalMode) {
 		this.finalMode = finalMode;
 	}
-	
+
 }

@@ -33,6 +33,8 @@ import org.springframework.samples.petclinic.model.Anciano;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Queja;
 import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -77,6 +79,7 @@ class QuejaServiceTests {
 	}
 
 	@Test
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	void debeContarTodasLasQuejasPorAnciano() {
 		Anciano a = this.ancianoService.findAncianoById(7);
 		Double quejas = this.quejaService.countQuejasHoyByAnciano(a);

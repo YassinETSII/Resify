@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.model;
 
 import java.time.LocalTime;
@@ -23,12 +24,13 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
 import org.springframework.format.annotation.DateTimeFormat;
-
 
 @Entity
 @Table(name = "visitas_sanitarias")
@@ -36,101 +38,103 @@ public class VisitaSanitaria extends BaseEntity {
 
 	@NotBlank
 	@Column(name = "motivo")
-	private String	motivo;
-	
+	private String		motivo;
+
 	@NotBlank
 	@Column(name = "descripcion")
-	private String	descripcion;
-	
+	private String		descripcion;
+
 	@NotBlank
 	@Column(name = "sanitario")
-	private String	sanitario;
+	private String		sanitario;
 
 	@Column(name = "fecha")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	@Past
-	private Date	fecha;
-	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date		fecha;
+
 	@NotNull
 	@Column(name = "hora_inicio")
 	@DateTimeFormat(pattern = "HH:mm")
-	private LocalTime horaInicio;
-	
+	private LocalTime	horaInicio;
+
 	@NotNull
 	@Column(name = "hora_fin")
 	@DateTimeFormat(pattern = "HH:mm")
-	private LocalTime horaFin;
-	
+	private LocalTime	horaFin;
+
 	@ManyToOne
 	@JoinColumn(name = "residencia_id")
-	private Residencia residencia;
-	
+	private Residencia	residencia;
+
 	@ManyToOne
 	@JoinColumn(name = "anciano_id")
-	private Anciano anciano;
+	private Anciano		anciano;
+
 
 	public Residencia getResidencia() {
-		return residencia;
+		return this.residencia;
 	}
 
-	public void setResidencia(Residencia residencia) {
+	public void setResidencia(final Residencia residencia) {
 		this.residencia = residencia;
 	}
 
 	public Anciano getAnciano() {
-		return anciano;
+		return this.anciano;
 	}
 
-	public void setAnciano(Anciano anciano) {
+	public void setAnciano(final Anciano anciano) {
 		this.anciano = anciano;
 	}
-	
+
 	public String getMotivo() {
-		return motivo;
+		return this.motivo;
 	}
 
-	public void setMotivo(String motivo) {
+	public void setMotivo(final String motivo) {
 		this.motivo = motivo;
 	}
 
 	public String getDescripcion() {
-		return descripcion;
+		return this.descripcion;
 	}
 
-	public void setDescripcion(String descripcion) {
+	public void setDescripcion(final String descripcion) {
 		this.descripcion = descripcion;
 	}
 
 	public String getSanitario() {
-		return sanitario;
+		return this.sanitario;
 	}
 
-	public void setSanitario(String sanitario) {
+	public void setSanitario(final String sanitario) {
 		this.sanitario = sanitario;
 	}
 
 	public Date getFecha() {
-		return fecha;
+		return this.fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(final Date fecha) {
 		this.fecha = fecha;
 	}
 
 	public LocalTime getHoraInicio() {
-		return horaInicio;
+		return this.horaInicio;
 	}
 
-	public void setHoraInicio(LocalTime horaInicio) {
+	public void setHoraInicio(final LocalTime horaInicio) {
 		this.horaInicio = horaInicio;
 	}
 
 	public LocalTime getHoraFin() {
-		return horaFin;
+		return this.horaFin;
 	}
 
-	public void setHoraFin(LocalTime horaFin) {
+	public void setHoraFin(final LocalTime horaFin) {
 		this.horaFin = horaFin;
 	}
-	
+
 }

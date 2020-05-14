@@ -20,6 +20,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 
@@ -36,6 +38,7 @@ public class ActionEntity extends BaseEntity {
 	@Column(name = "fecha")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	@Past
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date	fecha;
 
 
