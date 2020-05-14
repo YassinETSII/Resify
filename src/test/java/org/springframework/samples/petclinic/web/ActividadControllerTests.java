@@ -1,7 +1,14 @@
 
 package org.springframework.samples.petclinic.web;
 
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -49,9 +56,9 @@ class ActividadControllerTests {
 
 	@MockBean
 	private AuthoritiesService authoritiesService;
-	
+
 	@MockBean
-	private ResidenciaService			residenciaService;
+	private ResidenciaService residenciaService;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -84,8 +91,10 @@ class ActividadControllerTests {
 				.willReturn(this.man);
 		BDDMockito.given(this.authoritiesService.findAuthority(ActividadControllerTests.TEST_MANAGER_NOMBRE))
 				.willReturn("manager");
-		BDDMockito.given(this.managerService.findResidenciaByManagerUsername(ActividadControllerTests.TEST_MANAGER_NOMBRE))
-		.willReturn(this.resi);
+		BDDMockito
+				.given(this.managerService
+						.findResidenciaByManagerUsername(ActividadControllerTests.TEST_MANAGER_NOMBRE))
+				.willReturn(this.resi);
 	}
 
 	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
@@ -147,6 +156,54 @@ class ActividadControllerTests {
 				.andExpect(MockMvcResultMatchers.model().attribute("actividad",
 						Matchers.hasProperty("horaFin", Matchers.is(this.horfin))))
 				.andExpect(MockMvcResultMatchers.view().name("actividades/actividadesDetails"));
+	}
+
+	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
+	@Test
+	void testInitUpdateActividadForm() throws Exception {
+		mockMvc.perform(get("/actividades/{actividadId}/edit", ActividadControllerTests.TEST_ACTIVIDAD_ID))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(model().attributeExists("actividad"))
+				.andExpect(model().attribute("actividad", hasProperty("descripcion", is("Prueba desc"))))
+				.andExpect(model().attribute("actividad", hasProperty("titulo", is("Prueba"))))
+				.andExpect(model().attribute("actividad", hasProperty("fechaInicio", is(this.diaini))))
+				.andExpect(model().attribute("actividad", hasProperty("horaInicio", is(this.horini))))
+				.andExpect(model().attribute("actividad", hasProperty("horaFin", is(this.horfin))))
+				.andExpect(view().name("actividades/createOrUpdateActividadForm"));
+	}
+
+	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
+	@Test
+	void testProcessUpdateFormSuccess() throws Exception {
+		this.mockMvc
+				.perform(MockMvcRequestBuilders
+						.post("/actividades/{actividadId}/edit", ActividadControllerTests.TEST_ACTIVIDAD_ID)
+						.param("titulo", "Prueba2").param("descripcion", "Prueba descrip")
+						.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaInicio", "2030/01/01")
+						.param("horaInicio", "10:00").param("horaFin", "20:00"))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+	}
+	
+	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
+	@Test
+	void testProcessUpdateFormHasErrors() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/actividades/{actividadId}/edit",ActividadControllerTests.TEST_ACTIVIDAD_ID)
+				.param("titulo", "Prueba")
+				.param("descripcion", "")
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaInicio", "2030/01/01")
+				.param("horaInicio", "10:00")
+				.param("horaFin", "20:00"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("actividad"))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.view().name("actividades/createOrUpdateActividadForm"));
+	}
+
+	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
+	@Test
+	void testProcessDeleteSuccess() throws Exception {
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.get("/actividades/{actividadId}/delete",
+						ActividadControllerTests.TEST_ACTIVIDAD_ID))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 }
