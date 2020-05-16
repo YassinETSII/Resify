@@ -72,6 +72,11 @@ public class OrganizadorService {
 		userService.saveUser(organizador.getUser());
 		//creating authorities
 		authoritiesService.saveAuthorities(organizador.getUser().getUsername(), "organizador");
+	}
+	
+	@Transactional
+	public Long countOrganizadores() {
+		return this.organizadorRepository.count();
 	}		
 
 }

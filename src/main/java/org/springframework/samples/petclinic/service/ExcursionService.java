@@ -66,6 +66,26 @@ public class ExcursionService {
 
 	public Iterable<Excursion> findAllMineAnciano(Anciano anciano) {
 		return excursionRepository.findAllMineAnciano(anciano.getId(), java.sql.Date.valueOf(LocalDate.now()));
+	}
+
+	@Transactional
+	public Long countExcursiones() {
+		return excursionRepository.count();
+	}
+	
+	@Transactional
+	public Double avgExcursionesByOrganizador() {
+		Double res = 0.;
+		Iterable<Long> list = excursionRepository.countExcursionesByOrganizador();
+		int i = 0;
+		for(Long x: list) {
+			i+=1;
+			res+=x;
+		}
+		if(i!=0) {
+			res/=i;
+		}
+		return res;
 	}		
 
 }

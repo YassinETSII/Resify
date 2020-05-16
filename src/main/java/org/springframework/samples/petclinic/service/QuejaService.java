@@ -60,7 +60,44 @@ public class QuejaService {
 	public void saveQueja(Queja queja) throws DataAccessException {
 		quejaRepository.save(queja);	
 	}
+
+	@Transactional
+	public Long countQuejas() {
+		return this.quejaRepository.count();
+	}
+
+	@Transactional
+	public Double avgQuejasByAnciano() {
+		Double res = 0.;
+		Iterable<Long> list = this.quejaRepository.countQuejasByAnciano();
+		int i = 0;
+		for(Long x: list) {
+			i+=1;
+			res+=x;
+		}
+		if(i!=0) {
+			res/=i;
+		}
 		
+		return res;
+	}		
+
+
+	@Transactional
+	public Double avgQuejasByResidencia() {
+		Double res = 0.;
+		Iterable<Long> list = this.quejaRepository.countQuejasByResidencia();
+		int i = 0;
+		for(Long x: list) {
+			i+=1;
+			res+=x;
+		}
+		if(i!=0) {
+			res/=i;
+		}
+		
+		return res;
+	}		
 	
 
 }

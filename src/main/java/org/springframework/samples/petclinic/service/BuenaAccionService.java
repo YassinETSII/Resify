@@ -48,5 +48,11 @@ public class BuenaAccionService {
 	@Transactional
 	public Iterable<BuenaAccion> findAll() {
 		return buenaAccionRepository.findAll();
+	}
+
+	@Transactional
+	public Long countBuenasAcciones() {
+		return buenaAccionRepository.count();
 	}		
+	
 }

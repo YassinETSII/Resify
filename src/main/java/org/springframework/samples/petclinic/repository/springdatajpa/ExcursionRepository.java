@@ -24,4 +24,7 @@ public interface ExcursionRepository extends CrudRepository<Excursion, String> {
 	
 	@Query("SELECT e FROM PeticionExcursion p JOIN p.excursion e WHERE p.residencia.id =:id AND p.estado = 'aceptada' AND e.finalMode = true AND e.fechaFin <= :today")
 	Iterable<Excursion> findAllFinishedResidencia(@Param("id") int id, @Param("today") Date today);
+
+	@Query("SELECT COUNT(e) FROM Excursion e GROUP BY e.organizador")
+	Iterable<Long> countExcursionesByOrganizador() throws DataAccessException;
 }

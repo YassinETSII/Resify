@@ -59,6 +59,27 @@ public class VisitaSanitariaService {
 		Residencia residencia = this.residenciaService.findMine(manager);
 		int id = residencia.getId();
 		return this.visitaSanitariaRepository.findAllMine(id);
-	}	
+	}
+
+	@Transactional
+	public Long countVisitasSanitarias() {
+		return this.visitaSanitariaRepository.count();
+	}
+
+	@Transactional
+	public Double avgVisitasSanitariasByResidencia() {
+		Double res = 0.;
+		Iterable<Long> list = this.visitaSanitariaRepository.countVisitasSanitariasByResidencia();
+		int i = 0;
+		for(Long x: list) {
+			i+=1;
+			res+=x;
+		}
+		if(i!=0) {
+			res/=i;
+		}
+		
+		return res;
+	}		
 
 }

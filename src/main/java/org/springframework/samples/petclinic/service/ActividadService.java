@@ -76,6 +76,27 @@ public class ActividadService {
 
 	public Iterable<Actividad> findAllMineAnciano(Anciano anciano) {
 		return actividadRepository.findAllMineAnciano(anciano.getId(), java.sql.Date.valueOf(LocalDate.now()));
+	}
+	
+	@Transactional
+	public Long countActividades() {
+		return actividadRepository.count();
+	}
+
+	@Transactional
+	public Double avgActividadesByResidencia() {
+		Double res = 0.;
+		Iterable<Long> list = this.actividadRepository.countActividadesByResidencia();
+		int i = 0;
+		for(Long x: list) {
+			i+=1;
+			res+=x;
+		}
+		if(i!=0) {
+			res/=i;
+		}
+		
+		return res;
 	}		
 	
 	

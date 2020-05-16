@@ -19,4 +19,7 @@ public interface ActividadRepository extends CrudRepository<Actividad, String> {
 	@Query("SELECT a FROM Inscripcion i, Actividad a JOIN a.residencia r WHERE  i.residencia.id = r.id AND i.anciano.id =:id AND i.estado = 'aceptada' AND a.fechaInicio > :today")
 	Iterable<Actividad> findAllMineAnciano(@Param("id") int id, @Param("today") Date today);
 
+	@Query("SELECT count(a) FROM Actividad a GROUP BY a.residencia")
+	Iterable<Long> countActividadesByResidencia() throws DataAccessException;
+
 }
