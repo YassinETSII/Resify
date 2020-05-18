@@ -68,18 +68,7 @@ public class VisitaSanitariaService {
 
 	@Transactional
 	public Double avgVisitasSanitariasByResidencia() {
-		Double res = 0.;
-		Iterable<Long> list = this.visitaSanitariaRepository.countVisitasSanitariasByResidencia();
-		int i = 0;
-		for(Long x: list) {
-			i+=1;
-			res+=x;
-		}
-		if(i!=0) {
-			res/=i;
-		}
-		
-		return res;
+		return Double.valueOf(this.visitaSanitariaRepository.count())/this.residenciaService.countResidencias();
 	}		
 
 }

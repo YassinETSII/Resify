@@ -39,6 +39,9 @@ public class PeticionExcursionService {
 
 	@Autowired
 	private PeticionExcursionRepository peticionExcursionRepository;
+	
+	@Autowired
+	private ExcursionService excursionService;
 
 	@Transactional
 	public PeticionExcursion findPeticionExcursionById(int id) throws DataAccessException {
@@ -82,17 +85,8 @@ public class PeticionExcursionService {
 
 	@Transactional
 	public Double avgPeticionesExcursionByExcursion() {
-		Double res = 0.;
-		Iterable<Long> list =peticionExcursionRepository.countPeticionesExcursionByExcursion();
-		int i = 0;
-		for(Long x: list) {
-			i+=1;
-			res+=x;
-		}
-		if(i!=0) {
-			res/=i;
-		}
-		return res;
+
+		return Double.valueOf(this.peticionExcursionRepository.count())/this.excursionService.countExcursiones().doubleValue();
 	}
 
 	@Transactional

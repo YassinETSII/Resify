@@ -39,6 +39,12 @@ public class QuejaService {
 
 	@Autowired
 	private QuejaRepository quejaRepository;	
+	
+	@Autowired
+	private AncianoService ancianoService;	
+	
+	@Autowired
+	private ResidenciaService residenciaService;	
 
 	@Transactional(readOnly = true)
 	public Iterable<Queja> findQuejasByManager(Manager manager) throws DataAccessException {
@@ -68,35 +74,13 @@ public class QuejaService {
 
 	@Transactional
 	public Double avgQuejasByAnciano() {
-		Double res = 0.;
-		Iterable<Long> list = this.quejaRepository.countQuejasByAnciano();
-		int i = 0;
-		for(Long x: list) {
-			i+=1;
-			res+=x;
-		}
-		if(i!=0) {
-			res/=i;
-		}
-		
-		return res;
+		return Double.valueOf(this.quejaRepository.count())/this.ancianoService.countAncianos();
 	}		
 
 
 	@Transactional
 	public Double avgQuejasByResidencia() {
-		Double res = 0.;
-		Iterable<Long> list = this.quejaRepository.countQuejasByResidencia();
-		int i = 0;
-		for(Long x: list) {
-			i+=1;
-			res+=x;
-		}
-		if(i!=0) {
-			res/=i;
-		}
-		
-		return res;
+		return Double.valueOf(this.quejaRepository.count())/this.residenciaService.countResidencias();
 	}		
 	
 

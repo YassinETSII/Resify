@@ -17,6 +17,10 @@ public class FeedbackService {
 
 	@Autowired
 	private FeedbackRepository feedbackRepository;
+	
+	@Autowired
+	private ExcursionService excursionService;
+
 
 	@Transactional
 	public Feedback findFeedbackById(int id) throws DataAccessException {
@@ -56,18 +60,7 @@ public class FeedbackService {
 
 	@Transactional
 	public Double avgFeedbacksByExcursion() {
-		Double res = 0.;
-		Iterable<Long> list = this.feedbackRepository.countFeedbacksByExcursion();
-		int i = 0;
-		for(Long x: list) {
-			i+=1;
-			res+=x;
-		}
-		if(i!=0) {
-			res/=i;
-		}
-		
-		return res;
+		return Double.valueOf(this.feedbackRepository.count())/this.excursionService.countExcursiones();
 	}
 
 }

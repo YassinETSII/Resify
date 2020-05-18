@@ -38,6 +38,9 @@ public class ActividadService {
 	@Autowired
 	private ActividadRepository actividadRepository;	
 	
+	@Autowired
+	private ResidenciaService residenciaService;	
+	
 //	@Autowired
 //	private UserService userService;
 //	
@@ -85,18 +88,7 @@ public class ActividadService {
 
 	@Transactional
 	public Double avgActividadesByResidencia() {
-		Double res = 0.;
-		Iterable<Long> list = this.actividadRepository.countActividadesByResidencia();
-		int i = 0;
-		for(Long x: list) {
-			i+=1;
-			res+=x;
-		}
-		if(i!=0) {
-			res/=i;
-		}
-		
-		return res;
+		return Double.valueOf(this.actividadRepository.count())/this.residenciaService.countResidencias().doubleValue();
 	}		
 	
 	

@@ -16,8 +16,6 @@
 
 package org.springframework.samples.petclinic.service;
 
-import java.util.stream.StreamSupport;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Anciano;
@@ -42,6 +40,9 @@ public class AncianoService {
 
 	@Autowired
 	private AuthoritiesService	authoritiesService;
+	
+	@Autowired
+	private ResidenciaService	residenciaService;
 
 
 	@Autowired
@@ -86,21 +87,7 @@ public class AncianoService {
 
 	@Transactional
 	public Double avgAncianosByResidencia() {
-		Double res = 0.;
-		Iterable<Long> list = this.ancianoRepository.countAncianosByResidencia();
-		int i = 0;
-		for(Long x: list) {
-			System.out.println(i);
-			System.out.println(x);
-			i+=1;
-			if(x != null);
-			res+=x;
-		}
-		if(i!=0) {
-			res/=i;
-		}
-		
-		return res;
+		return  this.ancianoRepository.countAncianosInResidencia().doubleValue()/this.residenciaService.countResidencias().doubleValue();
 	}
 
 }

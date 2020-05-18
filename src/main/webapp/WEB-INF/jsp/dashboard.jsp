@@ -10,7 +10,6 @@
 
 
     <table class="table table-striped">
-    <p>USUARIOS</p>
         <tr>
             <th>managers</th>
             <td><c:out value="${dashboard.managers}"/></td>
@@ -23,7 +22,6 @@
             <th>ancianos</th>
             <td><c:out value="${dashboard.ancianos}"/></td>
         </tr>
-    <p>RESIDENCIAS</p>    
         <tr>
             <th>Residencias</th>
             <td><c:out value="${dashboard.residencias}"/></td>
@@ -88,7 +86,6 @@
             <th>Media de visitas por residencia</th>
             <td><c:out value="${dashboard.mediaVisitasPorResidencia}"/></td>
         </tr>
-        <p>EXCURSIONES</p>    
         <tr>
             <th>Excursiones</th>
             <td><c:out value="${dashboard.excursiones}"/></td>
@@ -129,48 +126,6 @@
             <th>Media de feedbacks por excursión</th>
             <td><c:out value="${dashboard.mediaFeedbacksPorExcursion}"/></td>
         </tr>
-        <tr>
-            <th>Quejas</th>
-            <td><c:out value="${dashboard.quejas}"/></td>
-        </tr>
-        <tr>
-            <th>Quejas</th>
-            <td><c:out value="${dashboard.quejas}"/></td>
-        </tr>
-        <tr>
-            <th>Quejas</th>
-            <td><c:out value="${dashboard.quejas}"/></td>
-        </tr>
-        <tr>
-            <th>Quejas</th>
-            <td><c:out value="${dashboard.quejas}"/></td>
-        </tr>
-        <tr>
-            <th>Quejas</th>
-            <td><c:out value="${dashboard.quejas}"/></td>
-        </tr>
-        <tr>
-            <th>Quejas</th>
-            <td><c:out value="${dashboard.quejas}"/></td>
-        </tr>
-        <tr>
-            <th>Quejas</th>
-            <td><c:out value="${dashboard.quejas}"/></td>
-        </tr>
-        <tr>
-            <th>Quejas</th>
-            <td><c:out value="${dashboard.quejas}"/></td>
-        </tr>
-        <tr>
-            <th>Quejas</th>
-            <td><c:out value="${dashboard.quejas}"/></td>
-        </tr>
-        <tr>
-            <th>Quejas</th>
-            <td><c:out value="${dashboard.quejas}"/></td>
-        </tr>
-        
-
     </table>
     
    	<a href="/" class="btn btn-default">Volver</a>

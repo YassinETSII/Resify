@@ -18,10 +18,4 @@ public interface QuejaRepository extends CrudRepository<Queja, String> {
 	
 	@Query("SELECT count(q.id) FROM Queja q WHERE q.anciano.id = :id AND q.fecha> :fecha")
 	Double countQuejasByTiempoYAncianoId(@Param("id") int id, @Param("fecha") Date fecha) throws DataAccessException;
-
-	@Query("SELECT count(q) FROM Queja q GROUP BY q.anciano")
-	Iterable<Long> countQuejasByAnciano() throws DataAccessException;
-
-	@Query("SELECT count(q) FROM Queja q, Inscripcion i WHERE q.anciano = i.anciano AND i.estado = 'aceptada' GROUP BY i.residencia")
-	Iterable<Long> countQuejasByResidencia();
 }

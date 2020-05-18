@@ -18,6 +18,9 @@ public class ExcursionService {
 	@Autowired
 	private ExcursionRepository excursionRepository;	
 	
+	@Autowired
+	private OrganizadorService organizadorService;
+	
 //	@Autowired
 //	private UserService userService;
 //	
@@ -75,17 +78,7 @@ public class ExcursionService {
 	
 	@Transactional
 	public Double avgExcursionesByOrganizador() {
-		Double res = 0.;
-		Iterable<Long> list = excursionRepository.countExcursionesByOrganizador();
-		int i = 0;
-		for(Long x: list) {
-			i+=1;
-			res+=x;
-		}
-		if(i!=0) {
-			res/=i;
-		}
-		return res;
+		return Double.valueOf(this.excursionRepository.count())/this.organizadorService.countOrganizadores();
 	}		
 
 }
