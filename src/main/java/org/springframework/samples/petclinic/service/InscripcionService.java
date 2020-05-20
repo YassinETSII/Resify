@@ -69,4 +69,29 @@ public class InscripcionService {
 		return this.inscripcionRepository.findAll();
 	}
 
+	@Transactional
+	public Long countInscripciones() {
+		return this.inscripcionRepository.count();
+	}
+
+	@Transactional
+	public Long countInscripcionesAceptadas() {
+		return this.inscripcionRepository.countInscripcionesAceptadas();
+	}
+
+	@Transactional
+	public Double ratioInscripcionesAceptadas() {
+		return this.countInscripcionesAceptadas().doubleValue()/this.countInscripciones().doubleValue();
+	}
+
+	@Transactional
+	public Long countInscripcionesRechazadas() {
+		return this.inscripcionRepository.countInscripcionesRechazadas();
+	}
+
+	@Transactional
+	public Double ratioInscripcionesRechazadas() {
+		return this.countInscripcionesRechazadas().doubleValue()/this.countInscripciones().doubleValue();
+	}
+
 }

@@ -1,11 +1,13 @@
 package org.springframework.samples.petclinic.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Excursion;
+import org.springframework.samples.petclinic.model.Feedback;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Organizador;
-import org.springframework.samples.petclinic.model.Feedback;
 import org.springframework.samples.petclinic.repository.springdatajpa.FeedbackRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,10 @@ public class FeedbackService {
 
 	@Autowired
 	private FeedbackRepository feedbackRepository;
+	
+	@Autowired
+	private ExcursionService excursionService;
+
 
 	@Transactional
 	public Feedback findFeedbackById(int id) throws DataAccessException {
@@ -45,6 +51,16 @@ public class FeedbackService {
 	@Transactional(readOnly = true)
 	public int countFeedbacksByExcursion(Excursion excursion, Manager manager) throws DataAccessException {
 		return feedbackRepository.countFeedbacksByExcursion(excursion, manager);
+	}
+
+	@Transactional
+	public Long countFeedbacks() {
+		return this.feedbackRepository.count();
+	}
+
+	@Transactional
+	public Double avgFeedbacksByExcursion() {
+		return Double.valueOf(this.feedbackRepository.count())/this.excursionService.countExcursiones();
 	}
 
 }

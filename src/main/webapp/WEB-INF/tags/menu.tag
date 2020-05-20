@@ -174,6 +174,13 @@
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Organizadores</span>
 					</petclinic:menuItem>
+					
+					<petclinic:menuItem active="${name eq 'dashboard'}"
+						url="/dashboard" title="find dashboard">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Dashboard</span>
+					</petclinic:menuItem>
+					
 				</sec:authorize>
 			</ul>
 
