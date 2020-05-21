@@ -28,7 +28,7 @@ public class VisitaSanitariaControllerE2ETest {
 	@Autowired
 	private MockMvc mockMvc;
 
-	@WithMockUser(username = "manager4", authorities = { "manager" })
+	@WithMockUser(username = "manager5", authorities = { "manager" })
 	@Test
 	void testProcessFindFormSuccess() throws Exception {
 
@@ -37,7 +37,7 @@ public class VisitaSanitariaControllerE2ETest {
 				.andExpect(MockMvcResultMatchers.view().name("visitasSanitarias/visitasSanitariasList"));
 	}
 
-	@WithMockUser(username = "manager4", authorities = { "manager" })
+	@WithMockUser(username = "manager5", authorities = { "manager" })
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/visitas-sanitarias/new"))
@@ -46,7 +46,7 @@ public class VisitaSanitariaControllerE2ETest {
 				.andExpect(MockMvcResultMatchers.model().attributeExists("visitaSanitaria"));
 	}
 
-	@WithMockUser(username = "manager4", authorities = { "manager" })
+	@WithMockUser(username = "manager5", authorities = { "manager" })
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc
@@ -57,7 +57,7 @@ public class VisitaSanitariaControllerE2ETest {
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
-	@WithMockUser(username = "manager4", authorities = { "manager" })
+	@WithMockUser(username = "manager5", authorities = { "manager" })
 	@Test
 	void testProcessCreationFormHasErrorsBlank() throws Exception {
 		this.mockMvc
@@ -70,7 +70,7 @@ public class VisitaSanitariaControllerE2ETest {
 				.andExpect(MockMvcResultMatchers.view().name("visitasSanitarias/createOrUpdateVisitaSanitariaForm"));
 	}
 
-	@WithMockUser(username = "manager4", authorities = { "manager" })
+	@WithMockUser(username = "manager5", authorities = { "manager" })
 	@Test
 	void testProcessCreationFormHasErrorsAncianoSinDependencia() throws Exception {
 		this.mockMvc
@@ -78,12 +78,12 @@ public class VisitaSanitariaControllerE2ETest {
 						.param("sanitario", "sanitario prueba").param("descripcion", "Prueba descrip")
 						.param("horaInicio", "10:00").param("horaFin", "12:00")
 						.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", "2020/01/01")
-						.param("anciano.id", "20"))
+						.param("anciano.id", "23"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.view().name("visitasSanitarias/createOrUpdateVisitaSanitariaForm"));
+				.andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
-	@WithMockUser(username = "manager4", authorities = { "manager" })
+	@WithMockUser(username = "manager5", authorities = { "manager" })
 	@Test
 	void testShowVisitaSanitaria() throws Exception {
 		this.mockMvc

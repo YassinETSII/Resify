@@ -78,7 +78,7 @@ public class ExcursionController {
 
 	@InitBinder("excursion")
 	public void initExcursionBinder(WebDataBinder dataBinder) {
-		dataBinder.setValidator(new ExcursionValidator());
+		dataBinder.addValidators(new ExcursionValidator());
 	}
 
 	@GetMapping()

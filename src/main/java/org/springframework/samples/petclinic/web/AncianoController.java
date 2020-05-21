@@ -19,22 +19,17 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Anciano;
 import org.springframework.samples.petclinic.service.AncianoService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author Juergen Hoeller
@@ -63,12 +58,12 @@ public class AncianoController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@GetMapping()
-	public String listAncianos(Map<String, Object> model) {
-		Iterable<Anciano> ancianos = ancianoService.findAncianos();
-		model.put("ancianos", ancianos);
-		return "usuarios/usuariosList";
-	}
+//	@GetMapping()
+//	public String listAncianos(Map<String, Object> model) {
+//		Iterable<Anciano> ancianos = ancianoService.findAncianos();
+//		model.put("ancianos", ancianos);
+//		return "usuarios/usuariosList";
+//	}
 
 	@GetMapping(value = "/new")
 	public String initCreationForm(Map<String, Object> model) {
@@ -85,38 +80,37 @@ public class AncianoController {
 		} else {
 			authService.saveAuthorities(anciano.getUser().getUsername(), "anciano");
 			ancianoService.saveAnciano(anciano);
-			model.put("message", "Se ha registrado el anciano correctamente");
-			return "redirect:/ancianos";
+			return "redirect:/";
 		}
 	}
 
-	@GetMapping(value = "/{ancianoId}/edit")
-	public String initUpdateAncianoForm(@PathVariable("ancianoId") int ancianoId, Model model) {
-		Anciano anciano = this.ancianoService.findAncianoById(ancianoId);
-		model.addAttribute(anciano);
-		return VIEWS_USUARIO_CREATE_OR_UPDATE_FORM;
-	}
-
-	@PostMapping(value = "/{ancianoId}/edit")
-	public String processUpdateAncianoForm(@Valid Anciano anciano, BindingResult result,
-			@PathVariable("ancianoId") int ancianoId, final ModelMap model) {
-		if (result.hasErrors()) {
-			model.put("anciano", anciano);
-			return VIEWS_USUARIO_CREATE_OR_UPDATE_FORM;
-		} else {
-			Anciano ancianoToUpdate = this.ancianoService.findAncianoById(ancianoId);
-			BeanUtils.copyProperties(anciano, ancianoToUpdate, "id", "user");
-			this.ancianoService.saveAnciano(ancianoToUpdate);
-			return "redirect:/ancianos/{ancianoId}";
-		}
-	}
-
-	@GetMapping("/{ancianoId}")
-	public ModelAndView showActividad(@PathVariable("ancianoId") int ancianoId) {
-		Anciano anciano = this.ancianoService.findAncianoById(ancianoId);
-		ModelAndView mav = new ModelAndView("usuarios/usuariosDetails");
-		mav.addObject(anciano);
-		return mav;
-	}
+//	@GetMapping(value = "/{ancianoId}/edit")
+//	public String initUpdateAncianoForm(@PathVariable("ancianoId") int ancianoId, Model model) {
+//		Anciano anciano = this.ancianoService.findAncianoById(ancianoId);
+//		model.addAttribute(anciano);
+//		return VIEWS_USUARIO_CREATE_OR_UPDATE_FORM;
+//	}
+//
+//	@PostMapping(value = "/{ancianoId}/edit")
+//	public String processUpdateAncianoForm(@Valid Anciano anciano, BindingResult result,
+//			@PathVariable("ancianoId") int ancianoId, final ModelMap model) {
+//		if (result.hasErrors()) {
+//			model.put("anciano", anciano);
+//			return VIEWS_USUARIO_CREATE_OR_UPDATE_FORM;
+//		} else {
+//			Anciano ancianoToUpdate = this.ancianoService.findAncianoById(ancianoId);
+//			BeanUtils.copyProperties(anciano, ancianoToUpdate, "id", "user");
+//			this.ancianoService.saveAnciano(ancianoToUpdate);
+//			return "redirect:/ancianos/{ancianoId}";
+//		}
+//	}
+//
+//	@GetMapping("/{ancianoId}")
+//	public ModelAndView showActividad(@PathVariable("ancianoId") int ancianoId) {
+//		Anciano anciano = this.ancianoService.findAncianoById(ancianoId);
+//		ModelAndView mav = new ModelAndView("usuarios/usuariosDetails");
+//		mav.addObject(anciano);
+//		return mav;
+//	}
 
 }

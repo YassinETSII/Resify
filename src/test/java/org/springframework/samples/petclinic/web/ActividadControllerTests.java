@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -233,5 +232,4 @@ class ActividadControllerTests {
 						.param("horaInicio", "10:00").param("horaFin", "20:00"))
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
-	
 }

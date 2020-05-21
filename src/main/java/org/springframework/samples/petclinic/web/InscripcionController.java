@@ -157,7 +157,7 @@ public class InscripcionController {
 			}
 			model.put("tienePendiente", tienePendiente);
 			if (tienePendiente == false) {
-				if (this.inscripcionService.cuentaAceptadasEnResidencia(residencia) == residencia.getAforo()) {
+				if (this.inscripcionService.cuentaAceptadasEnResidencia(residencia) >= residencia.getAforo()) {
 					model.put("aforoMaximo", true);
 				} else {
 					inscripcion.setEstado("pendiente");

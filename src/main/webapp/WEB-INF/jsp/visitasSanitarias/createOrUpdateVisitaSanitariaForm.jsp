@@ -20,14 +20,15 @@
                 <resify:inputField label="Sanitario" name="sanitario" />
                 <resify:inputField label="Hora Inicio" name="horaInicio" />
                 <resify:inputField label="Hora Fin" name="horaFin" />
-					<div class="form-group has-feedback">Seleccionar Anciano
+                <br>
+				<c:out value="${noAncianosConDependencia }" />
+					<div class="form-group has-feedback"><br>Seleccionar Anciano
 					<form:select path="anciano.id">
 						<jstl:forEach items="${ancianos}" var="anciano">
 							<form:option value="${anciano.id }"
 								label="${anciano.nombre} ${anciano.apellidos}"></form:option>
 						</jstl:forEach>
 					</form:select>
-					<br><c:out value="${noVale }" />
             		</div>
             </div>
             <div class="form-group">

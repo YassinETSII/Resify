@@ -10,7 +10,7 @@ import org.springframework.samples.petclinic.model.Authorities;
 
 public interface AuthoritiesRepository extends  CrudRepository<Authorities, String>{
 	
-	@Query("SELECT a.authority FROM Authorities a WHERE a.username LIKE :username%")
+	@Query("SELECT a.authority FROM Authorities a WHERE a.username = :username")
 	String findAuthority(@Param("username") String username) throws DataAccessException;
 			
 }

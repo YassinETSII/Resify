@@ -27,6 +27,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -39,27 +40,26 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "excursiones")
 public class Excursion extends ActivityEntity {
 
-	@Positive
+	@PositiveOrZero
 	@Column(name = "ratio")
-	private double		ratioAceptacion;
+	private double ratioAceptacion;
 
 	@Positive
 	@Column(name = "numeroResidencias")
-	private int			numeroResidencias;
+	private int numeroResidencias;
 
 	@NotNull
 	@Column(name = "fecha_fin")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date		fechaFin;
+	private Date fechaFin;
 
 	@Column(name = "final_mode")
-	private boolean		finalMode;
+	private boolean finalMode;
 
 	@ManyToOne
 	@JoinColumn(name = "organizador_id")
-	private Organizador	organizador;
-
+	private Organizador organizador;
 
 	public Double getRatioAceptacion() {
 		return this.ratioAceptacion;

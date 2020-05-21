@@ -8,14 +8,7 @@
 
 <resify:layout pageName="excursiones">
 
-	<h2>
-		Informacion de la excursion
-		<security:authorize access="hasAuthority('organizador')">
-			<c:if test="${excursion.finalMode}">
-			(Publicada)
-			</c:if>
-		</security:authorize>
-	</h2>
+	<h2>Informacion de la excursion</h2>
 
 
 	<table class="table table-striped">
@@ -67,6 +60,9 @@
 			<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Eliminar
 				excursion</a>
 		</c:if>
+		<c:if test="${excursion.finalMode}">
+			Ya has publicado esta excursion
+			</c:if>
 	</security:authorize>
 
 
@@ -90,30 +86,27 @@
 			<td><c:out value="NO TIENE UNA RESIDENCIA QUE INSCRIBIR" /></td>
 		</c:if>
 	</security:authorize>
-	
+
 	<security:authorize access="hasAuthority('manager')">
 		<c:if test="${hasResidencia }">
 			<c:if test="${!hasFeedback}">
 				<c:if test="${asistida}">
-				<spring:url
-					value="/excursiones/{excursionId}/feedbacks/new"
-					var="editUrl">
-					<spring:param name="excursionId" value="${excursion.id}" />
-				</spring:url>
-				<br/>
-				<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Dar feedback</a>
+					<spring:url value="/excursiones/{excursionId}/feedbacks/new"
+						var="editUrl">
+						<spring:param name="excursionId" value="${excursion.id}" />
+					</spring:url>
+					<br />
+					<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Dar
+						feedback</a>
 				</c:if>
 			</c:if>
 
 			<c:if test="${hasFeedback}">
-				<br/>
+				<br />
 				<td><c:out value="YA HA DADO FEEDBACK DE ESTA EXCURSIÓN" /></td>
 			</c:if>
 		</c:if>
 
-		<c:if test="${!hasResidencia}">
-			<td><c:out value="NO TIENE UNA RESIDENCIA QUE INSCRIBIR" /></td>
-		</c:if>
 	</security:authorize>
 
 </resify:layout>

@@ -14,6 +14,6 @@ public interface OrganizadorRepository extends CrudRepository<Organizador, Strin
 //	@Query("SELECT DISTINCT owner FROM Owner owner left join fetch owner.pets WHERE owner.lastName LIKE :lastName%")
 //	public Collection<Owner> findByLastName(@Param("lastName") String lastName);
 	
-	@Query("SELECT organizador FROM Organizador organizador WHERE organizador.user.username LIKE :username%")
+	@Query("SELECT organizador FROM Organizador organizador WHERE organizador.user.username = :username")
 	Organizador findByUsername(@Param("username") String username) throws DataAccessException;
 }
