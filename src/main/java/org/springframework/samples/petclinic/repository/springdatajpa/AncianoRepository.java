@@ -15,6 +15,10 @@ public interface AncianoRepository extends CrudRepository<Anciano, String> {
 	Anciano findByUsername(@Param("username") String username) throws DataAccessException;
 
 	@Query("SELECT a FROM Anciano a where a.id in (select i.anciano.id from Inscripcion i where i.estado = 'aceptada' "
+			+ "and i.residencia.id =:id) and a.tieneDependenciaGrave = 'true'")
+	Iterable<Anciano> findAncianosMiResidenciaConDependencia(@Param("id") int id) throws DataAccessException;
+
+	@Query("SELECT count(a.id) FROM Anciano a where a.id in (select i.anciano.id from Inscripcion i where i.estado = 'aceptada' "
 			+ "and i.residencia.id =:id)")
-	Iterable<Anciano> findAncianosMiResidencia(@Param("id") int id) throws DataAccessException;
+	Integer countAncianosByResidenciaId(@Param("id") int id) throws DataAccessException;
 }

@@ -63,8 +63,13 @@ public class AncianoService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Iterable<Anciano> findAncianosMiResidencia(final Residencia residencia) throws DataAccessException {
-		return this.ancianoRepository.findAncianosMiResidencia(residencia.getId());
+	public Iterable<Anciano> findAncianosMiResidenciaConDependencia(final Residencia residencia) throws DataAccessException {
+		return this.ancianoRepository.findAncianosMiResidenciaConDependencia(residencia.getId());
+	}
+	
+	@Transactional(readOnly = true)
+	public Integer countAncianosMiResidencia(final Residencia residencia) throws DataAccessException {
+		return this.ancianoRepository.countAncianosByResidenciaId(residencia.getId());
 	}
 
 	@Transactional

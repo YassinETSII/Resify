@@ -19,22 +19,17 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author Juergen Hoeller
@@ -63,12 +58,12 @@ public class ManagerController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@GetMapping()
-	public String listManagers(Map<String, Object> model) {
-		Iterable<Manager> managers = managerService.findManagers();
-		model.put("managers", managers);
-		return "usuarios/usuariosList";
-	}
+//	@GetMapping()
+//	public String listManagers(Map<String, Object> model) {
+//		Iterable<Manager> managers = managerService.findManagers();
+//		model.put("managers", managers);
+//		return "usuarios/usuariosList";
+//	}
 
 	@GetMapping(value = "/new")
 	public String initCreationForm(Map<String, Object> model) {
@@ -85,38 +80,37 @@ public class ManagerController {
 		} else {
 			authService.saveAuthorities(manager.getUser().getUsername(), "manager");
 			managerService.saveManager(manager);
-			model.put("message", "Se ha registrado el manager correctamente");
-			return "redirect:/managers";
+			return "redirect:/";
 		}
 	}
 
-	@GetMapping(value = "/{managerId}/edit")
-	public String initUpdateManagerForm(@PathVariable("managerId") int managerId, Model model) {
-		Manager manager = this.managerService.findManagerById(managerId);
-		model.addAttribute(manager);
-		return VIEWS_USUARIO_CREATE_OR_UPDATE_FORM;
-	}
-
-	@PostMapping(value = "/{managerId}/edit")
-	public String processUpdateManagerForm(@Valid Manager manager, BindingResult result,
-			@PathVariable("managerId") int managerId, final ModelMap model) {
-		if (result.hasErrors()) {
-			model.put("manager", manager);
-			return VIEWS_USUARIO_CREATE_OR_UPDATE_FORM;
-		} else {
-			Manager managerToUpdate = this.managerService.findManagerById(managerId);
-			BeanUtils.copyProperties(manager, managerToUpdate, "id", "user");
-			this.managerService.saveManager(managerToUpdate);
-			return "redirect:/managers/{managerId}";
-		}
-	}
-
-	@GetMapping("/{managerId}")
-	public ModelAndView showActividad(@PathVariable("managerId") int managerId) {
-		Manager manager = this.managerService.findManagerById(managerId);
-		ModelAndView mav = new ModelAndView("usuarios/usuariosDetails");
-		mav.addObject(manager);
-		return mav;
-	}
+//	@GetMapping(value = "/{managerId}/edit")
+//	public String initUpdateManagerForm(@PathVariable("managerId") int managerId, Model model) {
+//		Manager manager = this.managerService.findManagerById(managerId);
+//		model.addAttribute(manager);
+//		return VIEWS_USUARIO_CREATE_OR_UPDATE_FORM;
+//	}
+//
+//	@PostMapping(value = "/{managerId}/edit")
+//	public String processUpdateManagerForm(@Valid Manager manager, BindingResult result,
+//			@PathVariable("managerId") int managerId, final ModelMap model) {
+//		if (result.hasErrors()) {
+//			model.put("manager", manager);
+//			return VIEWS_USUARIO_CREATE_OR_UPDATE_FORM;
+//		} else {
+//			Manager managerToUpdate = this.managerService.findManagerById(managerId);
+//			BeanUtils.copyProperties(manager, managerToUpdate, "id", "user");
+//			this.managerService.saveManager(managerToUpdate);
+//			return "redirect:/managers/{managerId}";
+//		}
+//	}
+//
+//	@GetMapping("/{managerId}")
+//	public ModelAndView showActividad(@PathVariable("managerId") int managerId) {
+//		Manager manager = this.managerService.findManagerById(managerId);
+//		ModelAndView mav = new ModelAndView("usuarios/usuariosDetails");
+//		mav.addObject(manager);
+//		return mav;
+//	}
 
 }

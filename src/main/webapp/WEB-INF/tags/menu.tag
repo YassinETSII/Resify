@@ -156,25 +156,25 @@
 				
 				<!-- 				------------------------------------------------------------ -->
 
-				<sec:authorize access="hasAuthority('admin')">
-					<petclinic:menuItem active="${name eq 'ancianos'}"
-						url="/ancianos" title="find ancianos">
-						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-						<span>Ancianos</span>
-					</petclinic:menuItem>
+<%-- 				<sec:authorize access="hasAuthority('admin')"> --%>
+<%-- 					<petclinic:menuItem active="${name eq 'ancianos'}" --%>
+<%-- 						url="/ancianos" title="find ancianos"> --%>
+<!-- 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span> -->
+<!-- 						<span>Ancianos</span> -->
+<%-- 					</petclinic:menuItem> --%>
 
-					<petclinic:menuItem active="${name eq 'managers'}"
-						url="/managers" title="find managers">
-						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-						<span>Managers</span>
-					</petclinic:menuItem>
+<%-- 					<petclinic:menuItem active="${name eq 'managers'}" --%>
+<%-- 						url="/managers" title="find managers"> --%>
+<!-- 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span> -->
+<!-- 						<span>Managers</span> -->
+<%-- 					</petclinic:menuItem> --%>
 					
-					<petclinic:menuItem active="${name eq 'organizadores'}"
-						url="/organizadores" title="find organizadores">
-						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-						<span>Organizadores</span>
-					</petclinic:menuItem>
-				</sec:authorize>
+<%-- 					<petclinic:menuItem active="${name eq 'organizadores'}" --%>
+<%-- 						url="/organizadores" title="find organizadores"> --%>
+<!-- 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span> -->
+<!-- 						<span>Organizadores</span> -->
+<%-- 					</petclinic:menuItem> --%>
+<%-- 				</sec:authorize> --%>
 			</ul>
 
 
@@ -183,7 +183,7 @@
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
 					<li><a href="<c:url value="/login" />">Login</a></li>
-					<li><a href="<c:url value="/users/new" />">Register</a></li>
+					<li><a href="<c:url value="/usuarios/new" />">Register</a></li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"

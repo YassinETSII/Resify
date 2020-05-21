@@ -28,36 +28,9 @@ public class ExcursionValidator implements Validator {
 		Excursion excursion = (Excursion) obj;
 		Date currentDate = new Date();
 
-		if (excursion.getTitulo().isEmpty()) {
-			errors.rejectValue("titulo", "requerido", "requerido");
-		}
-
-		if (excursion.getDescripcion().isEmpty()) {
-			errors.rejectValue("descripcion", "requerido", "requerido");
-		}
-
-		if (excursion.getFechaInicio() == null || !excursion.getFechaInicio().after(currentDate)) {
-			errors.rejectValue("fechaInicio", "debe ser fecha futura", "debe ser fecha futura");
-		}
-
-		if (excursion.getFechaFin() == null) {
-			errors.rejectValue("fechaFin", "requerido", "requerido");
-		}
-
-		if (excursion.getHoraInicio() == null) {
-			errors.rejectValue("horaInicio", "requerido", "requerido");
-		}
-
-		if (excursion.getHoraFin() == null) {
-			errors.rejectValue("horaFin", "requerido", "requerido");
-		}
-		
-		if(excursion.getNumeroResidencias() < 0) {
-			errors.rejectValue("numeroResidencias", "debe ser mayor que 0", "debe ser mayor que 0");
-		}
-		
-		if(excursion.getRatioAceptacion() < 1) {
-			errors.rejectValue("ratioAceptacion", "debe ser mayor que 1", "debe ser mayor que 1");
+		if (excursion.getFechaInicio() != null && !excursion.getFechaInicio().after(currentDate)) {
+			errors.rejectValue("fechaInicio", "la fecha de inicio debe ser futura",
+					"la fecha de inicio debe ser futura");
 		}
 
 		if (excursion.getFechaFin() != null && excursion.getFechaInicio() != null && excursion.getHoraInicio() != null

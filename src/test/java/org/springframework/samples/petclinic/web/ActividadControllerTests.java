@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -234,27 +233,4 @@ class ActividadControllerTests {
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 	
-	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
-	@Test
-	void testProcessUpdateFormHasErrors() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/actividades/{actividadId}/edit",ActividadControllerTests.TEST_ACTIVIDAD_ID)
-				.param("titulo", "Prueba")
-				.param("descripcion", "")
-				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaInicio", "2030/01/01")
-				.param("horaInicio", "10:00")
-				.param("horaFin", "20:00"))
-			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("actividad"))
-			.andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.view().name("actividades/createOrUpdateActividadForm"));
-	}
-
-	@WithMockUser(username = ActividadControllerTests.TEST_MANAGER_NOMBRE)
-	@Test
-	void testProcessDeleteSuccess() throws Exception {
-		this.mockMvc
-				.perform(MockMvcRequestBuilders.get("/actividades/{actividadId}/delete",
-						ActividadControllerTests.TEST_ACTIVIDAD_ID))
-				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
-	}
-
 }
