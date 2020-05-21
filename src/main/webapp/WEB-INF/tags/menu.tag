@@ -169,12 +169,19 @@
 <!-- 						<span>Managers</span> -->
 <%-- 					</petclinic:menuItem> --%>
 					
-<%-- 					<petclinic:menuItem active="${name eq 'organizadores'}" --%>
-<%-- 						url="/organizadores" title="find organizadores"> --%>
-<!-- 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span> -->
-<!-- 						<span>Organizadores</span> -->
-<%-- 					</petclinic:menuItem> --%>
-<%-- 				</sec:authorize> --%>
+					<petclinic:menuItem active="${name eq 'organizadores'}"
+						url="/organizadores" title="find organizadores">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Organizadores</span>
+					</petclinic:menuItem>
+					
+					<petclinic:menuItem active="${name eq 'dashboard'}"
+						url="/dashboard" title="find dashboard">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Dashboard</span>
+					</petclinic:menuItem>
+					
+				</sec:authorize>
 			</ul>
 
 

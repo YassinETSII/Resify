@@ -47,6 +47,11 @@ public class IncidenciaService {
 	@Transactional
 	public Iterable<Incidencia> findAll() {
 		return incidenciaRepository.findAll();
+	}
+
+	@Transactional
+	public Long countIncidencias() {
+		return this.incidenciaRepository.count();
 	}		
 	
 	

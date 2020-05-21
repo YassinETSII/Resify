@@ -26,4 +26,7 @@ public interface FeedbackRepository extends CrudRepository<Feedback, String> {
 	@Query("SELECT count(f.id) FROM Feedback f WHERE f.excursion LIKE :excursion AND f.residencia.manager LIKE :manager ")
 	Integer countFeedbacksByExcursion(@Param("excursion") Excursion excursion, @Param("manager") Manager manager)
 			throws DataAccessException;
+
+	@Query("SELECT count(f) FROM Feedback f GROUP BY f.excursion")
+	Iterable<Long> countFeedbacksByExcursion() throws DataAccessException;
 }

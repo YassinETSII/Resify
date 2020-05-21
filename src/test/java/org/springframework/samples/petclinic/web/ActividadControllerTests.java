@@ -232,5 +232,4 @@ class ActividadControllerTests {
 						.param("horaInicio", "10:00").param("horaFin", "20:00"))
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
-	
 }

@@ -40,6 +40,9 @@ public class AncianoService {
 
 	@Autowired
 	private AuthoritiesService	authoritiesService;
+	
+	@Autowired
+	private ResidenciaService	residenciaService;
 
 
 	@Autowired
@@ -80,6 +83,16 @@ public class AncianoService {
 		this.userService.saveUser(anciano.getUser());
 		//creating authorities
 		this.authoritiesService.saveAuthorities(anciano.getUser().getUsername(), "anciano");
+	}
+
+	@Transactional
+	public Long countAncianos() {
+		return this.ancianoRepository.count();
+	}
+
+	@Transactional
+	public Double avgAncianosByResidencia() {
+		return  this.ancianoRepository.countAncianosInResidencia().doubleValue()/this.residenciaService.countResidencias().doubleValue();
 	}
 
 }

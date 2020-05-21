@@ -39,6 +39,12 @@ public class QuejaService {
 
 	@Autowired
 	private QuejaRepository quejaRepository;	
+	
+	@Autowired
+	private AncianoService ancianoService;	
+	
+	@Autowired
+	private ResidenciaService residenciaService;	
 
 	@Transactional(readOnly = true)
 	public Iterable<Queja> findQuejasByManager(Manager manager) throws DataAccessException {
@@ -60,7 +66,22 @@ public class QuejaService {
 	public void saveQueja(Queja queja) throws DataAccessException {
 		quejaRepository.save(queja);	
 	}
-		
+
+	@Transactional
+	public Long countQuejas() {
+		return this.quejaRepository.count();
+	}
+
+	@Transactional
+	public Double avgQuejasByAnciano() {
+		return Double.valueOf(this.quejaRepository.count())/this.ancianoService.countAncianos();
+	}		
+
+
+	@Transactional
+	public Double avgQuejasByResidencia() {
+		return Double.valueOf(this.quejaRepository.count())/this.residenciaService.countResidencias();
+	}		
 	
 
 }

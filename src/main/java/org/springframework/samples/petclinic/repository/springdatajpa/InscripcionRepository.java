@@ -18,6 +18,12 @@ public interface InscripcionRepository extends CrudRepository<Inscripcion, Strin
 	Iterable<Inscripcion> findAllMineManager(@Param("id") int id) throws DataAccessException;
 
 	@Query("SELECT COUNT(inscripcion) FROM Inscripcion inscripcion WHERE inscripcion.residencia.id =:id AND inscripcion.estado = 'aceptada'")
-	Integer cuentaAceptadasEnResidencia(Integer id);
+	Integer cuentaAceptadasEnResidencia(Integer id) throws DataAccessException;
+
+	@Query("SELECT COUNT(inscripcion) FROM Inscripcion inscripcion WHERE inscripcion.estado = 'aceptada'")
+	Long countInscripcionesAceptadas() throws DataAccessException;
+
+	@Query("SELECT COUNT(inscripcion) FROM Inscripcion inscripcion WHERE inscripcion.estado = 'rechazada'")
+	Long countInscripcionesRechazadas() throws DataAccessException;
 
 }

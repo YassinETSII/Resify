@@ -81,4 +81,9 @@ public class ManagerService {
 		this.authoritiesService.saveAuthorities(manager.getUser().getUsername(), "manager");
 	}
 
+	@Transactional
+	public Long countManagers() {
+		return this.managerRepository.count();
+	}
+
 }

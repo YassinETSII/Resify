@@ -38,6 +38,9 @@ public class ActividadService {
 	@Autowired
 	private ActividadRepository actividadRepository;	
 	
+	@Autowired
+	private ResidenciaService residenciaService;	
+	
 //	@Autowired
 //	private UserService userService;
 //	
@@ -76,6 +79,16 @@ public class ActividadService {
 
 	public Iterable<Actividad> findAllMineAnciano(Anciano anciano) {
 		return actividadRepository.findAllMineAnciano(anciano.getId(), java.sql.Date.valueOf(LocalDate.now()));
+	}
+	
+	@Transactional
+	public Long countActividades() {
+		return actividadRepository.count();
+	}
+
+	@Transactional
+	public Double avgActividadesByResidencia() {
+		return Double.valueOf(this.actividadRepository.count())/this.residenciaService.countResidencias().doubleValue();
 	}		
 	
 	
