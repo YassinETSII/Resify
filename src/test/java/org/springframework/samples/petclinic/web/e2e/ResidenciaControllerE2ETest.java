@@ -162,4 +162,46 @@ public class ResidenciaControllerE2ETest {
 			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("residencia")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("residencias/createOrUpdateResidenciaForm"));
 	}
 
+	//no debe acceder al top residencias siendo manager
+	@WithMockUser(username = "manager1")
+	@Test
+	void testProcessFindTopErrorManager() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/top")).andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+
+	//no debe acceder al top residencias siendo manager
+	@WithMockUser(username = "organizador1")
+	@Test
+	void testProcessFindTopErrorOrganizador() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/top")).andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+
+	//no debe editar residencia siendo anciano
+	@WithMockUser(username = "anciano1")
+	@Test
+	void testUpdateResidenciaErrorAnciano() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/{residenciaId}/edit", ResidenciaControllerE2ETest.TEST_RESIDENCIA_ID)).andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+
+	//no debe editar residencia siendo organizador
+	@WithMockUser(username = "organizador1")
+	@Test
+	void testUpdateResidenciaErrorOrganizador() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/{residenciaId}/edit", ResidenciaControllerE2ETest.TEST_RESIDENCIA_ID)).andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+
+	//no debe crear residencia siendo anciano
+	@WithMockUser(username = "anciano1")
+	@Test
+	void testCrearResidenciaErrorAnciano() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/new")).andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+
+	//no debe crear residencia siendo organizador
+	@WithMockUser(username = "organizador1")
+	@Test
+	void testCrearResidenciaErrorOrganizador() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/new")).andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+
 }

@@ -174,4 +174,40 @@ class ActividadControllerTests {
 			.param("fechaInicio", "2030/01/01").param("horaInicio", "10:00").param("horaFin", "20:00")).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
+	//no debe acceder al form de crear actividad si no tiene residencia
+	@WithMockUser(username = "manager3")
+	@Test
+	void testInitCreationConManagerSinResidencia() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades/new")).andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+
+	//no debe acceder al form de editar actividad si no es suya
+	@WithMockUser(username = "manager1")
+	@Test
+	void testInitUpdateConManagerEquivocado() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades/{actividadId}/edit", ActividadControllerTests.TEST_ACTIVIDAD_ID)).andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+
+	//no debe poder editar una actividad si no es suya
+	@WithMockUser(username = "manager1")
+	@Test
+	void testProcessUpdateConManagerEquivocado() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/actividades/{actividadId}/edit", ActividadControllerTests.TEST_ACTIVIDAD_ID).param("titulo", "Prueba2").param("descripcion", "Prueba descrip").with(SecurityMockMvcRequestPostProcessors.csrf())
+			.param("fechaInicio", "2030/01/01").param("horaInicio", "10:00").param("horaFin", "20:00")).andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+
+	//no debe acceder al show de una actividad siendo manager si no es suya
+	@WithMockUser(username = "manager1", authorities = "manager")
+	@Test
+	void testShowConManagerEquivocado() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades/{actividadId}", ActividadControllerTests.TEST_ACTIVIDAD_ID)).andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+
+	//no debe acceder al show de una actividad siendo anciano si no es de su residencia
+	@WithMockUser(username = "anciano3", authorities = "anciano")
+	@Test
+	void testShowConAncianoEquivocado() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades/{actividadId}", ActividadControllerTests.TEST_ACTIVIDAD_ID)).andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+
 }

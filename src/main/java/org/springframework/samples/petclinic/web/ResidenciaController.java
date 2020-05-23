@@ -92,6 +92,9 @@ public class ResidenciaController {
 		String auth = this.authoritiesService.findAuthority(p.getName());
 		if (auth.equals("manager")) {
 			Residencia residencia = this.residenciaService.findMine(this.managerService.findManagerByUsername(p.getName()));
+			if (residencia == null) {
+				return "redirect:residencias/new";
+			}
 			model.put("residencia", residencia);
 			return "residencias/residenciasDetails";
 		} else {
