@@ -73,5 +73,8 @@
     	</spring:url>
    		<a href="${inscribirseUrl}" class="btn btn-default">Inscribirse en la residencia</a>
     </c:if>
+    <c:if test="${fn:contains(pageContext['request'].userPrincipal.authorities, 'anciano') && tienePendiente == true}">
+    	<td><c:out value="TIENE UNA INSCRIPCIÓN PENDIENTE EN ESTA RESIDENCIA" /></td>
+    </c:if>
 
 </resify:layout>
