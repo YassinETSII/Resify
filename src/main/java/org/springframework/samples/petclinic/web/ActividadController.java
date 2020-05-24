@@ -135,8 +135,12 @@ public class ActividadController {
 	}
 
 	@GetMapping(value = "/{actividadId}/edit")
-	public String initUpdateActividadForm(@PathVariable("actividadId") final int actividadId, final Model model) {
+	public String initUpdateActividadForm(@PathVariable("actividadId") final int actividadId, final Model model, final Principal p) {
 		Actividad actividad = this.actividadService.findActividadById(actividadId);
+		Manager manager = this.managerService.findManagerByUsername(p.getName());
+		if (!actividad.getResidencia().getManager().equals(manager)) {
+			return "exception";
+		}
 		model.addAttribute(actividad);
 		return ActividadController.VIEWS_ACTIVIDAD_CREATE_OR_UPDATE_FORM;
 	}

@@ -121,5 +121,70 @@ public class ActividadControllerE2ETest {
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.view().name("actividades/createOrUpdateActividadForm"));
 	}
+	
+	//los organizadores no deben poder acceder a la lista de actividades
+	@WithMockUser(username = "organizador1")
+	@Test
+	void testListaActividadesComoOrganizador() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades"))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//los organizadores no deben poder acceder al show de actividades
+	@WithMockUser(username = "organizador1")
+	@Test
+	void testShowActividadComoOrganizador() throws Exception {
+		this.mockMvc
+		.perform(MockMvcRequestBuilders.get("/actividades/{actividadId}", ActividadControllerE2ETest.TEST_A_ID))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//los ancianos no deben poder acceder a la edición de actividades
+	@WithMockUser(username = "anciano1")
+	@Test
+	void testEditaActividadComoAnciano() throws Exception {
+		this.mockMvc.perform(get("/actividades/{actividadId}/edit", TEST_A_ID))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//los organizadores no deben poder acceder a la edición de actividades
+	@WithMockUser(username = "organizador1")
+	@Test
+	void testEditaActividadComoOrganizador() throws Exception {
+		this.mockMvc.perform(get("/actividades/{actividadId}/edit", TEST_A_ID))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//los ancianos no deben poder acceder a la creación de actividades
+	@WithMockUser(username = "anciano1")
+	@Test
+	void testCreaActividadComoAnciano() throws Exception {
+		this.mockMvc.perform(get("/actividades/new"))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//los organizadores no deben poder acceder a la creación de actividades
+	@WithMockUser(username = "organizador1")
+	@Test
+	void testCreaActividadComoOrganizador() throws Exception {
+		this.mockMvc.perform(get("/actividades/new", TEST_A_ID))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//los ancianos no deben poder borrar actividades
+	@WithMockUser(username = "anciano1")
+	@Test
+	void testBorraActividadComoAnciano() throws Exception {
+		this.mockMvc.perform(get("/actividades/{actividadId}/delete", TEST_A_ID))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//los organizadores no deben poder borrar actividades
+	@WithMockUser(username = "organizador1")
+	@Test
+	void testBorraActividadComoOrganizador() throws Exception {
+		this.mockMvc.perform(get("/actividades/{actividadId}/delete", TEST_A_ID))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
 
 }

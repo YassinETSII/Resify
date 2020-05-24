@@ -105,6 +105,9 @@ public class ExcursionController {
 		if (authority.equals("manager")) {
 			Manager manager = managerService.findManagerByUsername(p.getName());
 			Residencia res = residenciaService.findMine(manager);
+			if(res == null) {
+				return "redirect:../residencias/new";
+			}
 			excursiones = excursionService.findAllGone(res);
 		}
 		model.put("excursiones", excursiones);
