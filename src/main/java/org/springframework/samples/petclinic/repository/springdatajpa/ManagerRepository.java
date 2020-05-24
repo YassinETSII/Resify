@@ -12,10 +12,10 @@ public interface ManagerRepository extends CrudRepository<Manager, String> {
 
 	Manager findById(int id) throws DataAccessException;
 
-	@Query("SELECT residencia FROM Residencia residencia WHERE residencia.manager.user.username LIKE :username%")
+	@Query("SELECT residencia FROM Residencia residencia WHERE residencia.manager.user.username = :username")
 	Residencia findResidenciaByManagerUsername(@Param("username") String username) throws DataAccessException;
 
-	@Query("SELECT manager FROM Manager manager WHERE manager.user.username LIKE :username%")
+	@Query("SELECT manager FROM Manager manager WHERE manager.user.username = :username")
 	Manager findByUsername(@Param("username") String username) throws DataAccessException;
 
 }

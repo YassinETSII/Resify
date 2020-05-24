@@ -117,7 +117,16 @@ public class ResidenciaService {
 		return this.residenciaRepository.findResidenciaByAncianoId(anciano.getId());
 	}
 
-	
+	@Transactional
+	public Long countResidencias() {
+		return this.residenciaRepository.count();
+	}
+
+	@Transactional
+	public Long countResidenciasCompletas() {
+		return this.residenciaRepository.countResidenciasCompletas();
+	}
+
 	
 
 	private List<Residencia> ordenaPorRatio(final List<Residencia> listaPorOrdenar, final List<Residencia> listaYaOrdenada, final Double ratioInicial) {
@@ -137,5 +146,6 @@ public class ResidenciaService {
 		}
 		return res;
 	}
+
 
 }

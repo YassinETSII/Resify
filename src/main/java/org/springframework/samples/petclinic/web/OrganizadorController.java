@@ -19,22 +19,17 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Organizador;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OrganizadorService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author Juergen Hoeller
@@ -63,12 +58,12 @@ public class OrganizadorController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@GetMapping()
-	public String listOrganizadors(Map<String, Object> model) {
-		Iterable<Organizador> organizadores = organizadorService.findOrganizadores();
-		model.put("organizadores", organizadores);
-		return "usuarios/usuariosList";
-	}
+//	@GetMapping()
+//	public String listOrganizadors(Map<String, Object> model) {
+//		Iterable<Organizador> organizadores = organizadorService.findOrganizadores();
+//		model.put("organizadores", organizadores);
+//		return "usuarios/usuariosList";
+//	}
 
 	@GetMapping(value = "/new")
 	public String initCreationForm(Map<String, Object> model) {
@@ -85,38 +80,37 @@ public class OrganizadorController {
 		} else {
 			authService.saveAuthorities(organizador.getUser().getUsername(), "organizador");
 			organizadorService.saveOrganizador(organizador);
-			model.put("message", "Se ha registrado el organizador correctamente");
-			return "redirect:/organizadores";
+			return "redirect:/";
 		}
 	}
 
-	@GetMapping(value = "/{organizadorId}/edit")
-	public String initUpdateOrganizadorForm(@PathVariable("organizadorId") int organizadorId, Model model) {
-		Organizador organizador = this.organizadorService.findOrganizadorById(organizadorId);
-		model.addAttribute(organizador);
-		return VIEWS_USUARIO_CREATE_OR_UPDATE_FORM;
-	}
+//	@GetMapping(value = "/{organizadorId}/edit")
+//	public String initUpdateOrganizadorForm(@PathVariable("organizadorId") int organizadorId, Model model) {
+//		Organizador organizador = this.organizadorService.findOrganizadorById(organizadorId);
+//		model.addAttribute(organizador);
+//		return VIEWS_USUARIO_CREATE_OR_UPDATE_FORM;
+//	}
+//
+//	@PostMapping(value = "/{organizadorId}/edit")
+//	public String processUpdateOrganizadorForm(@Valid Organizador organizador, BindingResult result,
+//			@PathVariable("organizadorId") int organizadorId, final ModelMap model) {
+//		if (result.hasErrors()) {
+//			model.put("organizador", organizador);
+//			return VIEWS_USUARIO_CREATE_OR_UPDATE_FORM;
+//		} else {
+//			Organizador organizadorToUpdate = this.organizadorService.findOrganizadorById(organizadorId);
+//			BeanUtils.copyProperties(organizador, organizadorToUpdate, "id", "user");
+//			this.organizadorService.saveOrganizador(organizadorToUpdate);
+//			return "redirect:/organizadores/{organizadorId}";
+//		}
+//	}
 
-	@PostMapping(value = "/{organizadorId}/edit")
-	public String processUpdateOrganizadorForm(@Valid Organizador organizador, BindingResult result,
-			@PathVariable("organizadorId") int organizadorId, final ModelMap model) {
-		if (result.hasErrors()) {
-			model.put("organizador", organizador);
-			return VIEWS_USUARIO_CREATE_OR_UPDATE_FORM;
-		} else {
-			Organizador organizadorToUpdate = this.organizadorService.findOrganizadorById(organizadorId);
-			BeanUtils.copyProperties(organizador, organizadorToUpdate, "id", "user");
-			this.organizadorService.saveOrganizador(organizadorToUpdate);
-			return "redirect:/organizadores/{organizadorId}";
-		}
-	}
-
-	@GetMapping("/{organizadorId}")
-	public ModelAndView showActividad(@PathVariable("organizadorId") int organizadorId) {
-		Organizador organizador = this.organizadorService.findOrganizadorById(organizadorId);
-		ModelAndView mav = new ModelAndView("usuarios/usuariosDetails");
-		mav.addObject(organizador);
-		return mav;
-	}
+//	@GetMapping("/{organizadorId}")
+//	public ModelAndView showActividad(@PathVariable("organizadorId") int organizadorId) {
+//		Organizador organizador = this.organizadorService.findOrganizadorById(organizadorId);
+//		ModelAndView mav = new ModelAndView("usuarios/usuariosDetails");
+//		mav.addObject(organizador);
+//		return mav;
+//	}
 
 }

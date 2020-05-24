@@ -51,4 +51,7 @@ public interface ResidenciaRepository extends CrudRepository<Residencia, String>
 	@Query("SELECT r from Residencia r where r.id not in (SELECT distinct(re.id) FROM Residencia re, PeticionExcursion p, Excursion e where " + "p.estado = 'aceptada' and re.id = p.residencia.id and p.excursion.id = " + "e.id and e.organizador.id =:id)")
 	Iterable<Residencia> findResidenciasSinParticipar(@Param("id") int id) throws DataAccessException;
 
+	@Query("SELECT count(r.id) from Residencia r where r.aforo <= (SELECT count(i.id) FROM Inscripcion i where i.residencia.id = r.id AND i.estado = 'aceptada')")
+	Long countResidenciasCompletas()throws DataAccessException;
+
 }

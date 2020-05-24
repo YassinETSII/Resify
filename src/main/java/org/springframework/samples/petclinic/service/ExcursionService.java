@@ -18,6 +18,9 @@ public class ExcursionService {
 	@Autowired
 	private ExcursionRepository excursionRepository;	
 	
+	@Autowired
+	private OrganizadorService organizadorService;
+	
 //	@Autowired
 //	private UserService userService;
 //	
@@ -66,6 +69,16 @@ public class ExcursionService {
 
 	public Iterable<Excursion> findAllMineAnciano(Anciano anciano) {
 		return excursionRepository.findAllMineAnciano(anciano.getId(), java.sql.Date.valueOf(LocalDate.now()));
+	}
+
+	@Transactional
+	public Long countExcursiones() {
+		return excursionRepository.count();
+	}
+	
+	@Transactional
+	public Double avgExcursionesByOrganizador() {
+		return Double.valueOf(this.excursionRepository.count())/this.organizadorService.countOrganizadores();
 	}		
 
 }

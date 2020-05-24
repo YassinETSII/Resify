@@ -31,5 +31,14 @@ public interface PeticionExcursionRepository extends CrudRepository<PeticionExcu
 	Integer countPeticionesAceptadasByExcursion(@Param("excursion") Excursion excursion, @Param("manager") Manager manager)
 			throws DataAccessException;
 
+	@Query("SELECT count(p) FROM PeticionExcursion p GROUP BY p.excursion")
+	Iterable<Long> countPeticionesExcursionByExcursion() throws DataAccessException;
+	
+	@Query("SELECT count(p) FROM PeticionExcursion p WHERE p.estado = 'aceptada'")
+	Long countPeticionesExcursionAceptadas() throws DataAccessException;
+
+	@Query("SELECT count(p) FROM PeticionExcursion p WHERE p.estado = 'rechazada'")
+	Long countPeticionesExcursionRechazadas() throws DataAccessException;
+
 	
 }

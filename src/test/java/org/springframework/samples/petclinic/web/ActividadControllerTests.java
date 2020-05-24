@@ -209,5 +209,4 @@ class ActividadControllerTests {
 	void testShowConAncianoEquivocado() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades/{actividadId}", ActividadControllerTests.TEST_ACTIVIDAD_ID)).andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
-
 }

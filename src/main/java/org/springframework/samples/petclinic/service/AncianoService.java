@@ -40,6 +40,9 @@ public class AncianoService {
 
 	@Autowired
 	private AuthoritiesService	authoritiesService;
+	
+	@Autowired
+	private ResidenciaService	residenciaService;
 
 
 	@Autowired
@@ -63,8 +66,13 @@ public class AncianoService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Iterable<Anciano> findAncianosMiResidencia(final Residencia residencia) throws DataAccessException {
-		return this.ancianoRepository.findAncianosMiResidencia(residencia.getId());
+	public Iterable<Anciano> findAncianosMiResidenciaConDependencia(final Residencia residencia) throws DataAccessException {
+		return this.ancianoRepository.findAncianosMiResidenciaConDependencia(residencia.getId());
+	}
+	
+	@Transactional(readOnly = true)
+	public Integer countAncianosMiResidencia(final Residencia residencia) throws DataAccessException {
+		return this.ancianoRepository.countAncianosByResidenciaId(residencia.getId());
 	}
 
 	@Transactional
@@ -75,6 +83,16 @@ public class AncianoService {
 		this.userService.saveUser(anciano.getUser());
 		//creating authorities
 		this.authoritiesService.saveAuthorities(anciano.getUser().getUsername(), "anciano");
+	}
+
+	@Transactional
+	public Long countAncianos() {
+		return this.ancianoRepository.count();
+	}
+
+	@Transactional
+	public Double avgAncianosByResidencia() {
+		return  this.ancianoRepository.countAncianosInResidencia().doubleValue()/this.residenciaService.countResidencias().doubleValue();
 	}
 
 }

@@ -39,6 +39,9 @@ public class PeticionExcursionService {
 
 	@Autowired
 	private PeticionExcursionRepository peticionExcursionRepository;
+	
+	@Autowired
+	private ExcursionService excursionService;
 
 	@Transactional
 	public PeticionExcursion findPeticionExcursionById(int id) throws DataAccessException {
@@ -73,6 +76,37 @@ public class PeticionExcursionService {
 	@Transactional(readOnly = true)
 	public int countPeticionesByExcursionAceptada(Excursion excursion, Manager manager) throws DataAccessException {
 		return peticionExcursionRepository.countPeticionesAceptadasByExcursion(excursion, manager);
+	}
+
+	@Transactional
+	public Long countPeticionesExcursion() {
+		return peticionExcursionRepository.count();
+	}
+
+	@Transactional
+	public Double avgPeticionesExcursionByExcursion() {
+
+		return Double.valueOf(this.peticionExcursionRepository.count())/this.excursionService.countExcursiones().doubleValue();
+	}
+
+	@Transactional
+	public Long countPeticionesExcursionAceptadas() {
+		return peticionExcursionRepository.countPeticionesExcursionAceptadas();
+	}
+
+	@Transactional
+	public Double ratioPeticionesExcursionAceptadas() {
+		return countPeticionesExcursionAceptadas().doubleValue()/countPeticionesExcursion().doubleValue();
+	}
+
+	@Transactional
+	public Long countPeticionesExcursionRechazadas() {
+		return peticionExcursionRepository.countPeticionesExcursionRechazadas();
+	}
+
+	@Transactional
+	public Double ratioPeticionesExcursionRechazadas() {
+		return countPeticionesExcursionRechazadas().doubleValue()/countPeticionesExcursion().doubleValue();
 	}
 
 }

@@ -144,7 +144,7 @@ public class ResidenciaController {
 		if (res == null) {
 			tieneResidencia = false;
 		}
-
+		
 		if (tieneResidencia == true) {
 			return "redirect:../residencias/" + res.getId();
 		}

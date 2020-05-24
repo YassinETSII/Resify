@@ -88,7 +88,7 @@
 			<div class="form-group has-feedback">
 				<petclinic:inputField label="Nombre" name="nombre" />
 				<petclinic:inputField label="Apellidos" name="apellidos" />
-				<petclinic:inputField label="firma" name="firma" />
+				<petclinic:inputField label="Firma" name="firma" />
 				<petclinic:inputField label="Declaracion de Responsabilidad"
 					name="declaracionResponsabilidad" />
 				<c:if test="${manager['new']}">
