@@ -138,8 +138,12 @@ public class ExcursionController {
 	}
 
 	@GetMapping(value = "/{excursionId}/edit")
-	public String initUpdateExcursionForm(@PathVariable("excursionId") int excursionId, Model model) {
+	public String initUpdateExcursionForm(@PathVariable("excursionId") int excursionId, Model model, Principal p) {
 		Excursion excursion = this.excursionService.findExcursionById(excursionId);
+		Organizador organizador = this.organizadorService.findOrganizadorByUsername(p.getName());
+		if (!excursion.getOrganizador().equals(organizador)) {
+			return "exception";
+		}
 		model.addAttribute(excursion);
 		return VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;
 	}

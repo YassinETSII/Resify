@@ -132,5 +132,70 @@ public class ExcursionControllerE2ETest {
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.view().name("excursiones/createOrUpdateExcursionForm"));
 	}
+	
+	//los organizadores no deben poder acceder a la lista de excursiones para feedback
+	@WithMockUser(username = "organizador1")
+	@Test
+	void testListaExcursionParaFeedbackComoOrganizador() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/excursiones/feedback"))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//los ancianos no deben poder acceder a la lista de excursiones para feedback
+	@WithMockUser(username = "anciano1")
+	@Test
+	void testListaExcursionParaFeedbackComoAnciano() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/excursiones/feedback"))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//los manager no deben poder acceder a la creación de excursiones
+	@WithMockUser(username = "manager1")
+	@Test
+	void testCreaExcursionComoOrganizador() throws Exception {
+		this.mockMvc.perform(get("/excursiones/new", TEST_E_ID))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//los ancianos no deben poder acceder a la creación de excursiones
+	@WithMockUser(username = "anciano1")
+	@Test
+	void testCreaExcursionComoAnciano() throws Exception {
+		this.mockMvc.perform(get("/excursiones/new", TEST_E_ID))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//los ancianos no deben poder acceder a la edición de excursiones
+	@WithMockUser(username = "anciano1")
+	@Test
+	void testEditaExcursionComoAnciano() throws Exception {
+		this.mockMvc.perform(get("/excursiones/{excursionId}/edit", TEST_E_ID))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//los manager no deben poder acceder a la edición de excursiones
+	@WithMockUser(username = "manager1")
+	@Test
+	void testEditaExcursionComoManager() throws Exception {
+		this.mockMvc.perform(get("/excursiones/{excursionId}/edit", TEST_E_ID))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//los ancianos no deben poder borrar excursiones
+	@WithMockUser(username = "anciano1")
+	@Test
+	void testBorraExcursionComoAnciano() throws Exception {
+		this.mockMvc.perform(get("/excursiones/{excursionId}/delete", TEST_E_ID))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//los manager no deben poder borrar excursiones
+	@WithMockUser(username = "manager1")
+	@Test
+	void testBorraExcursionComoManager() throws Exception {
+		this.mockMvc.perform(get("/excursiones/{excursionId}/delete", TEST_E_ID))
+		.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+		
 
 }

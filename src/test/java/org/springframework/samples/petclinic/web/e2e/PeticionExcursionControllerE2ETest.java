@@ -144,5 +144,38 @@ public class PeticionExcursionControllerE2ETest {
 			.andExpect(MockMvcResultMatchers.view().name("peticionesExcursion/createOrUpdatePeticionExcursionForm"));
 	}
 	
+	//no debe acceder a la creación de peticiones siendo anciano
+	@WithMockUser(username = "anciano1", authorities = "anciano")
+	@Test
+	void testInitCreationFormComoAnciano() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/excursiones/{excursionId}/peticiones-excursion/new", TEST_EXCURSION_ID))
+		.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//no debe acceder a la creación de peticiones siendo anciano
+	@WithMockUser(username = "organizador1", authorities = "organizador")
+	@Test
+	void testInitCreationFormComoOrganizador() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/excursiones/{excursionId}/peticiones-excursion/new", TEST_EXCURSION_ID))
+		.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//no debe acceder a la creación de peticiones siendo anciano
+	@WithMockUser(username = "anciano1", authorities = "anciano")
+	@Test
+	void testInitUpdateFormComoAnciano() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/peticiones-excursion/{peticionExcursionId}/edit", TEST_PETICION_EXCURSION_ID))
+		.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	//no debe acceder a la creación de peticiones siendo manager
+	@WithMockUser(username = "manager1", authorities = "manager")
+	@Test
+	void testInitUpdateFormComoManager() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/peticiones-excursion/{peticionExcursionId}/edit", TEST_PETICION_EXCURSION_ID))
+		.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
+	
 
 }
