@@ -209,4 +209,12 @@ class ActividadControllerTests {
 	void testShowConAncianoEquivocado() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades/{actividadId}", ActividadControllerTests.TEST_ACTIVIDAD_ID)).andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
+	
+	//no debe poder borrar una actividad siendo manager si no es suya
+	@WithMockUser(username = "manager1", authorities = "manager")
+	@Test
+	void testProcessDeleteConManagerEquivocado() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/actividades/{actividadId}/delete", ActividadControllerTests.TEST_ACTIVIDAD_ID))
+			.andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
 }
