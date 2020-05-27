@@ -88,9 +88,12 @@ public class ActividadService {
 
 	@Transactional
 	public Double avgActividadesByResidencia() {
-		return Double.valueOf(this.actividadRepository.count())/this.residenciaService.countResidencias().doubleValue();
-	}		
-	
-	
+		Double res = 0.;
+		if (!this.residenciaService.countResidencias().equals(0L)) {
+			res = Double.valueOf(this.actividadRepository.count())/this.residenciaService.countResidencias().doubleValue();
+		}
+		return res;
+	}
+
 
 }

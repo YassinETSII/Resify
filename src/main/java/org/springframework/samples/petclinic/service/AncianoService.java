@@ -92,7 +92,11 @@ public class AncianoService {
 
 	@Transactional
 	public Double avgAncianosByResidencia() {
-		return  this.ancianoRepository.countAncianosInResidencia().doubleValue()/this.residenciaService.countResidencias().doubleValue();
+		Double res = 0.;
+		if (!this.residenciaService.countResidencias().equals(0L)) {
+			res = this.ancianoRepository.countAncianosInResidencia().doubleValue()/this.residenciaService.countResidencias().doubleValue();
+		}
+		return res;
 	}
 
 }

@@ -81,7 +81,11 @@ public class InscripcionService {
 
 	@Transactional
 	public Double ratioInscripcionesAceptadas() {
-		return this.countInscripcionesAceptadas().doubleValue()/this.countInscripciones().doubleValue();
+		Double res = 0.;
+		if (!this.countInscripciones().equals(0L)) {
+			res = this.countInscripcionesAceptadas().doubleValue()/this.countInscripciones().doubleValue();
+		}
+		return res;
 	}
 
 	@Transactional
@@ -91,7 +95,11 @@ public class InscripcionService {
 
 	@Transactional
 	public Double ratioInscripcionesRechazadas() {
-		return this.countInscripcionesRechazadas().doubleValue()/this.countInscripciones().doubleValue();
+		Double res = 0.;
+		if (!this.countInscripciones().equals(0L)) {
+			res = this.countInscripcionesRechazadas().doubleValue()/this.countInscripciones().doubleValue();
+		}
+		return res;
 	}
 
 }

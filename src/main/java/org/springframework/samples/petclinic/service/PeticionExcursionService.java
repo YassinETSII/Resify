@@ -85,8 +85,11 @@ public class PeticionExcursionService {
 
 	@Transactional
 	public Double avgPeticionesExcursionByExcursion() {
-
-		return Double.valueOf(this.peticionExcursionRepository.count())/this.excursionService.countExcursiones().doubleValue();
+		Double res = 0.;
+		if (!this.excursionService.countExcursiones().equals(0L)) {
+			res = Double.valueOf(this.peticionExcursionRepository.count())/this.excursionService.countExcursiones().doubleValue();
+		}
+		return res;
 	}
 
 	@Transactional
@@ -96,7 +99,11 @@ public class PeticionExcursionService {
 
 	@Transactional
 	public Double ratioPeticionesExcursionAceptadas() {
-		return countPeticionesExcursionAceptadas().doubleValue()/countPeticionesExcursion().doubleValue();
+		Double res = 0.;
+		if (!countPeticionesExcursion().equals(0L)) {
+			res = countPeticionesExcursionAceptadas().doubleValue()/countPeticionesExcursion().doubleValue();
+		}
+		return res;
 	}
 
 	@Transactional
@@ -106,7 +113,11 @@ public class PeticionExcursionService {
 
 	@Transactional
 	public Double ratioPeticionesExcursionRechazadas() {
-		return countPeticionesExcursionRechazadas().doubleValue()/countPeticionesExcursion().doubleValue();
+		Double res = 0.;
+		if (!countPeticionesExcursion().equals(0L)) {
+			res = countPeticionesExcursionRechazadas().doubleValue()/countPeticionesExcursion().doubleValue();
+		}
+		return res;
 	}
 
 }
