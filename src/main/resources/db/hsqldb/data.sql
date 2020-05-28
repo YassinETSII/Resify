@@ -49,7 +49,7 @@ INSERT INTO residencias VALUES (3, false, 10, 'residenciaSinPlazas@mail.es', 'De
 	'http://www.resisinplazas.com', 'Residencia Sin Plazas', '987654322', 8);
 	
 INSERT INTO residencias VALUES (4, true, 10, 'residenciaVisitaSanitaria@mail.es', 'Descripcion visita sanitaria', 'Direccion visita sanitaria', '70', '07:00', '21:00', 
-	'http://www.resivisita sanitaria.com', 'Residencia visita sanitaria', '987654322', 9);
+	'http://www.resivisitasanitaria.com', 'Residencia visita sanitaria', '987654322', 9);
 
 -- Actividades
 
@@ -212,8 +212,8 @@ INSERT INTO excursiones VALUES (6, 'Excursion mia terminada 1', '2020-05-02',  '
 	'Excursion acabada 1 res1', '2020-05-03', TRUE, '2', '1.0', 1);
 INSERT INTO excursiones VALUES (7, 'Excursion mia terminada 2', '2020-05-01',  '09:58', '17:00', 
 	'Excursion acabada 2 res1', '2020-05-02', TRUE, '2', '1.0', 1);
-INSERT INTO excursiones VALUES (8, 'Descripcion de prueba6', '2020-09-07',  '22:30', '17:00', 
-	'Excursion acabada 3 res2', '2020-09-07', TRUE, '2', '1.0', 1);
+INSERT INTO excursiones VALUES (8, 'Descripcion de prueba6', '2020-05-07',  '22:30', '17:00', 
+	'Excursion acabada 3 res1', '2020-05-07', TRUE, '2', '1.0', 1);
 	
 -- PeticionesExcursion
 

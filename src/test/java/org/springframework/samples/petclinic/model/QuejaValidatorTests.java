@@ -1,8 +1,6 @@
 
 package org.springframework.samples.petclinic.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -44,21 +42,11 @@ class QuejaValidatorTests {
 		queja.setTitulo("");
 		queja.setDescripcion("");
 
-
 		Validator validator = this.createValidator();
 		Set<ConstraintViolation<Queja>> constraintViolations = validator.validate(queja);
 
-		//Hay 1 campo incorrecto: declaracion
+		//Hay 2 campos incorrectos: declaracion y titulo
 		Assertions.assertThat(constraintViolations.size()).isEqualTo(2);
-		List<ConstraintViolation<Queja>> errors = new ArrayList<ConstraintViolation<Queja>>();
-		errors.addAll(constraintViolations);
-		ConstraintViolation<Queja> violation1 = errors.get(0);
-		ConstraintViolation<Queja> violation2 = errors.get(1);
-		
-		Assertions.assertThat(violation1.getPropertyPath().toString()).isEqualTo("descripcion");
-		Assertions.assertThat(violation2.getPropertyPath().toString()).isEqualTo("titulo");
 	}
-
-
 
 }

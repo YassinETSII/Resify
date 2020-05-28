@@ -16,7 +16,9 @@
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.StreamSupport;
 
@@ -92,8 +94,10 @@ public class VisitaSanitariaController {
 
 		Residencia residencia = residenciaService.findMine(managerService.findManagerByUsername(p.getName()));
 		Iterable<Anciano> misAncianos = ancianoService.findAncianosMiResidenciaConDependencia(residencia);
-		if (!misAncianos.iterator().hasNext())
+		if (!misAncianos.iterator().hasNext()) {
+			model.put("noDependencia", true);
 			model.put("noAncianosConDependencia", "* Su residencia no posee ningun anciano con dependencia grave");
+		}
 		model.put("ancianos", misAncianos);
 		return VIEWS_VISITA_SANITARIA_CREATE_OR_UPDATE_FORM;
 	}
@@ -151,8 +155,12 @@ public class VisitaSanitariaController {
 
 	public boolean tienePermiso(Principal p, VisitaSanitaria v) {
 		Residencia residenciaPrincipal = residenciaService.findMine(managerService.findManagerByUsername(p.getName()));
+		List<Anciano> ancianos = new ArrayList<>();
 		Iterable<Anciano> misAncianos = ancianoService.findAncianosMiResidenciaConDependencia(residenciaPrincipal);
-		boolean esMiAnciano = StreamSupport.stream(misAncianos.spliterator(), false)
+		for (Anciano anc : misAncianos) {
+			ancianos.add(anc);
+		}
+		boolean esMiAnciano = ancianos.stream()
 				.anyMatch(anciano -> anciano.equals(v.getAnciano()));
 		return v.getResidencia().equals(residenciaPrincipal) && esMiAnciano;
 	}

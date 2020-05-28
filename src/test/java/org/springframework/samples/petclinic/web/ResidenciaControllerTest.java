@@ -126,8 +126,8 @@ class ResidenciaControllerTest {
 	  @Test 
 	  void testProcessFindFormSuccess() throws Exception {
 	  this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias"))
-	  .andExpect(MockMvcResultMatchers.status().isOk())
-	  .andExpect(MockMvcResultMatchers.view().name("residencias/residenciasDetails")); 
+	  .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+	  .andExpect(MockMvcResultMatchers.view().name("redirect:residencias/new")); 
 	  }
 	  
 	  @WithMockUser(username = ResidenciaControllerTest.TEST_ORGANIZADOR_NOMBRE)

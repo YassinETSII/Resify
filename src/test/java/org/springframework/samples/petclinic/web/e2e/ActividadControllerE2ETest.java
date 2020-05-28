@@ -95,8 +95,6 @@ public class ActividadControllerE2ETest {
 				.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(model().attributeExists("actividad"))
 				.andExpect(model().attribute("actividad", hasProperty("descripcion", is("Descripcion de prueba1"))))
 				.andExpect(model().attribute("actividad", hasProperty("titulo", is("Prueba1"))))
-				.andExpect(model().attribute("actividad", hasProperty("horaInicio", is(LocalTime.of(17, 0)))))
-				.andExpect(model().attribute("actividad", hasProperty("horaFin", is(LocalTime.of(22, 30)))))
 				.andExpect(view().name("actividades/createOrUpdateActividadForm"));
 	}
 

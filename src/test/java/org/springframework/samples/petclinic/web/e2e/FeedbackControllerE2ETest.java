@@ -62,6 +62,6 @@ public class FeedbackControllerE2ETest {
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/excursiones/{excursionId}/feedbacks/new", TEST_EX2_ID).with(csrf()).param("valoracion", "2").param("descripcion", "Prueba descrip").param("descartaFeedbac", "false"))
-			.andExpect(MockMvcResultMatchers.status().isOk());
+		.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 }

@@ -7,6 +7,11 @@
 
 <resify:layout pageName="managers">
 	<jsp:body>
+		<c:choose>
+		<c:when test="${noDependencia}">
+			<c:out value="${noAncianosConDependencia }" />
+		</c:when>
+		<c:otherwise>
         <h2>
             Nueva Visita Sanitaria
         </h2>
@@ -21,7 +26,6 @@
                 <resify:inputField label="Hora Inicio" name="horaInicio" />
                 <resify:inputField label="Hora Fin" name="horaFin" />
                 <br>
-				<c:out value="${noAncianosConDependencia }" />
 					<div class="form-group has-feedback"><br>Seleccionar Anciano
 					<form:select path="anciano.id">
 						<jstl:forEach items="${ancianos}" var="anciano">
@@ -40,5 +44,7 @@
         </form:form>
         <c:if test="${!visitaSanitaria['new']}">
         </c:if>
+        </c:otherwise>
+        </c:choose>
     </jsp:body>
 </resify:layout>

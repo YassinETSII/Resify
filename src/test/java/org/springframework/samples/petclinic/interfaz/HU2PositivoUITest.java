@@ -16,6 +16,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
@@ -42,6 +44,7 @@ public class HU2PositivoUITest {
 	//entra en el show de una y hace click en inscribirse.
 	//Tras completar el formulario, su inscripción se envía correctamente
 	@Test
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	public void testHU2PositivoUI() throws Exception {
 		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();

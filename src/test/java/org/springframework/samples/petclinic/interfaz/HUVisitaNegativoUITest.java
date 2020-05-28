@@ -43,9 +43,9 @@ public class HUVisitaNegativoUITest {
 		driver.get("http://localhost:" + this.port);
 		driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
 		driver.findElement(By.id("username")).clear();
-		driver.findElement(By.id("username")).sendKeys("manager4");
+		driver.findElement(By.id("username")).sendKeys("manager5");
 		driver.findElement(By.id("password")).clear();
-		driver.findElement(By.id("password")).sendKeys("manager4");
+		driver.findElement(By.id("password")).sendKeys("manager5");
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
 		driver.findElement(By.xpath("//a[contains(@href, '/visitas-sanitarias')]")).click();
 		driver.findElement(By.xpath("//a[contains(text(),'Añadir\n			nueva visita')]")).click();

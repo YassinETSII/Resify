@@ -2,15 +2,29 @@
 package org.springframework.samples.petclinic.web.e2e;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.samples.petclinic.model.Anciano;
+import org.springframework.samples.petclinic.model.Residencia;
+import org.springframework.samples.petclinic.model.VisitaSanitaria;
+import org.springframework.samples.petclinic.service.AncianoService;
+import org.springframework.samples.petclinic.service.ManagerService;
+import org.springframework.samples.petclinic.service.ResidenciaService;
+import org.springframework.samples.petclinic.service.VisitaSanitariaService;
+import org.springframework.samples.petclinic.web.VisitaSanitariaController;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,9 +38,24 @@ import org.springframework.transaction.annotation.Transactional;
 public class VisitaSanitariaControllerE2ETest {
 
 	private static final int TEST_VS_ID = 1;
+	
+	private LocalTime horini = LocalTime.of(9, 0);
+	private LocalTime horfin = LocalTime.of(20, 0);
 
 	@Autowired
 	private MockMvc mockMvc;
+	
+	@Autowired
+	private VisitaSanitariaService visitaSanitariaService;
+	
+	@Autowired
+	private AncianoService ancianoService;
+	
+	@Autowired
+	private ResidenciaService residenciaService;
+	
+	@Autowired
+	private ManagerService managerService;
 
 	@WithMockUser(username = "manager5", authorities = { "manager" })
 	@Test
@@ -48,23 +77,28 @@ public class VisitaSanitariaControllerE2ETest {
 
 	@WithMockUser(username = "manager5", authorities = { "manager" })
 	@Test
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.post("/visitas-sanitarias/new").param("motivo", "Motivo prueba")
-						.param("descripcion", "Prueba descrip").param("sanitario", "sanitario prueba")
-						.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", "2020/01/01")
-						.param("horaInicio", "10:00").param("horaFin", "12:00").param("anciano.id", String.valueOf(22)))
+					.param("descripcion", "Prueba descrip").param("sanitario", "sanitario prueba")
+					.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", "2020/01/01")
+					.param("horaInicio", String.valueOf(this.horini)).param("horaFin", String.valueOf(this.horfin))
+					.param("anciano.id", String.valueOf(22)))
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 	@WithMockUser(username = "manager5", authorities = { "manager" })
 	@Test
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
+	@Transactional
 	void testProcessCreationFormHasErrorsBlank() throws Exception {
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.post("/visitas-sanitarias/new").param("motivo", "")
-						.param("sanitario", "").param("descripcion", "Prueba descrip").param("horaInicio", "")
-						.param("horaFin", "").with(SecurityMockMvcRequestPostProcessors.csrf())
-						.param("fecha", "2020/01/01").param("anciano.id", "22"))
+						.param("sanitario", "").param("descripcion", "Prueba descrip")
+						.param("horaInicio", String.valueOf(this.horini)).param("horaFin", String.valueOf(this.horfin))
+						.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", "2020/01/01")
+						.param("anciano.id", String.valueOf(22)))
 				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("visitaSanitaria"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.view().name("visitasSanitarias/createOrUpdateVisitaSanitariaForm"));
@@ -85,6 +119,8 @@ public class VisitaSanitariaControllerE2ETest {
 
 	@WithMockUser(username = "manager5", authorities = { "manager" })
 	@Test
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
+	@Transactional
 	void testShowVisitaSanitaria() throws Exception {
 		this.mockMvc
 		.perform(MockMvcRequestBuilders.get("/visitas-sanitarias/{visitaSanitariaId}",
@@ -102,6 +138,29 @@ public class VisitaSanitariaControllerE2ETest {
 		.andExpect(MockMvcResultMatchers.model().attribute("visitaSanitaria",
 				Matchers.hasProperty("horaFin", Matchers.is(LocalTime.of(22, 00)))))
 				.andExpect(MockMvcResultMatchers.view().name("visitasSanitarias/visitasSanitariasDetails"));
+	}
+	
+	@Test
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
+	@Transactional
+	void PruebaAnciano() throws Exception{
+		Anciano a = this.ancianoService.findAncianoById(22);
+		Assertions.assertNotNull(a);
+		VisitaSanitaria v = this.visitaSanitariaService.findVisitaSanitariaById(1);
+		Assertions.assertNotNull(v);
+		Assertions.assertNotNull(v.getAnciano());
+		Assertions.assertEquals(v.getAnciano(), a);
+
+		Residencia residenciaPrincipal = residenciaService.findMine(managerService.findManagerByUsername("manager5"));
+		List<Anciano> ancianos = new ArrayList<>();
+		Iterable<Anciano> misAncianos = ancianoService.findAncianosMiResidenciaConDependencia(residenciaPrincipal);
+		for (Anciano anc : misAncianos) {
+			ancianos.add(anc);
+		}
+		boolean esMiAnciano = ancianos.stream()
+				.anyMatch(anciano -> anciano.equals(v.getAnciano()));
+		Assertions.assertTrue(v.getResidencia().equals(residenciaPrincipal) && esMiAnciano);
+		
 	}
 	
 }
