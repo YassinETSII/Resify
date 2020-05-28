@@ -235,6 +235,8 @@ public class PeticionExcursionController {
 		}
 		if (result.hasErrors()) {
 			model.put("peticionExcursion", peticionExcursion);
+			model.addAttribute("nancianos", this.ancianoService.countAncianosMiResidencia(peticionExcursionToUpdate.getResidencia()));
+			model.addAttribute("ratio", this.residenciaService.getRatio(peticionExcursionToUpdate.getResidencia()));
 			return PeticionExcursionController.VIEWS_PETICION_EXCURSION_CREATE_OR_UPDATE_FORM;
 		} else {
 			BeanUtils.copyProperties(peticionExcursion, peticionExcursionToUpdate, "id", "residencia", "excursion",
