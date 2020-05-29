@@ -68,7 +68,11 @@ public class VisitaSanitariaService {
 
 	@Transactional
 	public Double avgVisitasSanitariasByResidencia() {
-		return Double.valueOf(this.visitaSanitariaRepository.count())/this.residenciaService.countResidencias();
+		Double res = 0.;
+		if (!this.residenciaService.countResidencias().equals(0L)) {
+			res = Double.valueOf(this.visitaSanitariaRepository.count())/this.residenciaService.countResidencias().doubleValue();
+		}
+		return res;
 	}		
 
 }
