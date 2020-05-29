@@ -78,7 +78,11 @@ public class ExcursionService {
 	
 	@Transactional
 	public Double avgExcursionesByOrganizador() {
-		return Double.valueOf(this.excursionRepository.count())/this.organizadorService.countOrganizadores();
+		Double res = 0.;
+		if (!this.organizadorService.countOrganizadores().equals(0L)) {
+			res = Double.valueOf(this.excursionRepository.count())/this.organizadorService.countOrganizadores().doubleValue();
+		}
+		return res;
 	}		
 
 }

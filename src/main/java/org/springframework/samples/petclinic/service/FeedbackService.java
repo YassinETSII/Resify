@@ -60,7 +60,11 @@ public class FeedbackService {
 
 	@Transactional
 	public Double avgFeedbacksByExcursion() {
-		return Double.valueOf(this.feedbackRepository.count())/this.excursionService.countExcursiones();
+		Double res = 0.;
+		if (!this.excursionService.countExcursiones().equals(0L)) {
+			res = Double.valueOf(this.feedbackRepository.count())/this.excursionService.countExcursiones().doubleValue();
+		}
+		return res;
 	}
 
 }

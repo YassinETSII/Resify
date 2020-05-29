@@ -258,8 +258,54 @@ class ExcursionControllerTests {
 		.andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
+	//no debe poder acceder a la edición de una excursión un organizador distinto a su creador
+	@WithMockUser(username = "organizador1")
+	@Test
+	void testInitUpdateConOrganizadorIncorrecto() throws Exception {
+		mockMvc.perform(get("/excursiones/{excursionId}/edit", ExcursionControllerTests.TEST_EXCURSION_ID))			
+				.andExpect(view().name("exception"));
+	}
 
-
+	//no debe poder editar una excursión un organizador distinto al que la creó
+	@WithMockUser(username = "organizador1")
+	@Test
+	void testProcessUpdateConOrganizadorIncorrecto() throws Exception {
+		this.exc.setFinalMode(false);
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/excursiones/{excursionId}/edit",ExcursionControllerTests.TEST_EXCURSION_ID)
+				.param("titulo", "Prueba2")
+				.param("descripcion", "Prueba descrip")
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaInicio", "2030/01/01")
+				.param("horaInicio", "10:00")
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaFin", "2031/01/01")
+				.param("horaFin", "20:00")
+				.param("numeroResidencias", "10")
+				.param("ratioAceptacion", "1.0")
+				.param("finalMode", "true"))
+		.andExpect(view().name("exception"));
+	}
+	
+	//no debe acceder al show de una excursión siendo un organizador distinto a su creador
+	@WithMockUser(username = "organizador1", authorities = "organizador")
+	@Test
+	void testShowConOrganizadorEquivocado() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/excursiones/{excursionId}", ExcursionControllerTests.TEST_EXCURSION_ID)).andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+	
+	//no debe acceder al show de una excursión siendo anciano si no es de su residencia
+	@WithMockUser(username = "anciano3", authorities = "anciano")
+	@Test
+	void testShowConAncianoEquivocado() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/excursiones/{excursionId}", ExcursionControllerTests.TEST_EXCURSION_ID)).andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+	
+	//no debe poder borrar una excursión siendo manager si no es suya
+	@WithMockUser(username = "organizador1", authorities = "organizador")
+	@Test
+	void testProcessDeleteConManagerEquivocado() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/excursiones/{excursionId}/delete", ExcursionControllerTests.TEST_EXCURSION_ID))
+			.andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+	
 
 
 }

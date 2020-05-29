@@ -75,6 +75,8 @@ class ResidenciaControllerTest {
 	User							user					= new User();
 	User							userOrganiza			= new User();
 	User							userAnciano				= new User();
+	User							userMan2					= new User();
+	Manager							man2						= new Manager();
 	
 	private LocalTime horini = LocalTime.of(9, 0);
 	private LocalTime horfin = LocalTime.of(20, 0);
@@ -84,10 +86,12 @@ class ResidenciaControllerTest {
 		this.user.setUsername(ResidenciaControllerTest.TEST_MANAGER_NOMBRE);
 		this.userOrganiza.setUsername(ResidenciaControllerTest.TEST_ORGANIZADOR_NOMBRE);
 		this.userAnciano.setUsername(ResidenciaControllerTest.TEST_ANCIANO_NOMBRE);
+		this.userMan2.setUsername("managerIncorrecto");
 		
 		this.man.setUser(this.user);
 		this.anc.setUser(this.userAnciano);
 		this.organ.setUser(this.userOrganiza);
+		this.man2.setUser(this.userMan2);
 		
 		this.resi = new Residencia();
 		this.resi.setId(ResidenciaControllerTest.TEST_RESIDENCIA_ID);
@@ -110,6 +114,7 @@ class ResidenciaControllerTest {
 		BDDMockito.given(this.managerService.findManagerByUsername(ResidenciaControllerTest.TEST_MANAGER_NOMBRE)).willReturn(this.man);
 		BDDMockito.given(this.ancianoService.findAncianoByUsername(ResidenciaControllerTest.TEST_ANCIANO_NOMBRE)).willReturn(this.anc);
 		BDDMockito.given(this.organizadorService.findOrganizadorByUsername(ResidenciaControllerTest.TEST_ORGANIZADOR_NOMBRE)).willReturn(this.organ);
+		BDDMockito.given(this.managerService.findManagerByUsername("managerIncorrecto")).willReturn(this.man2);
 
 		BDDMockito.given(this.authoritiesService.findAuthority(ResidenciaControllerTest.TEST_MANAGER_NOMBRE)).willReturn("manager");
 		BDDMockito.given(this.authoritiesService.findAuthority(ResidenciaControllerTest.TEST_ANCIANO_NOMBRE)).willReturn("anciano");
@@ -121,8 +126,8 @@ class ResidenciaControllerTest {
 	  @Test 
 	  void testProcessFindFormSuccess() throws Exception {
 	  this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias"))
-	  .andExpect(MockMvcResultMatchers.status().isOk())
-	  .andExpect(MockMvcResultMatchers.view().name("residencias/residenciasDetails")); 
+	  .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+	  .andExpect(MockMvcResultMatchers.view().name("redirect:residencias/new")); 
 	  }
 	  
 	  @WithMockUser(username = ResidenciaControllerTest.TEST_ORGANIZADOR_NOMBRE)
@@ -273,5 +278,41 @@ class ResidenciaControllerTest {
 			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("residencia"))
 			.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.view().name("residencias/createOrUpdateResidenciaForm"));		
-		}			
+		}
+		
+		//no debe poder acceder al form de editar una residencia un manager distinto al que la creó
+		@WithMockUser(username = "managerIncorrecto")
+		 @Test 
+		 void testInitUpdateResidenciaManagerEquivocado() throws Exception {
+				mockMvc.perform(get("/residencias/{residenciaId}/edit", ResidenciaControllerTest.TEST_RESIDENCIA_ID))
+					.andExpect(MockMvcResultMatchers.view().name("exception")); 
+		 }
+		
+		//no debe poder editar una residencia un manager distinto al que la creó
+		@WithMockUser(username = "managerIncorrecto")
+		 @Test 
+		 void testProcessUpdateResidenciaManagerEquivocado() throws Exception {
+			this.mockMvc.perform(MockMvcRequestBuilders.post("/residencias/{residenciaId}/edit", ResidenciaControllerTest.TEST_RESIDENCIA_ID)
+				.with(csrf())
+				.param("nombre", "residee")
+				.param("direccion", "direc")
+				.param("descripcion", "desc")
+				.param("aforo", "100")
+				.param("masInfo", "")
+				.param("telefono", "674567123")
+				.param("correo", "resi@gmail.com")
+				.param("horaApertura", String.valueOf(this.horini))
+				.param("horaCierre", String.valueOf(this.horfin))
+				.param("edadMaxima", "82")
+				.param("aceptaDependenciaGrave", "true"))
+			.andExpect(MockMvcResultMatchers.view().name("exception"));
+		 }
+		
+		//no debe mostrar la residencia a un manager distinto al que la creó
+		@WithMockUser(username = "managerIncorrecto")
+		@Test
+		void testShowResidenciaManagerEquivocado() throws Exception {
+			this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/{residenciaId}", ResidenciaControllerTest.TEST_RESIDENCIA_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("exception"));
+		}
 }

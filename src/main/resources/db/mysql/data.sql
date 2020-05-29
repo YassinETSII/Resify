@@ -26,9 +26,13 @@ INSERT INTO authorities VALUES ('manager3','manager');
 INSERT INTO users(username,password,enabled) VALUES ('manager4','manager4',TRUE);
 INSERT INTO authorities VALUES ('manager4','manager');
 
+INSERT INTO users(username,password,enabled) VALUES ('manager5','manager5',TRUE);
+INSERT INTO authorities VALUES ('manager5','manager');
+
 INSERT INTO managers VALUES (3, 'Rodriguez', 'Rosa', 'Prueba1', 'Prueba1', 'manager1');
 INSERT INTO managers VALUES (4, 'Dominguez', 'Carlos', 'Prueba2', 'Prueba2', 'manager2');
 INSERT INTO managers VALUES (8, 'Jimenez', 'Laura', 'Prueba4', 'Prueba4', 'manager4');
+INSERT INTO managers VALUES (9, 'MVisitaSanitaria', 'MVisitaSanitaria', 'MVisitaSanitaria', 'MVisitaSanitaria', 'manager5');
 
 -- Manager sin residencia
 INSERT INTO managers VALUES (7, 'Sanchez', 'Roberto', 'Pureba3', 'Prueba3', 'manager3');
@@ -43,6 +47,9 @@ INSERT INTO residencias VALUES (2, false, 100, 'residencia2@mail.es', 'Descripci
 	
 INSERT INTO residencias VALUES (3, false, 10, 'residenciaSinPlazas@mail.es', 'Descripcion sin plazas', 'Direccion sin plazas', '70', '07:00', '21:00', 
 	'http://www.resisinplazas.com', 'Residencia Sin Plazas', '987654322', 8);
+	
+INSERT INTO residencias VALUES (4, true, 10, 'residenciaVisitaSanitaria@mail.es', 'Descripcion visita sanitaria', 'Direccion visita sanitaria', '70', '07:00', '21:00', 
+	'http://www.resivisitasanitaria.com', 'Residencia visita sanitaria', '987654322', 9);
 
 -- Actividades
 
@@ -72,6 +79,13 @@ INSERT INTO users(username,password,enabled) VALUES ('anciano3','anciano3',TRUE)
 INSERT INTO authorities VALUES ('anciano3','anciano');
 
 INSERT INTO ancianos VALUES (7, 'Gonzalez', 'Rosa', 'Presentacion3', 66, false, 'anciano3');
+
+	-- Anciano para residencia de visita sanitaria --
+
+INSERT INTO users(username,password,enabled) VALUES ('ancianovs','ancianovs',TRUE);
+INSERT INTO authorities VALUES ('ancianovs','anciano');
+
+INSERT INTO ancianos VALUES (23, 'Anciano', 'Residencia', 'TestVS', 66, false, 'ancianovs');
 
 	-- Ancianos para Residencia sin plazas --
 
@@ -170,11 +184,15 @@ INSERT INTO inscripciones VALUES (17, 'DeclaracionRS', 'aceptada', '2020-02-01',
 INSERT INTO inscripciones VALUES (18, 'DeclaracionRS', 'aceptada', '2020-02-01', null , 18, 3);
 INSERT INTO inscripciones VALUES (19, 'DeclaracionRS', 'aceptada', '2020-02-01', null , 19, 3);
 INSERT INTO inscripciones VALUES (20, 'DeclaracionRS', 'aceptada', '2020-02-01', null , 20, 3);
-INSERT INTO inscripciones VALUES (21, 'DeclaracionDependencia', 'aceptada', '2020-02-01', null , 22, 3);
+
+	-- Inscripciones residencia de visita sanitaria
+
+INSERT INTO inscripciones VALUES (21, 'DeclaracionDependencia', 'aceptada', '2020-02-01', null , 22, 4);
+INSERT INTO inscripciones VALUES (22, 'Declaracion', 'aceptada', '2020-02-01', null , 23, 4);
 
 -- Visitas sanitarias
 
-INSERT INTO visitas_sanitarias VALUES (1, 'visita sanitaria', '2020-04-20', '22:00', '17:00', 'Ejemplo', 'Sanitario prueba', 22, 3);
+INSERT INTO visitas_sanitarias VALUES (1, 'visita sanitaria', '2020-04-20', '22:00', '17:00', 'Ejemplo', 'Sanitario prueba', 22, 4);
 
 -- Excursiones
 
@@ -194,8 +212,8 @@ INSERT INTO excursiones VALUES (6, 'Excursion mia terminada 1', '2020-05-02',  '
 	'Excursion acabada 1 res1', '2020-05-03', TRUE, '2', '1.0', 1);
 INSERT INTO excursiones VALUES (7, 'Excursion mia terminada 2', '2020-05-01',  '09:58', '17:00', 
 	'Excursion acabada 2 res1', '2020-05-02', TRUE, '2', '1.0', 1);
-INSERT INTO excursiones VALUES (8, 'Descripcion de prueba6', '2020-09-07',  '22:30', '17:00', 
-	'Excursion acabada 3 res2', '2020-09-07', TRUE, '2', '1.0', 1);
+INSERT INTO excursiones VALUES (8, 'Descripcion de prueba6', '2020-05-07',  '22:30', '17:00', 
+	'Excursion acabada 3 res1', '2020-05-07', TRUE, '2', '1.0', 1);
 	
 -- PeticionesExcursion
 

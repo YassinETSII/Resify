@@ -65,8 +65,8 @@ class PeticionExcursionControllerTests {
 	private ResidenciaService			residenciaService;
 	
 	@MockBean
-	private AncianoService			ancianoService;
-
+	private AncianoService				ancianoService;
+  
 	@Autowired
 	private MockMvc						mockMvc;
 
@@ -218,5 +218,30 @@ class PeticionExcursionControllerTests {
 			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("peticionExcursion")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("peticionExcursion", "estado")).andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.view().name("peticionesExcursion/createOrUpdatePeticionExcursionForm"));
 	}
+	
+	//no debe acceder a la lista de peticiones siendo anciano
+	@WithMockUser(username = "anciano3", authorities = "anciano")
+	@Test
+	void testListComoAnciano() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/peticiones-excursion")).andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+	
+	//no debe poder acceder a la edición de una petición un organizador si no es de una excursión suya
+	@WithMockUser(username = "organizador1")
+	@Test
+	void testInitUpdateConOrganizadorEquivocado() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/peticiones-excursion/{peticionExcursionId}/edit", PeticionExcursionControllerTests.TEST_PETICION_EXCURSION_ID))
+			.andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+	
+	//no debe poder editar una petición un organizador si no es de una excursión suya
+	@WithMockUser(username = "organizador1")
+	@Test
+	void testProcessUpdateConOrganizadorEquivocado() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/peticiones-excursion/{peticionExcursionId}/edit", PeticionExcursionControllerTests.TEST_PETICION_EXCURSION_ID).with(SecurityMockMvcRequestPostProcessors.csrf())
+			.param("id", String.valueOf(PeticionExcursionControllerTests.TEST_PETICION_EXCURSION_ID)).with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", String.valueOf(this.hoy)).param("declaracion", "declaracion test")
+			.param("estado", "aceptada")).andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+	
 
 }

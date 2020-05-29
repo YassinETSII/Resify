@@ -67,7 +67,7 @@ class VisitaSanitariaServiceTests {
 	@Test
 	@Transactional
 	void debeEncontrarTodasLasVisitaSanitariasPorManager() {
-		Manager manager = this.managerService.findManagerById(8);
+		Manager manager = this.managerService.findManagerById(9);
 		Iterable<VisitaSanitaria> vis = this.visitaSanitariaService.findAllMine(manager);
 
 		ArrayList<VisitaSanitaria> visitaSanitariaes = new ArrayList<VisitaSanitaria>();
@@ -133,7 +133,7 @@ class VisitaSanitariaServiceTests {
 	@Transactional
 	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
 	public void debeEliminarVisitaSanitaria() {
-		Manager manager = this.managerService.findManagerById(8);
+		Manager manager = this.managerService.findManagerById(9);
 		Iterable<VisitaSanitaria> vis1 = this.visitaSanitariaService.findAllMine(manager);
 		ArrayList<VisitaSanitaria> visitaSanitarias1 = new ArrayList<VisitaSanitaria>();
 		for (VisitaSanitaria b : vis1) {

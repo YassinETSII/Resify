@@ -74,13 +74,21 @@ public class QuejaService {
 
 	@Transactional
 	public Double avgQuejasByAnciano() {
-		return Double.valueOf(this.quejaRepository.count())/this.ancianoService.countAncianos();
+		Double res = 0.;
+		if (!this.ancianoService.countAncianos().equals(0L)) {
+			res = Double.valueOf(this.quejaRepository.count())/this.ancianoService.countAncianos().doubleValue();
+		}
+		return res;
 	}		
 
 
 	@Transactional
 	public Double avgQuejasByResidencia() {
-		return Double.valueOf(this.quejaRepository.count())/this.residenciaService.countResidencias();
+		Double res = 0.;
+		if (!this.residenciaService.countResidencias().equals(0L)) {
+			res = Double.valueOf(this.quejaRepository.count())/this.residenciaService.countResidencias().doubleValue();
+		}
+		return res;
 	}		
 	
 
