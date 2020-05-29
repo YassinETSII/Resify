@@ -18,6 +18,7 @@ import org.springframework.samples.petclinic.model.Organizador;
 import org.springframework.samples.petclinic.model.PeticionExcursion;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.AncianoService;
 import org.springframework.samples.petclinic.service.ExcursionService;
 import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.service.OrganizadorService;
@@ -62,6 +63,9 @@ class PeticionExcursionControllerTests {
 
 	@MockBean
 	private ResidenciaService			residenciaService;
+	
+	@MockBean
+	private AncianoService			ancianoService;
 
 	@Autowired
 	private MockMvc						mockMvc;

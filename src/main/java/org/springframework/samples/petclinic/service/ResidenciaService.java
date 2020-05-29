@@ -1,18 +1,3 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package org.springframework.samples.petclinic.service;
 
@@ -29,39 +14,33 @@ import org.springframework.samples.petclinic.repository.springdatajpa.Residencia
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Mostly used as a facade for all Petclinic controllers Also a placeholder
- * for @Transactional and @Cacheable annotations
- *
- * @author Michael Isvy
- */
 @Service
 public class ResidenciaService {
 
 	@Autowired
 	private ResidenciaRepository residenciaRepository;
 
-
+	//tested
 	@Transactional(readOnly = true)
 	public Residencia findResidenciaById(final int id) throws DataAccessException {
 		return this.residenciaRepository.findById(id);
 	}
-
+	//tested
 	@Transactional
 	public void saveResidencia(final Residencia residencia) throws DataAccessException {
 		this.residenciaRepository.save(residencia);
 	}
-
+	//tested
 	@Transactional
 	public Residencia findMine(final Manager manager) {
 		return this.residenciaRepository.findMine(manager.getId());
 	}
-
+	//tested
 	@Transactional
 	public Iterable<Residencia> findAll() {
 		return this.residenciaRepository.findAll();
 	}
-
+	//tested
 	@Transactional
 	public Double getRatio(final Residencia residencia) {
 		Double res = 0.;
@@ -74,7 +53,7 @@ public class ResidenciaService {
 		}
 		return res;
 	}
-
+	//tested
 	@Transactional
 	public List<Residencia> findTop(final int nResults) {
 		List<Residencia> list = new ArrayList<>();
@@ -94,41 +73,28 @@ public class ResidenciaService {
 		}
 
 		return top;
-
-		//		List<Residencia> list = new ArrayList<>();
-		//		Iterator<Object[]> lt = this.residenciaRepository.findTop().iterator();
-		//		int i = 0;
-		//		while (i < nResults) {
-		//			if (lt.hasNext()) {
-		//				list.add((Residencia) lt.next()[0]);
-		//			}
-		//			i++;
-		//		}
-		//		return list;
 	}
-
+	//tested
 	@Transactional
 	public Iterable<Residencia> findResidenciasNoParticipantes(final Organizador organizador) {
 		return this.residenciaRepository.findResidenciasSinParticipar(organizador.getId());
 	}
-	
+	//tested
 	@Transactional
 	public Residencia findResidenciaByAnciano(final Anciano anciano) {
 		return this.residenciaRepository.findResidenciaByAncianoId(anciano.getId());
 	}
-
+	//tested
 	@Transactional
 	public Long countResidencias() {
 		return this.residenciaRepository.count();
 	}
-
+	//tested
 	@Transactional
 	public Long countResidenciasCompletas() {
 		return this.residenciaRepository.countResidenciasCompletas();
 	}
-
-	
-
+	//tested en findTop
 	private List<Residencia> ordenaPorRatio(final List<Residencia> listaPorOrdenar, final List<Residencia> listaYaOrdenada, final Double ratioInicial) {
 		List<Residencia> res = listaYaOrdenada;
 		Double ratioActual = ratioInicial;
@@ -146,6 +112,4 @@ public class ResidenciaService {
 		}
 		return res;
 	}
-
-
 }
