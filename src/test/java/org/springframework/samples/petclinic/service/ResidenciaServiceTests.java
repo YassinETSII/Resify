@@ -24,6 +24,8 @@ import org.springframework.samples.petclinic.model.Organizador;
 import org.springframework.samples.petclinic.model.PeticionExcursion;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -615,6 +617,7 @@ class ResidenciaServiceTests {
 	//CASO POSITIVO: CUENTA LAS RESIDENCIAS CORRECTAMENTE		
 	@Test
 	@Transactional
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	void debeContarResidencias() {
 		//RESIDENCIA 1
 				Residencia RE1 = new Residencia();
@@ -648,13 +651,14 @@ class ResidenciaServiceTests {
 				RE2.setTelefono("987654322");
 				this.residenciaService.saveResidencia(RE2);
 				
-			Assertions.assertTrue(this.residenciaService.countResidencias()==6l);
+			Assertions.assertTrue(this.residenciaService.countResidencias()==6);
 	}
 		
 	//CASO NEGATIVO: NO CUENTA LAS RESIDENCIAS CORRECTAMENTE	
 	@Test
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	void noCuentaResidenciasCorrectamente() {
-		Assertions.assertFalse(this.residenciaService.countResidencias()!=4l);
+		Assertions.assertFalse(this.residenciaService.countResidencias()!=4);
 	}
 
 	//##################################################################################################################
@@ -664,12 +668,12 @@ class ResidenciaServiceTests {
 	//CASO POSITIVO: CUENTA RESIDENCIAS COMPLETAS EXISTENTES
 	@Test
 	void debeContarResidenciasCompletasCorrectamente() {
-		Assertions.assertTrue(this.residenciaService.countResidenciasCompletas()==1l);
+		Assertions.assertTrue(this.residenciaService.countResidenciasCompletas()==1);
 	}
 	
 	//CASO NEGATIVO: NO CUENTA LAS RESIDENCIAS COMPLETAS CORRECTAMENTE	
 	@Test
 	void noCuentaResidenciasCompletasCorrectamente() {
-		Assertions.assertFalse(this.residenciaService.countResidenciasCompletas()==12l);
+		Assertions.assertFalse(this.residenciaService.countResidenciasCompletas()==12);
 	}
 }

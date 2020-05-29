@@ -35,6 +35,10 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @Transactional
+/*
+ * @TestPropertySource(
+ * locations = "classpath:application-mysql.properties")
+ */
 public class VisitaSanitariaControllerE2ETest {
 
 	private static final int TEST_VS_ID = 1;
@@ -117,7 +121,9 @@ public class VisitaSanitariaControllerE2ETest {
 				.andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
-	@WithMockUser(username = "manager5", authorities = { "manager" })
+	@WithMockUser(username = "manager5", authorities = {
+		"manager"
+	})
 	@Test
 	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	@Transactional
@@ -141,8 +147,8 @@ public class VisitaSanitariaControllerE2ETest {
 	}
 	
 	@Test
-	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	@Transactional
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	void PruebaAnciano() throws Exception{
 		Anciano a = this.ancianoService.findAncianoById(22);
 		Assertions.assertNotNull(a);
@@ -152,13 +158,22 @@ public class VisitaSanitariaControllerE2ETest {
 		Assertions.assertEquals(v.getAnciano(), a);
 
 		Residencia residenciaPrincipal = residenciaService.findMine(managerService.findManagerByUsername("manager5"));
-		List<Anciano> ancianos = new ArrayList<>();
-		Iterable<Anciano> misAncianos = ancianoService.findAncianosMiResidenciaConDependencia(residenciaPrincipal);
+		boolean esMiAnciano = false;
+		Anciano b = null;
+		Iterable<Anciano> misAncianos = ancianoService.findAncianosMiResidencia(residenciaPrincipal);
 		for (Anciano anc : misAncianos) {
-			ancianos.add(anc);
+			if(anc.getTieneDependenciaGrave()==true) {
+				b = anc;
+				if(anc.getUser().getUsername().equals(v.getAnciano().getUser().getUsername())) {
+					esMiAnciano = true;
+					break;
+				}
+			}
 		}
-		boolean esMiAnciano = ancianos.stream()
-				.anyMatch(anciano -> anciano.equals(v.getAnciano()));
+		Assertions.assertEquals(v.getAnciano().getUser().getUsername(), b.getUser().getUsername());
+		Assertions.assertNotNull(residenciaPrincipal);
+		Assertions.assertTrue(esMiAnciano);
+		Assertions.assertTrue(v.getResidencia().equals(residenciaPrincipal));
 		Assertions.assertTrue(v.getResidencia().equals(residenciaPrincipal) && esMiAnciano);
 		
 	}

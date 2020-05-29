@@ -120,6 +120,7 @@ class VisitaSanitariaServiceTests {
 
 	@Test
 	@Transactional
+	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
 	public void debeLanzarExcepcionCreandoVisitaSanitariaEnBlanco() {
 
 		VisitaSanitaria vis = new VisitaSanitaria();
