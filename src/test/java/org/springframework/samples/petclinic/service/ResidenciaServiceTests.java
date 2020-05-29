@@ -1,19 +1,3 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.springframework.samples.petclinic.service;
 
 import java.time.LocalTime;
@@ -24,7 +8,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolationException;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +54,11 @@ class ResidenciaServiceTests {
 	@Autowired
 	protected AncianoService			ancianoService;
 
-
+	//##################################################################################################################
+	//TEST: ENCONTRAR RESIDENCIA A PARTIR DE ID
+	//##################################################################################################################
+	
+	//CASO POSITIVO: ENCUENTRA RESIDENCIA CON ID CORRECTO
 	@Test
 	void debeEncontrarResidenciaConIdCorrecto() {
 		Residencia re = this.residenciaService.findResidenciaById(1);
@@ -82,53 +69,19 @@ class ResidenciaServiceTests {
 		Assertions.assertTrue(re.getDireccion().equals("Direccion"));
 		Assertions.assertTrue(re.getEdadMaxima().equals(70));
 	}
-
+	
+	//CASO NEGATIVO: ENCUENTRA RESIDENCIA CON ID QUE NO EXISTE
 	@Test
-	void noDebeEncontrarResidenciaConIdInexistente() {
+	void noDebeEncontrarResidenciaConIdIncorrecto() {
 		Residencia re = this.residenciaService.findResidenciaById(99999);
 		Assertions.assertNull(re);
 	}
 
-	@Test
-	void debeEncontrarTodasLasResidencias() {
-		Iterable<Residencia> res = this.residenciaService.findAll();
+	//##################################################################################################################
+	//TEST: CREAR RESIDENCIA
+	//##################################################################################################################
 
-		ArrayList<Residencia> resis = new ArrayList<Residencia>();
-		for (Residencia r : res) {
-			resis.add(r);
-		}
-		Residencia re2 = resis.get(0);
-		Assertions.assertTrue(re2.getCorreo().equals("residencia1@mail.es"));
-	}
-
-	@Test
-	void noDebeEncontrarResidenciaInexistente() {
-		Iterable<Residencia> res = this.residenciaService.findAll();
-
-		ArrayList<Residencia> resis = new ArrayList<Residencia>();
-		for (Residencia r : res) {
-			resis.add(r);
-		}
-		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
-			resis.get(9999999);
-		});
-	}
-
-	@Test
-	void debeEncontrarResidenciaPorManager() {
-		Manager m = this.managerService.findManagerById(3);
-		Residencia res = this.residenciaService.findMine(m);
-		Assertions.assertTrue(res.getCorreo().equals("residencia1@mail.es"));
-	}
-
-	@Test
-	void noDebeEncontrarResidenciaConIdManagerInexistente() {
-		Manager m = this.managerService.findManagerById(9999999);
-		Assertions.assertThrows(NullPointerException.class, () -> {
-			this.residenciaService.findMine(m);
-		});
-	}
-
+	//CASO POSITIVO: CREA RESIDENCIA UN MANAGER QUE NO TENÍA PREVIAMENTE UNA REGISTRADA	
 	@Test
 	@Transactional
 	public void debeCrearResidenciaManagerSinUna() {
@@ -156,7 +109,8 @@ class ResidenciaServiceTests {
 		Assertions.assertTrue(rres2 != null);
 		Assertions.assertTrue(ra.getId() != null);
 	}
-
+	
+	//CASO NEGATIVO: CREA RESIDENCIA CON CAMPOS DEL FORMULARIO EN BLANCO
 	@Test
 	@Transactional
 	public void debeLanzarExcepcionCreandoResidenciaEnBlanco() {
@@ -165,7 +119,65 @@ class ResidenciaServiceTests {
 			this.residenciaService.saveResidencia(ra);
 		});
 	}
+	
+	//##################################################################################################################
+	//TEST: ENCONTRAR RESIDENCIA A PARTIR DE ID DE MANAGER
+	//##################################################################################################################
+	
+	//CASO POSITIVO: ENCUENTRA RESIDENCIA CON ID DE MANAGER CORRECTO
+	@Test
+	void debeEncontrarResidenciaPorManager() {
+		Manager m = this.managerService.findManagerById(3);
+		Residencia res = this.residenciaService.findMine(m);
+		Assertions.assertTrue(res.getCorreo().equals("residencia1@mail.es"));
+	}
 
+	//CASO NEGATIVO: ENCUENTRA RESIDENCIA CON ID DE MANAGER QUE NO EXISTE
+	@Test
+	void noDebeEncontrarResidenciaConIdManagerInexistente() {
+		Manager m = this.managerService.findManagerById(9999999);
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			this.residenciaService.findMine(m);
+		});
+	}
+
+	//##################################################################################################################
+	//TEST: ENCONTRAR TODAS LAS RESIDENCIAS
+	//##################################################################################################################
+
+	//CASO POSITIVO: ENCUENTRA TODAS LAS RESIDENCIAS CORRECTAMENTE
+	@Test
+	void debeEncontrarTodasLasResidencias() {
+		Iterable<Residencia> res = this.residenciaService.findAll();
+
+		ArrayList<Residencia> resis = new ArrayList<Residencia>();
+		for (Residencia r : res) {
+			resis.add(r);
+		}
+		Residencia re2 = resis.get(0);
+		Assertions.assertTrue(re2.getCorreo().equals("residencia1@mail.es"));
+	}
+	
+	//CASO NEGATIVO: BUSCA RESIDENCIA FUERA DE LOS LÍMITES DE RESIDENCIAS
+	@Test
+	void noDebeEncontrarResidenciaInexistente() {
+		Iterable<Residencia> res = this.residenciaService.findAll();
+
+		ArrayList<Residencia> resis = new ArrayList<Residencia>();
+		for (Residencia r : res) {
+			resis.add(r);
+		}
+		
+		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+			resis.get(9999999);
+		});
+	}
+
+	//##################################################################################################################
+	//TEST: CALCULAR RATIO DE BUENAS ACCIONES-INCIDENCIAS DE UNA RESIDENCIA
+	//##################################################################################################################
+	
+	//CASO POSITIVO I: CALCULA EL RATIO CORRECTAMENTE DE UNA RESIDENCIA CON BUENAS ACCIONES E INCIDENCIAS
 	@Test
 	@Transactional
 	public void debeCalcularRatio() {
@@ -225,7 +237,8 @@ class ResidenciaServiceTests {
 		Double m = this.residenciaService.getRatio(ra);
 		Assertions.assertTrue(m == 0.5);
 	}
-
+	
+	//CASO POSITIVO II: CALCULA EL RATIO CORRECTAMENTE DE UNA RESIDENCIA CON BUENAS ACCIONES Y SIN INCIDENCIAS
 	@Test
 	@Transactional
 	public void debeCalcularRatioSinIncidencias() {
@@ -262,6 +275,7 @@ class ResidenciaServiceTests {
 		Assertions.assertTrue(m == 1);
 	}
 
+	//CASO POSITIVO III: CALCULA EL RATIO CORRECTAMENTE DE UNA RESIDENCIA SIN BUENAS ACCIONES Y CON INCIDENCIAS
 	@Test
 	@Transactional
 	public void debeCalcularRatioSinBuenasAcciones() {
@@ -297,7 +311,47 @@ class ResidenciaServiceTests {
 		Double m = this.residenciaService.getRatio(ra);
 		Assertions.assertTrue(m == 0);
 	}
+	
+	//CASO POSITIVO IIII: DEVUELVE CERO EN EL RATIO SI NO HAY NI ACCIONES NI INCIDENCIAS
+	@Test
+	@Transactional
+	public void debeCalcularRatioSinBuenasAccionesNiIncidencias() {
 
+		Residencia ra = new Residencia();
+		LocalTime horaApertura = LocalTime.of(07, 00);
+		LocalTime horaCierre = LocalTime.of(21, 00);
+		ra.setAceptaDependenciaGrave(false);
+		ra.setAforo(100);
+		ra.setCorreo("residencia1@mail.es");
+		ra.setDescripcion("Descripcion de prueba");
+		ra.setDireccion("Direccion");
+		ra.setEdadMaxima(70);
+		ra.setHoraApertura(horaApertura);
+		ra.setHoraCierre(horaCierre);
+		ra.setMasInfo("http://www.resi1.com");
+		ra.setNombre("Reidencia 1");
+		ra.setTelefono("987654321");
+		this.residenciaService.saveResidencia(ra);
+
+		Double m = this.residenciaService.getRatio(ra);
+		Assertions.assertTrue(m == 0);
+	}
+	
+	//CASO NEGATIVO: NO DEBE CALCULAR RATIO SI RECIBE COMO RESIDENCIA UN NULL
+	@Test
+	public void noDebeCalcularRatioResidenciaNull() {
+	Residencia nullRes = new Residencia();
+	
+	Assertions.assertThrows(NullPointerException.class, () -> {
+		this.residenciaService.getRatio(nullRes);
+		});
+	}	
+	
+	//##################################################################################################################
+	//TEST: ENCONTRAR RESIDENCIA TOP
+	//##################################################################################################################
+	
+	//CASO POSITIVO I: ENCUENTRA RESIDENCIA TOP CORRECTAMENTE
 	@Test
 	@Transactional
 	public void debeEncontrarResidenciaTop() {
@@ -410,12 +464,32 @@ class ResidenciaServiceTests {
 			}
 		}
 
-		System.out.println("TOP: " + resIterator.stream().map(x -> x.getNombre()).collect(Collectors.toList()));
 		Assertions.assertTrue(RE1EnTop);
 		Assertions.assertFalse(RE2EnTop);
-
 	}
+	
+	//CASO POSITIVO II: DEVUELVE LISTA VACÍA SI HAY 0 RESULTADOS
+	@Test
+	public void debeDevolverListaVaciaSiNoHayResultados() {
+		List<Residencia> resIterator = this.residenciaService.findTop(0);
+		Assertions.assertTrue(resIterator.stream().collect(Collectors.toList()).isEmpty());
+	}
+	
 
+	//CASO NEGATIVO: NO DEBE DEVOLVER UN ELEMENTO DE LA LISTA SI HAY 0 RESULTADOS
+		@Test
+		public void noDebeDevolverElementoListastaVaciaSiNoHayResultados() {
+			List<Residencia> resIterator = this.residenciaService.findTop(0);
+			Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+				resIterator.get(0);
+				});
+		}
+		
+	//##################################################################################################################
+	//TEST: ENCONTRAR RESIDENCIAS SIN PARTICIPANTES
+	//##################################################################################################################
+		
+	//CASO POSITIVO: ENCUENTRA CORRECTAMENTE RESIDENCIAS SIN PARTICIPANTES		
 	@Test
 	@Transactional
 	public void debeEncontrarResidenciaSinParticipantes() {
@@ -501,7 +575,20 @@ class ResidenciaServiceTests {
 		}
 		Assertions.assertTrue(r2EnNoParticipantes);
 	}
+	
+	//CASO NEGATIVO: NO DEBE ENCONTRAR RESIDENCIAS SIN PARTICIPANTES CON ORGANIZADOR NULL
+	@Test
+	public void noDebeEncontrarResidenciaSinParticipantesConOrganizadorNull() {
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			this.residenciaService.findResidenciasNoParticipantes(null);
+			});
+	}
 
+	//##################################################################################################################
+	//TEST: ENCONTRAR RESIDENCIA A PARTIR DE ANCIANO DADO
+	//##################################################################################################################
+			
+	//CASO POSITIVO: ENCUENTRA CORRECTAMENTE RESIDENCIA DADO UN ANCIANO		
 	@Test
 	void debeEncontrarResidenciaPorAnciano() {
 		Anciano anciano = this.ancianoService.findAncianoById(7);
@@ -513,5 +600,76 @@ class ResidenciaServiceTests {
 		Assertions.assertTrue(residencia.getDireccion().equals("Direccion"));
 		Assertions.assertTrue(residencia.getEdadMaxima().equals(70));
 	}
+	
+	//CASO NEGATIVO: NO ENCUENTRA RESIDENCIA DADO UN ANCIANO QUE NO EXISTE		
+	@Test
+	void noDebeEncontrarResidenciaPorAncianoSiNoExiste() {
+		Anciano anciano = this.ancianoService.findAncianoById(9999);
+		Assertions.assertNull(anciano);
+	}
+	
+	//##################################################################################################################
+	//TEST: CONTAR RESIDENCIAS EXSISTENTES
+	//##################################################################################################################
+				
+	//CASO POSITIVO: CUENTA LAS RESIDENCIAS CORRECTAMENTE		
+	@Test
+	@Transactional
+	void debeContarResidencias() {
+		//RESIDENCIA 1
+				Residencia RE1 = new Residencia();
+				LocalTime horaApertura = LocalTime.of(07, 00);
+				LocalTime horaCierre = LocalTime.of(21, 00);
+				RE1.setAceptaDependenciaGrave(false);
+				RE1.setAforo(100);
+				RE1.setCorreo("residencia1@mail.es");
+				RE1.setDescripcion("Descripcion de prueba");
+				RE1.setDireccion("Direccion");
+				RE1.setEdadMaxima(70);
+				RE1.setHoraApertura(horaApertura);
+				RE1.setHoraCierre(horaCierre);
+				RE1.setMasInfo("http://www.resi1.com");
+				RE1.setNombre("Residencia Test Buena");
+				RE1.setTelefono("987654321");
+				this.residenciaService.saveResidencia(RE1);
 
+				//RESIDENCIA 2
+				Residencia RE2 = new Residencia();
+				RE2.setAceptaDependenciaGrave(false);
+				RE2.setAforo(102);
+				RE2.setCorreo("residencia2@mail.es");
+				RE2.setDescripcion("Descripcion de prueba");
+				RE2.setDireccion("Direccion");
+				RE2.setEdadMaxima(70);
+				RE2.setHoraApertura(horaApertura);
+				RE2.setHoraCierre(horaCierre);
+				RE2.setMasInfo("http://www.resi2.com");
+				RE2.setNombre("Residencia Test Mala");
+				RE2.setTelefono("987654322");
+				this.residenciaService.saveResidencia(RE2);
+				
+			Assertions.assertTrue(this.residenciaService.countResidencias()==6l);
+	}
+		
+	//CASO NEGATIVO: NO CUENTA LAS RESIDENCIAS CORRECTAMENTE	
+	@Test
+	void noCuentaResidenciasCorrectamente() {
+		Assertions.assertFalse(this.residenciaService.countResidencias()!=4l);
+	}
+
+	//##################################################################################################################
+	//TEST: CONTAR RESIDENCIAS COMPLETAS EXISTENTES
+	//##################################################################################################################
+	
+	//CASO POSITIVO: CUENTA RESIDENCIAS COMPLETAS EXISTENTES
+	@Test
+	void debeContarResidenciasCompletasCorrectamente() {
+		Assertions.assertTrue(this.residenciaService.countResidenciasCompletas()==1l);
+	}
+	
+	//CASO NEGATIVO: NO CUENTA LAS RESIDENCIAS COMPLETAS CORRECTAMENTE	
+	@Test
+	void noCuentaResidenciasCompletasCorrectamente() {
+		Assertions.assertFalse(this.residenciaService.countResidenciasCompletas()==12l);
+	}
 }
