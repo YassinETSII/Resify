@@ -136,7 +136,6 @@ public class QuejaController {
 		mav.addObject(queja);
 		Manager manager = this.managerService.findManagerByUsername(p.getName());
 		Iterable<Queja> quejas = this.quejaService.findQuejasByManager(manager);
-		System.out.println(quejas.toString());
 		if (StreamSupport.stream(quejas.spliterator(), false).noneMatch(x -> queja.equals(x))) {
 			mav = new ModelAndView("exception");
 		}

@@ -7,18 +7,17 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
 <petclinic:layout pageName="usuarios">
-	<h2>Nuevo Usuario</h2>
 
 	<spring:url value="/ancianos/new" var="addAncianoUrl" />
-	<a href="${fn:escapeXml(addAncianoUrl)}" class="btn btn-default">Añadir
-		nuevo anciano</a>
+	<a href="${fn:escapeXml(addAncianoUrl)}" class="btn btn-default">Registrarse
+		como anciano</a>
 
 	<spring:url value="/managers/new" var="addManagerUrl" />
-	<a href="${fn:escapeXml(addManagerUrl)}" class="btn btn-default">Añadir
-		nuevo manager</a>
+	<a href="${fn:escapeXml(addManagerUrl)}" class="btn btn-default">Registrarse
+		como manager</a>
 
 	<spring:url value="/organizadores/new" var="addOrganizadorUrl" />
-	<a href="${fn:escapeXml(addOrganizadorUrl)}" class="btn btn-default">Añadir
-		nuevo organizador</a>
+	<a href="${fn:escapeXml(addOrganizadorUrl)}" class="btn btn-default">Registrarse
+		como organizador</a>
 
 </petclinic:layout>

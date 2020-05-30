@@ -86,7 +86,7 @@ public class ActividadController {
 
 	@InitBinder("actividad")
 	public void initActividadBinder(final WebDataBinder dataBinder) {
-		dataBinder.setValidator(new ActividadValidator());
+		dataBinder.addValidators(new ActividadValidator());
 	}
 
 	@GetMapping()
