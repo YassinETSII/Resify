@@ -20,7 +20,6 @@ import org.springframework.samples.petclinic.service.ManagerService;
 import org.springframework.samples.petclinic.service.OrganizadorService;
 import org.springframework.samples.petclinic.service.PeticionExcursionService;
 import org.springframework.samples.petclinic.service.FeedbackService;
-import org.springframework.samples.petclinic.web.validators.FeedbackValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
