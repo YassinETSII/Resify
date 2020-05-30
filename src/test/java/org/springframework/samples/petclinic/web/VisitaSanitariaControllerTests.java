@@ -97,7 +97,7 @@ class VisitaSanitariaControllerTests {
 		BDDMockito.given(this.managerService.findManagerByUsername(VisitaSanitariaControllerTests.TEST_MANAGER_NOMBRE)).willReturn(this.man);
 		BDDMockito.given(this.ancianoService.findAncianoById(VisitaSanitariaControllerTests.TEST_ANCIANO_ID)).willReturn(this.anciano);
 		BDDMockito.given(this.residenciaService.findMine(this.man)).willReturn(this.resi);
-		BDDMockito.given(this.ancianoService.findAncianosMiResidenciaConDependencia(this.resi))
+		BDDMockito.given(this.ancianoService.findAncianosMiResidencia(this.resi))
 				.willReturn(this.misAncianos);
 	}
 
