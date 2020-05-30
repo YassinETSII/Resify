@@ -97,7 +97,8 @@ class VisitaSanitariaControllerTests {
 		BDDMockito.given(this.managerService.findManagerByUsername(VisitaSanitariaControllerTests.TEST_MANAGER_NOMBRE)).willReturn(this.man);
 		BDDMockito.given(this.ancianoService.findAncianoById(VisitaSanitariaControllerTests.TEST_ANCIANO_ID)).willReturn(this.anciano);
 		BDDMockito.given(this.residenciaService.findMine(this.man)).willReturn(this.resi);
-		BDDMockito.given(this.ancianoService.findAncianosMiResidencia(this.resi)).willReturn(this.misAncianos);
+		BDDMockito.given(this.ancianoService.findAncianosMiResidenciaConDependencia(this.resi))
+				.willReturn(this.misAncianos);
 	}
 
 	@WithMockUser(username = VisitaSanitariaControllerTests.TEST_MANAGER_NOMBRE)
@@ -105,6 +106,16 @@ class VisitaSanitariaControllerTests {
 	void testProcessFindFormSuccess() throws Exception {
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/visitas-sanitarias")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("visitasSanitarias/visitasSanitariasList"));
+	}
+
+	// No debe poder acceder al listado si no tiene registrado una residencia, le
+	// manda a la vista de creación de una
+	@WithMockUser(username = "manager1")
+	@Test
+	void testProcessFindFormErrorNoResidencia() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/visitas-sanitarias"))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:residencias/new"));
 	}
 
 	@WithMockUser(username = VisitaSanitariaControllerTests.TEST_MANAGER_NOMBRE)
@@ -145,6 +156,20 @@ class VisitaSanitariaControllerTests {
 			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
+	@WithMockUser(username = "manager1")
+	@Test
+	void testProcessCreationFormHasErrorsConManagerEquivocado() throws Exception {
+		this.anciano.setTieneDependenciaGrave(true);
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/visitas-sanitarias/new").param("motivo", "Motivo prueba")
+						.param("descripcion", "Prueba descrip").param("sanitario", "sanitario prueba")
+						.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", "2020/01/01")
+						.param("horaInicio", String.valueOf(this.horini)).param("horaFin", String.valueOf(this.horfin))
+						.param("anciano.id", String.valueOf(TEST_ANCIANO_ID)))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+
 	@WithMockUser(username = VisitaSanitariaControllerTests.TEST_MANAGER_NOMBRE)
 	@Test
 	void testShowVisitaSanitaria() throws Exception {
@@ -155,6 +180,27 @@ class VisitaSanitariaControllerTests {
 			.andExpect(MockMvcResultMatchers.model().attribute("visitaSanitaria", Matchers.hasProperty("fecha", Matchers.is(this.diaini))))
 			.andExpect(MockMvcResultMatchers.model().attribute("visitaSanitaria", Matchers.hasProperty("horaInicio", Matchers.is(this.horini))))
 			.andExpect(MockMvcResultMatchers.model().attribute("visitaSanitaria", Matchers.hasProperty("horaFin", Matchers.is(this.horfin)))).andExpect(MockMvcResultMatchers.view().name("visitasSanitarias/visitasSanitariasDetails"));
+	}
+	@WithMockUser(username = VisitaSanitariaControllerTests.TEST_MANAGER_NOMBRE)
+	@Test
+	void testProcessDeleteSuccess() throws Exception {
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.get("/visitas-sanitarias/{visitaSanitariaId}/delete",
+						VisitaSanitariaControllerTests.TEST_VISITA_SANITARIA_ID))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/visitas-sanitarias"));
+	}
+
+	
+	//No debe poder borrar una visita si no es de su residencia
+	@WithMockUser(username = "manager1")
+	@Test
+	void testShowVisitaSanitariaConManagerEquivocado() throws Exception {
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.get("/visitas-sanitarias/{visitaSanitariaId}",
+						VisitaSanitariaControllerTests.TEST_VISITA_SANITARIA_ID))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
 }

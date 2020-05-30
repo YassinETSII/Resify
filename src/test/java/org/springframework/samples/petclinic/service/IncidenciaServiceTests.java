@@ -33,25 +33,32 @@ import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
+
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 class IncidenciaServiceTests {
 
 	@Autowired
-	protected IncidenciaService	incidenciaService;
+	protected IncidenciaService incidenciaService;
 
 	@Autowired
-	protected ManagerService	managerService;
+	protected ManagerService managerService;
 
 	@Autowired
-	protected ResidenciaService	residenciaService;
-
+	protected ResidenciaService residenciaService;
 
 	@Test
 	void debeEncontrarIncidenciaConIdCorrecto() {
 		Incidencia i = this.incidenciaService.findIncidenciaById(1);
 		Assertions.assertTrue(i.getTitulo().equals("titulo1"));
 		Assertions.assertTrue(i.getResidencia().getNombre().equals("Residencia 1"));
+
+	}
+
+	@Test
+	void noDebeEncontrarIncidenciaConIdIncorrecto() {
+		Incidencia i = this.incidenciaService.findIncidenciaById(111);
+		Assertions.assertNull(i);
 
 	}
 
@@ -79,6 +86,15 @@ class IncidenciaServiceTests {
 
 		Incidencia ba = basc.get(0);
 		Assertions.assertTrue(ba.getTitulo().equals("titulo1"));
+	}
+
+	// No va a encontrar incidencias para un manager inexistente
+	@Test
+	void noDebeEncontrarTodasLasIncidenciasParaManagerInexistente() {
+		Manager m = this.managerService.findManagerById(111);
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			this.incidenciaService.findAllMine(m);
+		});
 	}
 
 	@Test
@@ -109,10 +125,10 @@ class IncidenciaServiceTests {
 			basc2.add(b2);
 		}
 
-		//Comprueba que se ha añadido a las incidencias del manager
+		// Comprueba que se ha añadido a las incidencias del manager
 		Assertions.assertTrue(basc2.size() == total + 1);
 
-		//Comprueba que su id ya no es nulo
+		// Comprueba que su id ya no es nulo
 		Assertions.assertTrue(ba.getId() != null);
 	}
 

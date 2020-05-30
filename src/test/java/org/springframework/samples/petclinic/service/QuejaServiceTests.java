@@ -42,14 +42,13 @@ import org.springframework.transaction.annotation.Transactional;
 class QuejaServiceTests {
 
 	@Autowired
-	protected QuejaService		quejaService;
+	protected QuejaService quejaService;
 
 	@Autowired
-	protected ManagerService	managerService;
+	protected ManagerService managerService;
 
 	@Autowired
-	protected AncianoService	ancianoService;
-
+	protected AncianoService ancianoService;
 
 	@Test
 	void debeEncontrarQuejaConIdCorrecto() {
@@ -58,6 +57,14 @@ class QuejaServiceTests {
 		Assertions.assertTrue(queja.getAnonimo() == false);
 		Assertions.assertTrue(queja.getAnciano().getId().equals(7));
 		Assertions.assertTrue(queja.getDescripcion().equals("Descripcion Prueba 1"));
+
+	}
+
+	// No encuentra queja con id inexistente
+	@Test
+	void noDebeEncontrarQuejaConIdIncorrecto() {
+		Queja queja = this.quejaService.findQuejaById(111);
+		Assertions.assertNull(queja);
 
 	}
 
@@ -78,6 +85,16 @@ class QuejaServiceTests {
 
 	}
 
+	// Cuando busca las quejas para un manager que no existe,
+	@Test
+	void noDebeEncontrarTodasLasQuejasManagerInexistente() {
+		Manager manager = this.managerService.findManagerById(111);
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			this.quejaService.findQuejasByManager(manager);
+		});
+
+	}
+
 	@Test
 	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	void debeContarTodasLasQuejasPorAnciano() {
@@ -85,6 +102,16 @@ class QuejaServiceTests {
 		Double quejas = this.quejaService.countQuejasHoyByAnciano(a);
 
 		Assertions.assertTrue(quejas.equals(0.));
+	}
+
+	// No se puede encontrar quejas para un anciano inexistente
+	@Test
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
+	void noDebeContarTodasLasQuejasParaAncianoInexistente() {
+		Anciano a = this.ancianoService.findAncianoById(7);
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			this.quejaService.countQuejasHoyByAnciano(a);
+		});
 	}
 
 	@Test
@@ -116,10 +143,10 @@ class QuejaServiceTests {
 			quejas2.add(q2);
 		}
 
-		//Comprueba que se ha añadido a las quejas del manager
+		// Comprueba que se ha añadido a las quejas del manager
 		Assertions.assertTrue(quejas2.size() == total + 1);
 
-		//Comprueba que su id ya no es nulo
+		// Comprueba que su id ya no es nulo
 		Assertions.assertTrue(queja.getId() != null);
 
 		Assertions.assertTrue(quejas2.contains(queja));

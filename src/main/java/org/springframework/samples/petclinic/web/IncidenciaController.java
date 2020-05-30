@@ -72,6 +72,8 @@ public class IncidenciaController {
 	public String listIncidencias(Map<String, Object> model, Principal p) {
 		Manager manager = managerService.findManagerByUsername(p.getName());
 		Iterable<Incidencia> incidencias = incidenciaService.findAllMine(manager);
+		System.out.println(manager);
+		System.out.println(this.residenciaService.findMine(manager));
 		if(this.residenciaService.findMine(manager)==null) {
 			model.put("noTieneResi", true);
 		}else {

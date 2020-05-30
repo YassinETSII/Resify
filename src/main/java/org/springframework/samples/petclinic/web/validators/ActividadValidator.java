@@ -29,32 +29,14 @@ public class ActividadValidator implements Validator {
 		Actividad actividad = (Actividad) obj;
 		Date currentDate = new Date();
 
-		if (actividad.getTitulo().isEmpty()) {
-			errors.rejectValue("titulo", "requerido", "requerido");
-		}
-
-		if (actividad.getDescripcion().isEmpty()) {
-			errors.rejectValue("descripcion", "requerido", "requerido");
-		}
-
-		if (actividad.getFechaInicio() == null) {
-			errors.rejectValue("fechaInicio", "requerido", "requerido");
-		}
-
-		if (actividad.getHoraInicio() == null) {
-			errors.rejectValue("horaInicio", "requerido", "requerido");
-		}
-
-		if (actividad.getHoraFin() == null) {
-			errors.rejectValue("horaFin", "requerido", "requerido");
-		}
-
 		if (actividad.getFechaInicio() != null && !actividad.getFechaInicio().after(currentDate)) {
 			errors.rejectValue("fechaInicio", "debe ser fecha futura", "debe ser fecha futura");
 		}
 
-		if (actividad.getHoraFin() != null && actividad.getHoraInicio() != null && actividad.getHoraInicio().isAfter(actividad.getHoraFin())) {
-			errors.rejectValue("horaFin", "debe ser igual o posterior a la hora inicio", "debe ser igual o posterior a la hora inicio");
+		if (actividad.getHoraFin() != null && actividad.getHoraInicio() != null
+				&& actividad.getHoraInicio().isAfter(actividad.getHoraFin())) {
+			errors.rejectValue("horaFin", "debe ser igual o posterior a la hora inicio",
+					"debe ser igual o posterior a la hora inicio");
 		}
 	}
 
