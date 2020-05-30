@@ -192,5 +192,29 @@ class ExcursionServiceTests {
 		Excursion excursion1 = excursiones.get(0);
 		Assertions.assertTrue(excursion1.getTitulo().equals("Prueba3"));
 	}
+	
+	@Test
+	@Transactional
+	public void debeContarTodasLasExcursiones() {
+		Assertions.assertTrue(this.excursionService.countExcursiones().equals(8L));
+	}
+	
+	@Test
+	@Transactional
+	public void noDebeContarTodasLasExcursiones() {
+		Assertions.assertTrue(!this.excursionService.countExcursiones().equals(4L));
+	}
+	
+	@Test
+	@Transactional
+	public void debeHacerMediaExcursionesPorOrganizador() {
+		Assertions.assertTrue(this.excursionService.avgExcursionesByOrganizador().equals(4.0));
+	}
+	
+	@Test
+	@Transactional
+	public void noDebeHacerMediaExcursionesPorOrganizador() {
+		Assertions.assertTrue(!this.excursionService.avgExcursionesByOrganizador().equals(0.4));
+	}
 
 }

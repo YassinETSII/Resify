@@ -126,5 +126,19 @@ class BuenaAccionServiceTests {
 			this.buenaAccionService.saveBuenaAccion(ba);
 		});
 	}
+	
+	@Test
+	@Transactional
+	public void debeContarTodasLasBuenasAcciones() {
+		Assertions.assertTrue(this.buenaAccionService.countBuenasAcciones().equals(4L));
+	}
+	
+	@Test
+	@Transactional
+	public void noDebeContarTodasLasBuenasAcciones() {
+		Assertions.assertTrue(!this.buenaAccionService.countBuenasAcciones().equals(2L));
+	}
+
+
 
 }
