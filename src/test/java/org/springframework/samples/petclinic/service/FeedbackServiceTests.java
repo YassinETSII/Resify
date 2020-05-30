@@ -96,7 +96,7 @@ class FeedbackServiceTests {
 	  
 	  //CASO NEGATIVO I: NO ENCUENTRA FEEDBACK CORRECTAMENTE POR NO HACER MATCH CON UN ATRIBUTO 
 	  @Test 
-	  void noDebeEncontrarFeedbacksNoEsMio() { 
+	  void noDebeEncontrarFeedbackNoEsMio() { 
 		  Organizador organizador = this.organizadorService.findOrganizadorById(1);
 		  Iterable<Feedback> fes = this.feedbackService.findAllMineOrganizador(organizador);
 			  
@@ -114,8 +114,7 @@ class FeedbackServiceTests {
 		  Assertions.assertThrows(NullPointerException.class, () -> {
 			  this.feedbackService.findAllMineOrganizador(null);
 			});
-
-		}
+	  }
 	  
 	//##################################################################################################################
 	//TEST: CREAR FEEDBACK
