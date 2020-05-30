@@ -35,6 +35,10 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @Transactional
+/*
+ * @TestPropertySource(
+ * locations = "classpath:application-mysql.properties")
+ */
 public class VisitaSanitariaControllerE2ETest {
 
 	private static final int TEST_VS_ID = 1;
@@ -150,6 +154,7 @@ public class VisitaSanitariaControllerE2ETest {
 	}
 
 	@WithMockUser(username = "manager5", authorities = { "manager" })
+
 	@Test
 	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	@Transactional
@@ -170,7 +175,7 @@ public class VisitaSanitariaControllerE2ETest {
 				.andExpect(MockMvcResultMatchers.view().name("visitasSanitarias/visitasSanitariasDetails"));
 	}
 
-	// No debe poder ver una visita sanitaria siendo anciano
+// No debe poder ver una visita sanitaria siendo anciano
 	@WithMockUser(username = "anciano1")
 	@Test
 	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)

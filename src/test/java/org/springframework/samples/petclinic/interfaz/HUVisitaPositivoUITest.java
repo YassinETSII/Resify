@@ -17,6 +17,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
@@ -39,6 +41,7 @@ public class HUVisitaPositivoUITest {
 	}
 
 	@Test
+	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
 	public void testVisitaSanitaria() throws Exception {
 		driver.get("http://localhost:" + this.port);
 		driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();

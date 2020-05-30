@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.StreamSupport;
 
 import javax.validation.Valid;
 
@@ -54,19 +54,20 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/visitas-sanitarias")
 public class VisitaSanitariaController {
 
-	private static final String VIEWS_VISITA_SANITARIA_CREATE_OR_UPDATE_FORM = "visitasSanitarias/createOrUpdateVisitaSanitariaForm";
+	private static final String		VIEWS_VISITA_SANITARIA_CREATE_OR_UPDATE_FORM	= "visitasSanitarias/createOrUpdateVisitaSanitariaForm";
 
 	@Autowired
-	private VisitaSanitariaService visitaSanitariaService;
+	private VisitaSanitariaService	visitaSanitariaService;
 
 	@Autowired
-	private ManagerService managerService;
+	private ManagerService			managerService;
 
 	@Autowired
-	private ResidenciaService residenciaService;
+	private ResidenciaService		residenciaService;
 
 	@Autowired
-	private AncianoService ancianoService;
+	private AncianoService			ancianoService;
+
 
 	@InitBinder("visitaSanitaria")
 	public void initInscripcionBinder(final WebDataBinder dataBinder) {
@@ -77,91 +78,113 @@ public class VisitaSanitariaController {
 	}
 
 	@GetMapping()
-	public String listVisitaSanitarias(Map<String, Object> model, Principal p) {
-		Manager manager = managerService.findManagerByUsername(p.getName());
-		if (residenciaService.findMine(manager) == null) {
+	public String listVisitaSanitarias(final Map<String, Object> model, final Principal p) {
+		Manager manager = this.managerService.findManagerByUsername(p.getName());
+		if (this.residenciaService.findMine(manager) == null) {
 			return "redirect:residencias/new";
 		}
-		Iterable<VisitaSanitaria> visitasSanitarias = visitaSanitariaService.findAllMine(manager);
+		Iterable<VisitaSanitaria> visitasSanitarias = this.visitaSanitariaService.findAllMine(manager);
 		model.put("visitasSanitarias", visitasSanitarias);
 		return "visitasSanitarias/visitasSanitariasList";
 	}
 
 	@GetMapping(value = "/new")
-	public String initCreationForm(Map<String, Object> model, Principal p) {
+	public String initCreationForm(final Map<String, Object> model, final Principal p) {
 		VisitaSanitaria visitaSanitaria = new VisitaSanitaria();
 		model.put("visitaSanitaria", visitaSanitaria);
 
-		Residencia residencia = residenciaService.findMine(managerService.findManagerByUsername(p.getName()));
-		Iterable<Anciano> misAncianos = ancianoService.findAncianosMiResidenciaConDependencia(residencia);
-		if (!misAncianos.iterator().hasNext()) {
+		Residencia residencia = this.residenciaService.findMine(this.managerService.findManagerByUsername(p.getName()));
+		Iterable<Anciano> misAncianos = this.ancianoService.findAncianosMiResidencia(residencia);
+		List<Anciano> ancianos = new ArrayList<>();
+		for (Anciano anc : misAncianos) {
+			if (anc.getTieneDependenciaGrave() == true) {
+				ancianos.add(anc);
+			}
+		}
+		if (ancianos.size() == 0) {
 			model.put("noDependencia", true);
 			model.put("noAncianosConDependencia", "* Su residencia no posee ningun anciano con dependencia grave");
 		}
 		model.put("ancianos", misAncianos);
-		return VIEWS_VISITA_SANITARIA_CREATE_OR_UPDATE_FORM;
+		return VisitaSanitariaController.VIEWS_VISITA_SANITARIA_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/new")
-	public String processCreationForm(@Valid VisitaSanitaria visitaSanitaria, BindingResult result,
-			Map<String, Object> model, Principal p) {
-		Residencia residencia = residenciaService.findMine(managerService.findManagerByUsername(p.getName()));
+	public String processCreationForm(@Valid final VisitaSanitaria visitaSanitaria, final BindingResult result, final Map<String, Object> model, final Principal p) {
+		Residencia residencia = this.residenciaService.findMine(this.managerService.findManagerByUsername(p.getName()));
 		Date hoy = new Date(System.currentTimeMillis() - 1);
-		Anciano anciano = ancianoService.findAncianoById(visitaSanitaria.getAnciano().getId());
+		Anciano anciano = this.ancianoService.findAncianoById(visitaSanitaria.getAnciano().getId());
 
 		visitaSanitaria.setResidencia(residencia);
 		visitaSanitaria.setAnciano(anciano);
 		visitaSanitaria.setFecha(hoy);
 
-		if (!tienePermiso(p, visitaSanitaria) || !visitaSanitaria.getAnciano().getTieneDependenciaGrave())
+		if (!this.tienePermiso(p, visitaSanitaria) || !visitaSanitaria.getAnciano().getTieneDependenciaGrave()) {
 			return "exception";
+		}
 
 		if (result.hasErrors()) {
-			Iterable<Anciano> misAncianos = ancianoService.findAncianosMiResidenciaConDependencia(residencia);
-
-			model.put("ancianos", misAncianos);
+			Iterable<Anciano> misAncianos = this.ancianoService.findAncianosMiResidencia(residencia);
+			List<Anciano> ancianos = new ArrayList<>();
+			for (Anciano anc : misAncianos) {
+				if (anc.getTieneDependenciaGrave() == true) {
+					ancianos.add(anc);
+				}
+			}
+			model.put("ancianos", ancianos);
 			model.put("visitaSanitaria", visitaSanitaria);
-			return VIEWS_VISITA_SANITARIA_CREATE_OR_UPDATE_FORM;
+			return VisitaSanitariaController.VIEWS_VISITA_SANITARIA_CREATE_OR_UPDATE_FORM;
 		} else {
-			visitaSanitariaService.saveVisitaSanitaria(visitaSanitaria);
+			this.visitaSanitariaService.saveVisitaSanitaria(visitaSanitaria);
 			model.put("message", "Se ha registrado la visita sanitaria correctamente");
 			return "redirect:/visitas-sanitarias";
 		}
 	}
 
 	@GetMapping("/{visitaSanitariaId}")
-	public ModelAndView showVisitaSanitariaOrganizador(@PathVariable("visitaSanitariaId") int visitaSanitariaId,
-			Principal p) {
+	public ModelAndView showVisitaSanitariaOrganizador(@PathVariable("visitaSanitariaId") final int visitaSanitariaId, final Principal p) {
 		VisitaSanitaria visitaSanitaria = this.visitaSanitariaService.findVisitaSanitariaById(visitaSanitariaId);
 		ModelAndView mav = new ModelAndView("visitasSanitarias/visitasSanitariasDetails");
 		mav.addObject(visitaSanitaria);
 
-		if (!tienePermiso(p, visitaSanitaria))
+		if (!this.tienePermiso(p, visitaSanitaria)) {
 			return new ModelAndView("exception");
+		}
 
 		return mav;
 	}
 
 	@GetMapping("/{visitaSanitariaId}/delete")
-	public String deleteVisitaSanitaria(@PathVariable("visitaSanitariaId") int visitaSanitariaId, Principal p) {
+	public String deleteVisitaSanitaria(@PathVariable("visitaSanitariaId") final int visitaSanitariaId, final Principal p) {
 		VisitaSanitaria visitaSanitaria = this.visitaSanitariaService.findVisitaSanitariaById(visitaSanitariaId);
 
-		if (!tienePermiso(p, visitaSanitaria))
+		if (!this.tienePermiso(p, visitaSanitaria)) {
 			return "exception";
+		}
 
 		this.visitaSanitariaService.deleteVisitaSanitaria(visitaSanitaria);
 		return "redirect:/visitas-sanitarias";
 	}
 
-	public boolean tienePermiso(Principal p, VisitaSanitaria v) {
-		Residencia residenciaPrincipal = residenciaService.findMine(managerService.findManagerByUsername(p.getName()));
-		List<Anciano> ancianos = new ArrayList<>();
-		Iterable<Anciano> misAncianos = ancianoService.findAncianosMiResidenciaConDependencia(residenciaPrincipal);
+	public boolean tienePermiso(final Principal p, final VisitaSanitaria v) {
+		Residencia residenciaPrincipal = this.residenciaService.findMine(this.managerService.findManagerByUsername(p.getName()));
+		//		List<Anciano> ancianos = new ArrayList<>();
+		//		Iterable<Anciano> misAncianos = ancianoService.findAncianosMiResidenciaConDependencia(residenciaPrincipal);
+		//		for (Anciano anc : misAncianos) {
+		//			ancianos.add(anc);
+		//		}
+		//		boolean esMiAnciano = ancianos.stream()
+		//				.anyMatch(anciano -> anciano.equals(v.getAnciano()));
+		boolean esMiAnciano = false;
+		Iterable<Anciano> misAncianos = this.ancianoService.findAncianosMiResidencia(residenciaPrincipal);
 		for (Anciano anc : misAncianos) {
-			ancianos.add(anc);
+			if (anc.getTieneDependenciaGrave() == true) {
+				if (anc.getId().equals(v.getAnciano().getId())) {
+					esMiAnciano = true;
+					break;
+				}
+			}
 		}
-		boolean esMiAnciano = ancianos.stream()
-				.anyMatch(anciano -> anciano.equals(v.getAnciano()));
 		return v.getResidencia().equals(residenciaPrincipal) && esMiAnciano;
 	}
 
