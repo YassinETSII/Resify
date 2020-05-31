@@ -1,2 +1,2 @@
-![Modelo aplicación Resify](Resify/doc/model.png)
+![Modelo aplicación Resify](doc/model.png)
 
