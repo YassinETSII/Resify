@@ -208,7 +208,7 @@ public class VisitaSanitariaControllerE2ETest {
 
 		Residencia residenciaPrincipal = residenciaService.findMine(managerService.findManagerByUsername("manager5"));
 		List<Anciano> ancianos = new ArrayList<>();
-		Iterable<Anciano> misAncianos = ancianoService.findAncianosMiResidenciaConDependencia(residenciaPrincipal);
+		Iterable<Anciano> misAncianos = ancianoService.findAncianosMiResidencia(residenciaPrincipal);
 		for (Anciano anc : misAncianos) {
 			ancianos.add(anc);
 		}

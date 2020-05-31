@@ -146,6 +146,14 @@ class ResidenciaControllerTest {
 	  .andExpect(MockMvcResultMatchers.view().name("residencias/residenciasList")); 
 	  }
 	  
+	  @WithMockUser(username = ResidenciaControllerTest.TEST_ORGANIZADOR_NOMBRE)
+	  @Test 
+	  void testProcessFindRatioFormSuccess() throws Exception {
+	  this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/ratio"))
+	  .andExpect(MockMvcResultMatchers.status().isOk())
+	  .andExpect(MockMvcResultMatchers.view().name("residencias/residenciasListRatio")); 
+	  }
+	  
 	  @WithMockUser(username = ResidenciaControllerTest.TEST_MANAGER_NOMBRE)
 	  @Test 
 	  void testProcessFindNoParticipantesFormSuccess() throws Exception {

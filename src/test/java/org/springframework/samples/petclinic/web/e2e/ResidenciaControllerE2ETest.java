@@ -169,12 +169,26 @@ public class ResidenciaControllerE2ETest {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/top")).andExpect(MockMvcResultMatchers.status().isForbidden());
 	}
 
-	//no debe acceder al top residencias siendo manager
+	//no debe acceder al top residencias siendo organizador
 	@WithMockUser(username = "organizador1")
 	@Test
 	void testProcessFindTopErrorOrganizador() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/top")).andExpect(MockMvcResultMatchers.status().isForbidden());
 	}
+	
+	//no debe acceder al ratio residencias siendo manager
+		@WithMockUser(username = "manager1")
+		@Test
+		void testProcessFindRatioErrorManager() throws Exception {
+			this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/ratio")).andExpect(MockMvcResultMatchers.status().isForbidden());
+		}
+
+		//no debe acceder al ratio residencias siendo anciano
+		@WithMockUser(username = "anciano1")
+		@Test
+		void testProcessFindRatioErrorAnciano() throws Exception {
+			this.mockMvc.perform(MockMvcRequestBuilders.get("/residencias/ratio")).andExpect(MockMvcResultMatchers.status().isForbidden());
+		}	
 
 	//no debe editar residencia siendo anciano
 	@WithMockUser(username = "anciano1")
