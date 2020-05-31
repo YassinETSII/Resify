@@ -108,9 +108,8 @@ class QuejaServiceTests {
 	@Test
 	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	void noDebeContarTodasLasQuejasParaAncianoInexistente() {
-		Anciano a = this.ancianoService.findAncianoById(7);
 		Assertions.assertThrows(NullPointerException.class, () -> {
-			this.quejaService.countQuejasHoyByAnciano(a);
+			this.quejaService.countQuejasHoyByAnciano(null);
 		});
 	}
 
