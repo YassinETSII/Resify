@@ -56,7 +56,7 @@ public class InscripcionService {
 	public Long countInscripcionesAceptadas() {
 		return this.inscripcionRepository.countInscripcionesAceptadas();
 	}
-
+	//tested
 	@Transactional
 	public Double ratioInscripcionesAceptadas() {
 		Double res = 0.;
@@ -70,7 +70,7 @@ public class InscripcionService {
 	public Long countInscripcionesRechazadas() {
 		return this.inscripcionRepository.countInscripcionesRechazadas();
 	}
-
+	//tested
 	@Transactional
 	public Double ratioInscripcionesRechazadas() {
 		Double res = 0.;
