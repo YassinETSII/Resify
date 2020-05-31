@@ -82,7 +82,7 @@ public class FeedbackController {
 	public String initCreationForm(@PathVariable("excursionId") final int excursionId, final ModelMap model,
 			final Principal p) {
 		Excursion excursion = this.excursionService.findExcursionById(excursionId);
-		Manager manager = this.managerService.findManagerByUserName(p.getName());
+		Manager manager = this.managerService.findManagerByUsername(p.getName());
 		Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
 		Integer feedbacks = this.feedbackService.countFeedbacksByExcursion(excursion, manager);
 		Integer peticion = this.peticionExcursionService.countPeticionesByExcursionAceptada(excursion, manager);
@@ -110,7 +110,7 @@ public class FeedbackController {
 			@Valid final Feedback feedback, final BindingResult result, final ModelMap model,
 			final Principal p) {
 		Residencia residencia = managerService.findResidenciaByManagerUsername(p.getName());
-		Manager manager = this.managerService.findManagerByUserName(p.getName());
+		Manager manager = this.managerService.findManagerByUsername(p.getName());
 		Date fecha = new Date(System.currentTimeMillis() - 1);
 		Excursion excursion = this.excursionService.findExcursionById(excursionId);
 		Integer peticion = this.peticionExcursionService.countPeticionesByExcursionAceptada(excursion, manager);

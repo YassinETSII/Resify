@@ -153,7 +153,7 @@ class FeedbackControllerTest {
 
 		BDDMockito.given(this.peticionExcursionService.findPeticionExcursionById(FeedbackControllerTest.TEST_PETICION_EXCURSION_ID)).willReturn(this.pet);
 
-		BDDMockito.given(this.managerService.findManagerByUserName(FeedbackControllerTest.TEST_MANAGER_NOMBRE)).willReturn(this.man);
+		BDDMockito.given(this.managerService.findManagerByUsername(FeedbackControllerTest.TEST_MANAGER_NOMBRE)).willReturn(this.man);
 		BDDMockito.given(this.organizadorService.findOrganizadorByUsername(FeedbackControllerTest.TEST_ORGANIZADOR_NOMBRE)).willReturn(this.organ);
 		
 		BDDMockito.given(this.residenciaService.findResidenciaById(FeedbackControllerTest.TEST_RESIDENCIA_ID)).willReturn(this.re);
