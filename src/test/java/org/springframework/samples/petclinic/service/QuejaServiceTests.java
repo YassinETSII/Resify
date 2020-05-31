@@ -166,5 +166,43 @@ class QuejaServiceTests {
 			this.quejaService.saveQueja(queja);
 		});
 	}
+	
+	@Test
+	@Transactional
+	public void debeContarTodasLasQuejas() {
+		Assertions.assertTrue(this.quejaService.countQuejas().equals(2L));
+	}
+	
+	@Test
+	@Transactional
+	public void noDebeContarTodasLasQuejas() {
+		Assertions.assertTrue(!this.quejaService.countQuejas().equals(4L));
+	}
+
+	@Test
+	@Transactional
+	public void debeHacerMediaQuejasPorResidencia() {
+		Assertions.assertTrue(this.quejaService.avgQuejasByResidencia().equals(0.5));
+	}
+
+	@Test
+	@Transactional
+	public void noDebeHacerMediaQuejasPorResidencia() {
+		Assertions.assertTrue(!this.quejaService.avgQuejasByResidencia().equals(0.9));
+	}
+
+	@Test
+	@Transactional
+	public void debeHacerMediaQuejasPorAnciano() {
+		Assertions.assertTrue(this.quejaService.avgQuejasByAnciano().equals(0.125));
+	}
+
+	@Test
+	@Transactional
+	public void noDebeHacerMediaQuejasPorAnciano() {
+		Assertions.assertTrue(!this.quejaService.avgQuejasByAnciano().equals(0.5));
+	}
+
+
 
 }

@@ -148,5 +148,29 @@ class ActividadServiceTests {
 		Actividad actividad = actividades.get(0);
 		Assertions.assertTrue(actividad.getTitulo().equals("Prueba5"));
 	}
+	
+	@Test
+	void debeContarTodasLasActividades() {
+		Assertions.assertTrue(this.actividadService.countActividades().equals(5L));
+	}
+	
+	@Test
+	void noDebeContarTodasLasActividades() {
+		Assertions.assertTrue(!this.actividadService.countActividades().equals(2L));
+	}
+	
+	@Test
+	void debeHacerMediaActividadesPorResidencia() {
+		Assertions.assertTrue(this.actividadService.avgActividadesByResidencia().equals(1.25));
+	}
+
+	@Test
+	void noDebeHacerMediaActividadesPorResidencia() {
+		Assertions.assertTrue(!this.actividadService.avgActividadesByResidencia().equals(1.9));
+	}
+
+	
+	
+
 
 }

@@ -142,5 +142,19 @@ class IncidenciaServiceTests {
 			this.incidenciaService.saveIncidencia(ba);
 		});
 	}
+	
+	@Test
+	@Transactional
+	public void debeContarTodasLasIncidencias() {
+		Assertions.assertTrue(this.incidenciaService.countIncidencias().equals(4L));
+	}
+	
+	@Test
+	@Transactional
+	public void noDebeContarTodasLasIncidencias() {
+		Assertions.assertTrue(!this.incidenciaService.countIncidencias().equals(2L));
+	}
+
+
 
 }

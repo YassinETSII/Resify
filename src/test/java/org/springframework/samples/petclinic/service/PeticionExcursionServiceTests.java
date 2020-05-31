@@ -149,5 +149,79 @@ class PeticionExcursionServiceTests {
 //			this.peticionExcursionService.save(pe);
 //		});
 //	}
+	
+	@Test
+	@Transactional
+	public void debeContarTodasLasPeticiones() {
+		Assertions.assertTrue(this.peticionExcursionService.countPeticionesExcursion().equals(6L));
+	}
+	
+	@Test
+	@Transactional
+	public void noDebeContarTodasLasPeticiones() {
+		Assertions.assertTrue(!this.peticionExcursionService.countPeticionesExcursion().equals(4L));
+	}
+	
+	@Test
+	@Transactional
+	public void debeHacerMediaPeticionesPorExcursion() {
+		Assertions.assertTrue(this.peticionExcursionService.avgPeticionesExcursionByExcursion().equals(0.75));
+	}
+	
+	@Test
+	@Transactional
+	public void noDebeHacerMediaPeticionesPorExcursion() {
+		Assertions.assertTrue(!this.peticionExcursionService.avgPeticionesExcursionByExcursion().equals(0.2));
+	}
+	
+	@Test
+	@Transactional
+	public void debeContarTodasLasPeticionesAceptadas() {
+		Assertions.assertTrue(this.peticionExcursionService.countPeticionesExcursionAceptadas().equals(5L));
+	}
+	
+	@Test
+	@Transactional
+	public void noDebeContarTodasLasPeticionesAceptadas() {
+		Assertions.assertTrue(!this.peticionExcursionService.countPeticionesExcursionAceptadas().equals(4L));
+	}
+	
+	@Test
+	@Transactional
+	public void debeHacerRatioPeticionesAceptadas() {
+		Assertions.assertTrue(this.peticionExcursionService.ratioPeticionesExcursionAceptadas().equals(2.5/3));
+	}
+	
+	@Test
+	@Transactional
+	public void noDebeHacerRatioPeticionesAceptadas() {
+		Assertions.assertTrue(!this.peticionExcursionService.ratioPeticionesExcursionAceptadas().equals(0.5));
+	}
+	
+	@Test
+	@Transactional
+	public void debeContarTodasLasPeticionesRechazadas() {
+		Assertions.assertTrue(this.peticionExcursionService.countPeticionesExcursionRechazadas().equals(0L));
+	}
+	
+	@Test
+	@Transactional
+	public void noDebeContarTodasLasPeticionesRechazadas() {
+		Assertions.assertTrue(!this.peticionExcursionService.countPeticionesExcursionRechazadas().equals(4L));
+	}
+	
+	@Test
+	@Transactional
+	public void debeHacerRatioPeticionesRechazadas() {
+		Assertions.assertTrue(this.peticionExcursionService.ratioPeticionesExcursionRechazadas().equals(0.0));
+	}
+	
+	@Test
+	@Transactional
+	public void noDebeHacerRatioPeticionesRechazadas() {
+		Assertions.assertTrue(!this.peticionExcursionService.ratioPeticionesExcursionRechazadas().equals(0.5));
+	}
+	
+	
 
 }

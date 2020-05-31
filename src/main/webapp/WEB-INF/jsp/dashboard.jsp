@@ -11,15 +11,15 @@
 
     <table class="table table-striped">
         <tr>
-            <th>managers</th>
+            <th>Managers</th>
             <td><c:out value="${dashboard.managers}"/></td>
         </tr>
         <tr>
-            <th>organizadores</th>
+            <th>Organizadores</th>
             <td><c:out value="${dashboard.organizadores}"/></td>
         </tr>
         <tr>
-            <th>ancianos</th>
+            <th>Ancianos</th>
             <td><c:out value="${dashboard.ancianos}"/></td>
         </tr>
         <tr>
@@ -33,6 +33,10 @@
         <tr>
             <th>Media de ancianos por residencia</th>
             <td><c:out value="${dashboard.mediaAncianosPorResidencia}"/></td>
+        </tr>
+        <tr>
+            <th>Actividades</th>
+            <td><c:out value="${dashboard.actividades}"/></td>
         </tr>
         <tr>
             <th>Media de actividades por residencia</th>

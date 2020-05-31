@@ -216,5 +216,4 @@ public class VisitaSanitariaControllerE2ETest {
 		Assertions.assertTrue(v.getResidencia().equals(residenciaPrincipal) && esMiAnciano);
 
 	}
-
 }
