@@ -94,7 +94,7 @@ public class FeedbackController {
 
 		//Si la excursión no está en finalMode o no se ha finalizado o si no se ha aceptado
 		if (!(feedback.getExcursion().isFinalMode())
-				|| feedback.getExcursion().getFechaFin().after(fecha) || !peticion.equals(1)) {
+				|| feedback.getExcursion().getFechaFin().after(fecha) || peticion!=1) {
 			return "exception";
 		}
 
