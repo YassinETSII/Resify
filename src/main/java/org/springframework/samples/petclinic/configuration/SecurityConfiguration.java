@@ -64,6 +64,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/residencias/new").hasAnyAuthority("manager")
 			.antMatchers("/residencias").authenticated()
 			.antMatchers("/residencias/top").hasAnyAuthority("anciano")
+			.antMatchers("/residencias/ratio").hasAnyAuthority("organizador")
 			.antMatchers("/residencias/no-participantes").hasAnyAuthority("organizador")
 			.antMatchers("/residencias/{residenciaId}").hasAnyAuthority("organizador", "anciano", "manager")
 			.antMatchers("/residencias/**").hasAnyAuthority("manager")

@@ -17,6 +17,8 @@
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -126,6 +128,22 @@ public class ResidenciaController {
 		Iterable<Residencia> residencias = this.residenciaService.findTop(5);
 		model.put("residencias", residencias);
 		return "residencias/residenciasList";
+	}
+	
+	@GetMapping(value = "/ratio")
+	public String listRatioResidencias(final Map<String, Object> model, final Principal p) {
+		Iterable<Residencia> residencias = this.residenciaService.findAll();
+		List<Residencia> resi = new ArrayList<>();
+		List<Double> ratiosResi = new ArrayList<>();
+		for (Residencia res : residencias) {
+			resi.add(res);
+		}
+		for (int i=0; i<resi.size(); i++) {
+			ratiosResi.add(this.residenciaService.getRatio(resi.get(i)));
+		}		
+		model.put("residencias", residencias);
+		model.put("ratiosResi", ratiosResi);
+		return "residencias/residenciasListRatio";
 	}
 
 	@GetMapping(value = "/no-participantes")

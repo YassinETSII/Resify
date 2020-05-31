@@ -33,7 +33,6 @@
 		</tbody>
 	</table>
 
-
 	<c:if test="${puedeVerAnciano }">
 		<spring:url value="/residencias/top" var="topUrl">
 		</spring:url>
@@ -47,6 +46,13 @@
 		</spring:url>
 		<a href="${fn:escapeXml(noParticipantesUrl)}" class="btn btn-default">Ver
 			residencias que no han participado</a>
+	</c:if>
+		<c:if test="${puedeVerOrganizador }">
+		<spring:url value="/residencias/ratio"
+			var="ratioUrl">
+		</spring:url>
+		<a href="${fn:escapeXml(ratioUrl)}" class="btn btn-default">Ver
+			ratio de las residencias</a>
 	</c:if>
 
 
