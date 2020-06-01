@@ -85,18 +85,18 @@ public class InscripcionControllerE2ETest {
 		  .andExpect(MockMvcResultMatchers.status().isForbidden()); 
 	  }
 	 
-	/*@WithMockUser(username = "anciano1", authorities = {"anciano"})	  
+	@WithMockUser(username = "anciano1", authorities = {"anciano"})	  
 	  @Test
+	  @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 		void testProcessCreationFormSuccess() throws Exception {
 			this.mockMvc
 				.perform(MockMvcRequestBuilders.post("/inscripciones/new/{residenciaId}", TEST_RES_ID)
 						.with(SecurityMockMvcRequestPostProcessors.csrf())
 						.param("declaracion", "dec")
-						.param("estado", "pendiente").with(SecurityMockMvcRequestPostProcessors.csrf())
-						.param("fecha", String.valueOf(this.hoy)))
+						.param("estado", "pendiente").with(SecurityMockMvcRequestPostProcessors.csrf()))
 						.andExpect(MockMvcResultMatchers.status().is3xxRedirection());		
 	  }	
-	*/
+	
 	  //un organizador no puede enviar inscripcion de una residencia
 	@WithMockUser(username = "manager1", authorities = {"manager"})	  
 	  @Test
