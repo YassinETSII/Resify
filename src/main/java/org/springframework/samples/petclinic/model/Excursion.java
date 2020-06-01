@@ -31,11 +31,6 @@ import javax.validation.constraints.PositiveOrZero;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- * Simple JavaBean domain object representing a visit.
- *
- * @author Ken Krebs
- */
 @Entity
 @Table(name = "excursiones")
 public class Excursion extends ActivityEntity {

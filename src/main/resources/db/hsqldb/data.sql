@@ -214,6 +214,14 @@ INSERT INTO excursiones VALUES (7, 'Excursion mia terminada 2', '2020-05-01',  '
 	'Excursion acabada 2 res1', '2020-05-02', TRUE, '2', '1.0', 1);
 INSERT INTO excursiones VALUES (8, 'Descripcion de prueba6', '2020-05-07',  '22:30', '17:00', 
 	'Excursion acabada 3 res1', '2020-05-07', TRUE, '2', '1.0', 1);
+
+-- Excursion NO FINAL MODE	
+INSERT INTO excursiones VALUES (9, 'Descripcion de prueba7', '2020-05-07',  '22:30', '17:00', 
+	'Excursion acabada 3 res1', '2020-05-07', FALSE, '2', '1.0', 1);
+	
+	-- Excursion NO CADUCADA	
+INSERT INTO excursiones VALUES (10, 'Descripcion de prueba7', '2023-05-07',  '22:30', '17:00', 
+	'Excursion acabada 3 res1', '2023-05-07', FALSE, '2', '1.0', 1);	
 	
 -- PeticionesExcursion
 
