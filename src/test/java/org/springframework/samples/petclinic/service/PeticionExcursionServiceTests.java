@@ -165,7 +165,7 @@ class PeticionExcursionServiceTests {
 	@Test
 	@Transactional
 	public void debeHacerMediaPeticionesPorExcursion() {
-		Assertions.assertTrue(this.peticionExcursionService.avgPeticionesExcursionByExcursion().equals(0.75));
+		Assertions.assertTrue(this.peticionExcursionService.avgPeticionesExcursionByExcursion().equals(0.6));
 	}
 	
 	@Test

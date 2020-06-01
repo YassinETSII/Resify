@@ -252,7 +252,7 @@ class FeedbackServiceTests {
 	@Test 
 		void calcularMediaFeedbacksPorExcursion() { 
 			 Double fe = this.feedbackService.avgFeedbacksByExcursion(); 
-			 Assertions.assertTrue(fe==0.25); 	
+			 Assertions.assertTrue(fe==0.2); 	
 		}
 
 	//CASO NEGATIVO: CUENTA FEEDBACK CORRECTAMENTE  
