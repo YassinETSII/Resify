@@ -192,7 +192,7 @@ public class ActividadController {
 	}
 
 	@GetMapping("/{actividadId}/delete")
-	public String deleteExcursion(@PathVariable("actividadId") final int actividadId, final Principal p) {
+	public String deleteActividad(@PathVariable("actividadId") final int actividadId, final Principal p) {
 		Actividad actividad = this.actividadService.findActividadById(actividadId);
 		Manager manager = this.managerService.findManagerByUsername(p.getName());
 		if (!actividad.getResidencia().getManager().equals(manager)) {

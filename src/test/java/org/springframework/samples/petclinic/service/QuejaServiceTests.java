@@ -50,6 +50,7 @@ class QuejaServiceTests {
 	@Autowired
 	protected AncianoService ancianoService;
 
+	
 	@Test
 	void debeEncontrarQuejaConIdCorrecto() {
 		Queja queja = this.quejaService.findQuejaById(1);
@@ -108,8 +109,9 @@ class QuejaServiceTests {
 	@Test
 	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	void noDebeContarTodasLasQuejasParaAncianoInexistente() {
+		Anciano a = this.ancianoService.findAncianoById(111);
 		Assertions.assertThrows(NullPointerException.class, () -> {
-			this.quejaService.countQuejasHoyByAnciano(null);
+			this.quejaService.countQuejasHoyByAnciano(a);
 		});
 	}
 

@@ -16,6 +16,8 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import javax.validation.ConstraintViolationException;
@@ -27,7 +29,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.samples.petclinic.model.Anciano;
 import org.springframework.samples.petclinic.model.Manager;
+import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.model.VisitaSanitaria;
 import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.DirtiesContext;
@@ -42,17 +46,16 @@ import com.google.common.collect.Iterables;
 class VisitaSanitariaServiceTests {
 
 	@Autowired
-	protected VisitaSanitariaService	visitaSanitariaService;
+	protected VisitaSanitariaService visitaSanitariaService;
 
 	@Autowired
-	protected ManagerService			managerService;
+	protected ManagerService managerService;
 
 	@Autowired
-	protected AncianoService			ancianoService;
+	protected AncianoService ancianoService;
 
 	@Autowired
-	protected ResidenciaService			residenciaService;
-
+	protected ResidenciaService residenciaService;
 
 	@Test
 	@Transactional
@@ -61,6 +64,15 @@ class VisitaSanitariaServiceTests {
 		Assertions.assertTrue(vis.getDescripcion().equals("visita sanitaria"));
 		Assertions.assertTrue(vis.getMotivo().equals("Ejemplo"));
 		Assertions.assertTrue(vis.getAnciano().equals(this.ancianoService.findAncianoById(22)));
+
+	}
+
+	// No se encuentra visita sanitaria que no existe
+	@Test
+	@Transactional
+	void noDebeEncontrarVisitaSanitariaConIdIncorrecto() {
+		VisitaSanitaria vis = this.visitaSanitariaService.findVisitaSanitariaById(111);
+		Assertions.assertNull(vis);
 
 	}
 
@@ -78,49 +90,57 @@ class VisitaSanitariaServiceTests {
 		Assertions.assertTrue(visitaSanitaria1.getDescripcion().equals("visita sanitaria"));
 	}
 
-	//	@Test
-	//	@Transactional
-	//	public void debeCrearVisitaSanitaria() {
-	//		Manager manager = this.managerService.findManagerById(8);
-	//		System.out.println(manager);
-	//		Iterable<VisitaSanitaria> vis1 = this.visitaSanitariaService.findAllMine(manager);
-	//		ArrayList<VisitaSanitaria> visitaSanitarias1 = new ArrayList<VisitaSanitaria>();
-	//		Residencia residencia = residenciaService.findMine(manager);
-	//		System.out.println(residencia);
-	//		Anciano anciano = ancianoService.findAncianoById(20);
-	//		anciano.setTieneDependenciaGrave(true);
-	//		for (VisitaSanitaria b : vis1) {
-	//			visitaSanitarias1.add(b);
-	//		}
-	//
-	//		int total = visitaSanitarias1.size();
-	//
-	//		VisitaSanitaria visitaSanitaria = new VisitaSanitaria();
-	//		visitaSanitaria.setDescripcion("Prueba");
-	//		visitaSanitaria.setFecha(java.sql.Date.valueOf(LocalDate.now().minusDays(1)));
-	//		visitaSanitaria.setHoraInicio(LocalTime.of(9, 0));
-	//		visitaSanitaria.setHoraFin(LocalTime.of(20, 0));
-	//		visitaSanitaria.setMotivo("motivo prueba");
-	//		visitaSanitaria.setSanitario("sanitario prueba");;
-	//		visitaSanitaria.setResidencia(residencia);
-	//		visitaSanitaria.setAnciano(anciano);
-	//
-	//		this.visitaSanitariaService.saveVisitaSanitaria(visitaSanitaria);
-	//
-	//		Iterable<VisitaSanitaria> vis2 = this.visitaSanitariaService.findAllMine(manager);
-	//		ArrayList<VisitaSanitaria> visitaSanitarias2 = new ArrayList<VisitaSanitaria>();
-	//		for (VisitaSanitaria e : vis2) {
-	//			visitaSanitarias2.add(e);
-	//		}
-	//
-	//		Assertions.assertTrue(visitaSanitarias2.size() == total + 1);
-	//
-	//		Assertions.assertTrue(visitaSanitaria.getId() != null);
-	//	}
+	// No se podra encontrar las visitas sanitarias de un manager que no existe
+	@Test
+	@Transactional
+	void noDebeEncontrarTodasLasVisitaSanitariasParaManagerInexistente() {
+		Manager manager = this.managerService.findManagerById(111);
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			this.visitaSanitariaService.findAllMine(manager);
+		});
+	}
 
 	@Test
 	@Transactional
-	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
+	public void debeCrearVisitaSanitaria() {
+		Manager manager = this.managerService.findManagerById(9);
+		Iterable<VisitaSanitaria> vis1 = this.visitaSanitariaService.findAllMine(manager);
+		ArrayList<VisitaSanitaria> visitaSanitarias1 = new ArrayList<VisitaSanitaria>();
+		Residencia residencia = this.residenciaService.findResidenciaById(4);
+		Anciano anciano = ancianoService.findAncianoById(22);
+
+		for (VisitaSanitaria b : vis1) {
+			visitaSanitarias1.add(b);
+		}
+
+		int total = visitaSanitarias1.size();
+
+		VisitaSanitaria visitaSanitaria = new VisitaSanitaria();
+		visitaSanitaria.setDescripcion("Prueba");
+		visitaSanitaria.setFecha(java.sql.Date.valueOf(LocalDate.now().minusDays(5)));
+		visitaSanitaria.setHoraInicio(LocalTime.of(9, 0));
+		visitaSanitaria.setHoraFin(LocalTime.of(20, 0));
+		visitaSanitaria.setMotivo("motivo prueba");
+		visitaSanitaria.setSanitario("sanitario prueba");
+		visitaSanitaria.setResidencia(residencia);
+		visitaSanitaria.setAnciano(anciano);
+		visitaSanitaria.setId(10);
+
+		this.visitaSanitariaService.saveVisitaSanitaria(visitaSanitaria);
+
+		Iterable<VisitaSanitaria> vis2 = this.visitaSanitariaService.findAllMine(manager);
+		ArrayList<VisitaSanitaria> visitaSanitarias2 = new ArrayList<VisitaSanitaria>();
+		for (VisitaSanitaria e : vis2) {
+			visitaSanitarias2.add(e);
+		}
+
+		Assertions.assertTrue(visitaSanitarias2.size() == total + 1);
+
+		Assertions.assertTrue(visitaSanitaria.getId() != null);
+	}
+
+	@Test
+	@Transactional
 	public void debeLanzarExcepcionCreandoVisitaSanitariaEnBlanco() {
 
 		VisitaSanitaria vis = new VisitaSanitaria();
@@ -160,6 +180,18 @@ class VisitaSanitariaServiceTests {
 			Assertions.assertTrue(Iterables.size(vis2) == 0);
 		}
 
+	}
+
+	@Test
+	@Transactional
+	void debeContarTodasLasVisitaSanitarias() {
+		Assertions.assertTrue(this.visitaSanitariaService.countVisitasSanitarias().equals(1L));
+	}
+
+	@Test
+	@Transactional
+	void debeHacerMediaVisitaSanitariasPorResidencia() {
+		Assertions.assertTrue(this.visitaSanitariaService.avgVisitasSanitariasByResidencia().equals(0.25));
 	}
 
 }

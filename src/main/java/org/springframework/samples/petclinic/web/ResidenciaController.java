@@ -105,11 +105,7 @@ public class ResidenciaController {
 			} else {
 				Anciano anciano = this.ancianoService.findAncianoByUsername(p.getName());
 				Iterable<Inscripcion> inscripciones = this.inscripcionService.findAllMineAnciano(anciano);
-				System.out.println("--------------");
-				System.out.println(anciano);
-				System.out.println(inscripciones);
 				for (Inscripcion i : inscripciones) {
-					System.out.println(i.getEstado());
 					if (i.getEstado().equals("aceptada")) {
 						return "redirect:residencias/" + i.getResidencia().getId();
 					}

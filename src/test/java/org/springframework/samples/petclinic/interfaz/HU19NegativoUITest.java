@@ -21,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class HUVisitaNegativoUITest {
+public class HU19NegativoUITest {
 
 	@LocalServerPort
 	private int port;

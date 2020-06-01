@@ -58,7 +58,7 @@ public class HU11PositivoUITest {
 		this.driver.findElement(By.id("descripcion")).clear();
 		this.driver.findElement(By.id("descripcion")).sendKeys("Test Interfaz");
 		this.driver.findElement(By.id("fechaInicio")).click();
-		this.driver.findElement(By.linkText("20")).click();
+		this.driver.findElement(By.id("fechaInicio")).sendKeys("2020/08/10");
 		this.driver.findElement(By.id("horaInicio")).click();
 		this.driver.findElement(By.id("horaInicio")).clear();
 		this.driver.findElement(By.id("horaInicio")).sendKeys("10:00");
