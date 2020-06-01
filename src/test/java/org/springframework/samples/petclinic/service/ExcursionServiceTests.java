@@ -208,7 +208,7 @@ class ExcursionServiceTests {
 	@Test
 	@Transactional
 	public void debeHacerMediaExcursionesPorOrganizador() {
-		Assertions.assertTrue(this.excursionService.avgExcursionesByOrganizador().equals(5.0));
+		Assertions.assertTrue(this.excursionService.avgExcursionesByOrganizador().equals(3.3333333333333335));
 	}
 	
 	@Test
