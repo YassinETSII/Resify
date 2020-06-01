@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public class BuenaAccionControllerE2ETest {
 
-	private static final int	TEST_MANAGER_ID	= 1;
 	private static final int	TEST_BA_ID		= 1;
 
 	@Autowired
@@ -77,5 +76,91 @@ public class BuenaAccionControllerE2ETest {
 			.andExpect(MockMvcResultMatchers.model().attribute("buenaAccion", Matchers.hasProperty("descripcion", Matchers.is("Descripcion de buena accion1"))))
 			.andExpect(MockMvcResultMatchers.model().attribute("buenaAccion", Matchers.hasProperty("titulo", Matchers.is("titulo1")))).andExpect(MockMvcResultMatchers.view().name("buenasAcciones/buenasAccionesDetails"));
 	}
+	
+	//un organizador no puede listar las buenas acciones
+		@WithMockUser(username = "organizador1", authorities = {
+				"organizador"
+			})
+			@Test
+			void testProcessFindFormErrorOrganizador() throws Exception {
 
+				this.mockMvc.perform(MockMvcRequestBuilders.get("/buenas-acciones"))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+			}
+		
+		//un anciano no puede listar las buenas acciones
+			@WithMockUser(username = "anciano1", authorities = {
+					"anciano"
+				})
+				@Test
+				void testProcessFindFormErrorAnciano() throws Exception {
+
+					this.mockMvc.perform(MockMvcRequestBuilders.get("/buenas-acciones"))
+					.andExpect(MockMvcResultMatchers.status().isForbidden());
+				}
+			//un anciano no puede acceder al formulario de crear buenas acciones
+			@WithMockUser(username = "anciano1", authorities = {
+					"anciano"
+				})
+				@Test
+				void testInitCreationFormErrorAnciano() throws Exception {
+					this.mockMvc.perform(MockMvcRequestBuilders.get("/buenas-acciones/new")).andExpect(MockMvcResultMatchers.status().isForbidden());
+				}
+			
+			//un organizador no puede acceder al formulario de crear buenas acciones
+				@WithMockUser(username = "organizador1", authorities = {
+						"organizador"
+					})
+					@Test
+					void testInitCreationFormErrorOrganizador() throws Exception {
+						this.mockMvc.perform(MockMvcRequestBuilders.get("/buenas-acciones/new")).andExpect(MockMvcResultMatchers.status().isForbidden());
+					}
+				
+			
+			//un manager sin residencia registrada intenta registrar una buena accion
+			@WithMockUser(username = "manager3", authorities = {
+					"manager"
+				})
+				@Test
+				void testInitCreationFormErrorManagerSinResidencia() throws Exception {
+					this.mockMvc.perform(MockMvcRequestBuilders.get("/buenas-acciones/new"))
+					.andExpect(MockMvcResultMatchers.view().name("exception")); 
+				}
+			
+			//un anciano no puede enviar formulario de buena accion
+			@WithMockUser(username = "anciano1", authorities = {
+					"anciano"
+				})
+				@Test
+				void testProcessCreationFormErrorAnciano() throws Exception {
+					this.mockMvc.perform(MockMvcRequestBuilders.post("/buenas-acciones/new").param("titulo", "Prueba").param("descripcion", "Prueba descrip").with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", "2020/01/01"))
+					.andExpect(MockMvcResultMatchers.status().isForbidden());		}
+			
+			//un organizador no puede enviar formulario de buena accion
+			@WithMockUser(username = "organizador1", authorities = {
+					"organizador"
+				})
+				@Test
+				void testProcessCreationFormErrorOrganizador() throws Exception {
+					this.mockMvc.perform(MockMvcRequestBuilders.post("/buenas-acciones/new").param("titulo", "Prueba").param("descripcion", "Prueba descrip").with(SecurityMockMvcRequestPostProcessors.csrf()).param("fecha", "2020/01/01"))
+					.andExpect(MockMvcResultMatchers.status().isForbidden());		}
+			
+			//un organizador no puede acceder a una buena accion
+			@WithMockUser(username = "organizador1", authorities = {
+					"organizador"
+				})
+				@Test
+				void testShowBuenaAccionOrganizador() throws Exception {
+					this.mockMvc.perform(MockMvcRequestBuilders.get("/buenas-acciones/{buenaAccionId}", BuenaAccionControllerE2ETest.TEST_BA_ID)).andExpect(MockMvcResultMatchers.status().isForbidden());	
+				}
+			
+			//un anciano no puede acceder a una buena accion
+			@WithMockUser(username = "anciano1", authorities = {
+					"anciano"
+				})
+				@Test
+				void testShowBuenaAccionAnciano() throws Exception {
+					this.mockMvc.perform(MockMvcRequestBuilders.get("/buenas-acciones/{buenaAccionId}", BuenaAccionControllerE2ETest.TEST_BA_ID)).andExpect(MockMvcResultMatchers.status().isForbidden());	
+				}
+			
 }
