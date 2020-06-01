@@ -2,15 +2,18 @@
 INSERT INTO users(username,password,enabled) VALUES ('admin1','4dm1n',TRUE);
 INSERT INTO authorities VALUES ('admin1','admin');
 
-INSERT INTO users(username,password,enabled) VALUES ('organizador1','0rg4n1z4d0r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('organizador1','organizador1',TRUE);
 INSERT INTO authorities VALUES ('organizador1','organizador');
 
-INSERT INTO users(username,password,enabled) VALUES ('organizador2','0rg4n1z4d0r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('organizador2','organizador2',TRUE);
 INSERT INTO authorities VALUES ('organizador2','organizador');
+
+INSERT INTO users(username,password,enabled) VALUES ('organizador3','organizador3',TRUE);
+INSERT INTO authorities VALUES ('organizador3','organizador');
 
 INSERT INTO organizadores VALUES (1, 'Fernandez', 'Juan', 'Prueba1', 'Prueba1', 'organizador1');
 INSERT INTO organizadores VALUES (2,  'Limon', 'Maria', 'Prueba2', 'Prueba2', 'organizador2');
-	
+INSERT INTO organizadores VALUES (3,  'Naranja', 'Juana', 'Prueba3', 'Prueba3', 'organizador3');
 	
 -- Managers
 
