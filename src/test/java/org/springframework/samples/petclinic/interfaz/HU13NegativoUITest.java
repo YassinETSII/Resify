@@ -23,7 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class HU15PositivoUITest {
+public class HU13NegativoUITest {
 
 	@LocalServerPort
 	private int				port;
@@ -41,23 +41,23 @@ public class HU15PositivoUITest {
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 	
-	//El organizador accede a la lista de feedbacks y aparecen los feedbacks
-	// que se le han realizado, y este decide descartar uno de ellos
-
+	//El usuario manager accede al formulario de crear un feedback,
+	//envía el formulario en blanco y comprueba que no puede enviar el formulario
 	@Test
 	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	public void testHU13PositivoUI() throws Exception {
 		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
+		this.driver.findElement(By.id("username")).click();
 		this.driver.findElement(By.id("username")).clear();
-		this.driver.findElement(By.id("username")).sendKeys("organizador1");
+		this.driver.findElement(By.id("username")).sendKeys("manager1");
 		this.driver.findElement(By.id("password")).click();
 		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys("0rg4n1z4d0r");
+		this.driver.findElement(By.id("password")).sendKeys("manager1");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//a[contains(@href, '/feedbacks')]")).click();
-		this.driver.findElement(By.xpath("//a[contains(@href, '/feedbacks/1/edit')]")).click();
-		this.driver.findElement(By.name("descartaFeedback")).click();
+		this.driver.findElement(By.xpath("//a[contains(@href, '/excursiones/feedback')]")).click();
+		this.driver.findElement(By.xpath("//a[contains(@href, 'excursiones/8')]")).click();
+		this.driver.findElement(By.xpath("//a[contains(text(),'Dar\n						feedback')]")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 	}
 
