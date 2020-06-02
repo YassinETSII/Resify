@@ -13,11 +13,5 @@ public interface VisitaSanitariaRepository extends CrudRepository<VisitaSanitari
 
 	@Query("SELECT visita FROM VisitaSanitaria visita WHERE visita.residencia.id =:id")
 	Iterable<VisitaSanitaria> findAllMine(@Param("id") int id) throws DataAccessException;
-
-//	@Query("SELECT excursion FROM Excursion excursion WHERE excursion.finalMode = true AND excursion.fechaInicio > :today")
-//	Iterable<Excursion> findAllPublishedAndFuture(@Param("today") Date today) throws DataAccessException;
-//
-//	@Query("SELECT excursion FROM Participacion p JOIN p.excursion excursion WHERE  p.anciano.id =:id AND excursion.finalMode = true AND excursion.fechaInicio > :today")
-//	Iterable<Excursion> findAllMineAnciano(@Param("id") int id, @Param("today") Date today);
-
+	
 }

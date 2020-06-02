@@ -124,7 +124,6 @@ public class ExcursionController {
 	@PostMapping(value = "/new")
 	public String processCreationForm(@Valid Excursion excursion, BindingResult result, Map<String, Object> model,
 			Principal p) {
-		result.getAllErrors().forEach(x->System.out.println(x.getDefaultMessage()));
 		if (result.hasErrors()) {
 			model.put("excursion", excursion);
 			return VIEWS_EXCURSION_CREATE_OR_UPDATE_FORM;

@@ -81,7 +81,6 @@ class ExcursionServiceTests {
 		}
 
 		Excursion excursion = excursiones.get(0);
-		System.out.println(excursion.getTitulo());
 		Assertions.assertTrue(excursion.getTitulo().equals("Prueba3"));
 	}
 
@@ -146,39 +145,34 @@ class ExcursionServiceTests {
 		});
 	}
 
-	//	@Test
-	//	@Transactional
-	//	public void debeEliminarExcursion() {
-	//		Organizador organizador = this.organizadorService.findOrganizadorById(1);
-	//		Iterable<Excursion> exc1 = this.excursionService.findAllMine(organizador);
-	//		ArrayList<Excursion> excursiones1 = new ArrayList<Excursion>();
-	//		for (Excursion b : exc1) {
-	//			excursiones1.add(b);
-	//		}
-	//
-	//		int total = excursiones1.size();
-	//
-	//		Excursion excursion = excursiones1.get(0);
-	//		System.out.println("dadafsdfsadfs "+excursiones1.get(0).getId());
-	//		this.excursionService.deleteExcursion(excursion);;
-	//
-	//		Iterable<Excursion> exc2 = this.excursionService.findAllMine(organizador);
-	//		if(exc2 != null) {
-	//			ArrayList<Excursion> excursiones2 = new ArrayList<Excursion>();
-	//			for (Excursion e : exc2) {
-	//				excursiones2.add(e);
-	//
-	//			}
-	//			Assertions.assertTrue(excursiones2.size() == total - 1);
-	//			Assertions.assertTrue(excursion.getId() == null);
-	//
-	//		}else {
-	//			Assertions.assertTrue(exc2 == null);
-	//		}
-	//
-	//
-	//
-	//	}
+		@Test
+		@Transactional
+		public void debeEliminarExcursion() {
+			Organizador organizador = this.organizadorService.findOrganizadorById(1);
+			Iterable<Excursion> exc1 = this.excursionService.findAllMine(organizador);
+			ArrayList<Excursion> excursiones1 = new ArrayList<Excursion>();
+			for (Excursion b : exc1) {
+				excursiones1.add(b);
+			}
+	
+			int total = excursiones1.size();
+	
+			Excursion excursion = this.excursionService.findExcursionById(2);
+			this.excursionService.deleteExcursion(excursion);;
+	
+			Iterable<Excursion> exc2 = this.excursionService.findAllMine(organizador);
+			if(exc2 != null) {
+				ArrayList<Excursion> excursiones2 = new ArrayList<Excursion>();
+				for (Excursion e : exc2) {
+					excursiones2.add(e);
+	
+				}
+				Assertions.assertTrue(excursiones2.size() == total - 1);
+	
+			}else {
+				Assertions.assertTrue(exc2 == null);
+			}	
+		}
 
 	@Test
 	void debeEncontrarTodasLasExcursionesPorAnciano() {

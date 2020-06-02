@@ -61,6 +61,7 @@ public class VisitaSanitariaControllerE2ETest {
 	@Autowired
 	private ManagerService managerService;
 
+	
 	@WithMockUser(username = "manager5", authorities = { "manager" })
 	@Test
 	void testProcessFindFormSuccess() throws Exception {
@@ -195,25 +196,5 @@ public class VisitaSanitariaControllerE2ETest {
 				.andExpect(MockMvcResultMatchers.status().isForbidden());
 	}
 
-	@Test
-	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
-	@Transactional
-	void PruebaAnciano() throws Exception {
-		Anciano a = this.ancianoService.findAncianoById(22);
-		Assertions.assertNotNull(a);
-		VisitaSanitaria v = this.visitaSanitariaService.findVisitaSanitariaById(1);
-		Assertions.assertNotNull(v);
-		Assertions.assertNotNull(v.getAnciano());
-		Assertions.assertEquals(v.getAnciano(), a);
 
-		Residencia residenciaPrincipal = residenciaService.findMine(managerService.findManagerByUsername("manager5"));
-		List<Anciano> ancianos = new ArrayList<>();
-		Iterable<Anciano> misAncianos = ancianoService.findAncianosMiResidencia(residenciaPrincipal);
-		for (Anciano anc : misAncianos) {
-			ancianos.add(anc);
-		}
-		boolean esMiAnciano = ancianos.stream().anyMatch(anciano -> anciano.equals(v.getAnciano()));
-		Assertions.assertTrue(v.getResidencia().equals(residenciaPrincipal) && esMiAnciano);
-
-	}
 }

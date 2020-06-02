@@ -59,7 +59,7 @@ public class HU11NegativoUITest {
 		driver.findElement(By.id("descripcion")).clear();
 		driver.findElement(By.id("descripcion")).sendKeys("a");
 		driver.findElement(By.id("fechaInicio")).click();
-		driver.findElement(By.linkText("5")).click();
+		driver.findElement(By.id("fechaInicio")).sendKeys("2020/05/01");
 		driver.findElement(By.id("horaInicio")).click();
 		driver.findElement(By.id("horaInicio")).clear();
 		driver.findElement(By.id("horaInicio")).sendKeys("17:00");
