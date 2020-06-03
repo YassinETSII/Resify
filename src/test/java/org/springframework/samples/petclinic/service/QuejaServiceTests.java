@@ -171,6 +171,7 @@ class QuejaServiceTests {
 	
 	@Test
 	@Transactional
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	public void debeContarTodasLasQuejas() {
 		Assertions.assertTrue(this.quejaService.countQuejas().equals(2L));
 	}

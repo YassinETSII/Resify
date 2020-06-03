@@ -19,6 +19,8 @@ import org.springframework.samples.petclinic.model.Inscripcion;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -62,6 +64,7 @@ class InscripcionServiceTests {
 		//CASO POSITIVO: CREA INSCRIPCION A UNA RESIDENCIA CORRECTAMENTE
 		@Test
 		@Transactional
+		@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 		public void debeCrearInscripcionAResidencia() {
 			Manager m = this.managerService.findManagerById(7);
 			Anciano an = this.ancianoService.findAncianoById(21);
@@ -210,7 +213,9 @@ class InscripcionServiceTests {
 		}
 		  
 		  //CASO POSITIVO: CUENTA INSCRIPCIONES TOTALES CORRECTAMENTE
-		  @Test 
+		  @Test
+		  @Transactional
+		  @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 		  void cuentaInscripcionesTotales() { 
 			  Long in = this.inscripcionService.countInscripciones();
 			  Assertions.assertTrue(in==16); 
@@ -290,13 +295,17 @@ class InscripcionServiceTests {
 	//##################################################################################################################	
 	
 	//CASO POSTIVO: CALCULA RATIO DE LAS INSCRIPCIONES RECHAZADAS TOTALES CORRECTAMENTE
-	 @Test 
+	 @Test
+	 @Transactional
+	 @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	  void calculaRatioInscripcionesRechazadasCorrectamente() { 
 		  Double in = this.inscripcionService.ratioInscripcionesRechazadas();
 		  Assertions.assertTrue(in==0.0625); 
 	}  
 	//CASO POSTIVO: CALCULA RATIO DE LAS INSCRIPCIONES ACEPTADAS TOTALES CORRECTAMENTE
-	  @Test 
+	  @Test
+	  @Transactional
+	  @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	  void calculaRatioInscripcionesAceptadasCorrectamente() { 
 		  Double in = this.inscripcionService.ratioInscripcionesAceptadas();
 		  Assertions.assertTrue(in==0.8125); 

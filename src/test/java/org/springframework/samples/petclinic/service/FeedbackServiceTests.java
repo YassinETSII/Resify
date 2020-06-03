@@ -22,6 +22,8 @@ import org.springframework.samples.petclinic.model.PeticionExcursion;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.samples.petclinic.model.Feedback;
 import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -231,7 +233,9 @@ class FeedbackServiceTests {
 	//##################################################################################################################
 	
 	//CASO POSITIVO: CUENTA FEEDBACK CORRECTAMENTE  
-	 @Test 
+	 @Test
+	 @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
+	 @Transactional
 	 void cuentaFeedbacks() { 
 	  	Long fe = this.feedbackService.countFeedbacks(); 
 	  	Assertions.assertTrue(fe==2); 	

@@ -34,6 +34,8 @@ import org.springframework.samples.petclinic.model.Organizador;
 import org.springframework.samples.petclinic.model.PeticionExcursion;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -112,6 +114,8 @@ class PeticionExcursionServiceTests {
 	}
 
 	@Test
+	@Transactional
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	void debeContarTodasLasPeticionExcursionAceptadasPorExcursion() {
 		Excursion excursion = this.excursionService.findExcursionById(3);
 		Double npeticiones = this.peticionExcursionService.countPeticionExcursionAceptadaByExcursion(excursion);
@@ -152,6 +156,7 @@ class PeticionExcursionServiceTests {
 	
 	@Test
 	@Transactional
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	public void debeContarTodasLasPeticiones() {
 		Assertions.assertTrue(this.peticionExcursionService.countPeticionesExcursion().equals(6L));
 	}
@@ -164,6 +169,7 @@ class PeticionExcursionServiceTests {
 	
 	@Test
 	@Transactional
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	public void debeHacerMediaPeticionesPorExcursion() {
 		Assertions.assertTrue(this.peticionExcursionService.avgPeticionesExcursionByExcursion().equals(0.6));
 	}
@@ -176,6 +182,7 @@ class PeticionExcursionServiceTests {
 	
 	@Test
 	@Transactional
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	public void debeContarTodasLasPeticionesAceptadas() {
 		Assertions.assertTrue(this.peticionExcursionService.countPeticionesExcursionAceptadas().equals(5L));
 	}
@@ -188,6 +195,7 @@ class PeticionExcursionServiceTests {
 	
 	@Test
 	@Transactional
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	public void debeHacerRatioPeticionesAceptadas() {
 		Assertions.assertTrue(this.peticionExcursionService.ratioPeticionesExcursionAceptadas().equals(2.5/3));
 	}

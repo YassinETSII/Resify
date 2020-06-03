@@ -184,6 +184,7 @@ class VisitaSanitariaServiceTests {
 
 	@Test
 	@Transactional
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	void debeContarTodasLasVisitaSanitarias() {
 		Assertions.assertTrue(this.visitaSanitariaService.countVisitasSanitarias().equals(1L));
 	}

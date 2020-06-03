@@ -31,6 +31,8 @@ import org.springframework.samples.petclinic.model.Incidencia;
 import org.springframework.samples.petclinic.model.Manager;
 import org.springframework.samples.petclinic.model.Residencia;
 import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 
@@ -145,6 +147,7 @@ class IncidenciaServiceTests {
 	
 	@Test
 	@Transactional
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	public void debeContarTodasLasIncidencias() {
 		Assertions.assertTrue(this.incidenciaService.countIncidencias().equals(4L));
 	}
