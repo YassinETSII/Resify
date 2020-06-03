@@ -607,7 +607,7 @@ hechaPara ^</panel_attributes>
       <h>105</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Entity&gt;&gt;
-VisitaSanitariaEntity
+VisitaSanitaria
 --
 + motivo: String {NotBlank}
 + descripcion: String {NotBlank}
