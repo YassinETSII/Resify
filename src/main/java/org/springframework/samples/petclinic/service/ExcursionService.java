@@ -21,17 +21,6 @@ public class ExcursionService {
 	@Autowired
 	private OrganizadorService organizadorService;
 	
-//	@Autowired
-//	private UserService userService;
-//	
-//	@Autowired
-//	private AuthoritiesService authoritiesService;
-
-//	@Autowired
-//	public ExcursionService(ExcursionRepository excursionRepository) {
-//		this.excursionRepository = excursionRepository;
-//	}	
-
 	@Transactional(readOnly = true)
 	public Excursion findExcursionById(int id) throws DataAccessException {
 		return excursionRepository.findById(id);
